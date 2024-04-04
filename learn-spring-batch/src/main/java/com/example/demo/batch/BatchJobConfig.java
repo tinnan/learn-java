@@ -5,11 +5,10 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 
 @Configuration
 public class BatchJobConfig {
@@ -22,10 +21,10 @@ public class BatchJobConfig {
     }
 
     @Bean
-    public Step step1(JobRepository jobRepository, DataSourceTransactionManager transactionManager,
+    public Step step1(JobRepository jobRepository, JpaTransactionManager transactionManager,
                       FlatFileItemReader<Person> reader, PersonItemProcessor processor,
-                      JdbcBatchItemWriter<Person> writer) {
-        return new StepBuilder("step1", jobRepository).<Person, Person>chunk(3, transactionManager)
+                      PeopleItemWriter writer) {
+        return new StepBuilder("step1", jobRepository).<Person, People>chunk(3, transactionManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)
