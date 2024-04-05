@@ -1,6 +1,10 @@
 package com.example.demo.batch.api;
 
+import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.annotation.Bean;
@@ -18,5 +22,16 @@ public class BatchApiConfig {
         jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
         jobLauncher.afterPropertiesSet();
         return jobLauncher;
+    }
+
+    @Bean
+    public JobOperator apiJobOperator(JobRepository jobRepository, JobLauncher apiJobLauncher, JobExplorer jobExplorer,
+                                   JobRegistry jobRegistry) {
+        SimpleJobOperator jobOperator = new SimpleJobOperator();
+        jobOperator.setJobRepository(jobRepository);
+        jobOperator.setJobLauncher(apiJobLauncher);
+        jobOperator.setJobExplorer(jobExplorer);
+        jobOperator.setJobRegistry(jobRegistry);
+        return jobOperator;
     }
 }

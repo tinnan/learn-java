@@ -5,9 +5,16 @@ Collections of example application for Spring batch program. Each example is act
 Start the app with program arguments `--spring.profiles.active=<profile1>,<profile2>,...`
 
 ## Examples
-1. Profiles `tut1`, `tut1-simple` - Simple batch program with 1 job and 1 step to read from CSV file, transform the 
+1. Profile `tut1` - Simple batch program with 1 job and 1 step to read from CSV file, transform the 
    data and write to database.
-2. Profiles `tut1`, `tut1-api` - Simple batch program, same as no.1, but starting from API call.
+
+## API
+Start app with profile `api` will expose the following APIs.
+1. List all job names.
    ```
-   POST http://localhost:8080/api/v1/job/tut1
+   GET http://localhost:8080/api/v1/job
+   ```
+2. Run job.
+   ```
+   POST http://localhost:8080/api/v1/job/run/:jobName
    ```
