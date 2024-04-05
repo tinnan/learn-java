@@ -1,4 +1,4 @@
-package com.example.demo.batch;
+package com.example.demo.batch.tut1;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

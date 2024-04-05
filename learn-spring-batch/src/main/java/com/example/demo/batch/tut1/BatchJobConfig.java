@@ -1,4 +1,4 @@
-package com.example.demo.batch;
+package com.example.demo.batch.tut1;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -38,7 +38,7 @@ public class BatchJobConfig {
     public FlatFileItemReader<Person> reader() {
         return new FlatFileItemReaderBuilder<Person>().name("personItemReader")
                 .resource(new ClassPathResource(
-                        "sample-data.csv"))
+                        "tut1/sample-data.csv"))
                 .delimited()
                 .names("firstName", "lastName")
                 .targetType(Person.class)

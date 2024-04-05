@@ -1,4 +1,4 @@
-package com.example.demo.batch;
+package com.example.demo.batch.tut1;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
