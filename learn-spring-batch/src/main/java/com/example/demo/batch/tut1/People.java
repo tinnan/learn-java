@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Profile;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Profile({ "tut1" })
 public class People {
     @Id
     @SequenceGenerator(name = "person_id_generator", sequenceName = "person_id_generator")

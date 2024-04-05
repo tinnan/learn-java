@@ -6,11 +6,13 @@ import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 @AllArgsConstructor
+@Profile({ "tut1" })
 public class JobCompletionNotificationListener implements JobExecutionListener {
     private final PeopleRepository peopleRepository;
     private final JobRepository jobRepository;
