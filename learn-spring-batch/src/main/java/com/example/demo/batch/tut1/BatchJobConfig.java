@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
 @Configuration
@@ -24,6 +25,16 @@ public class BatchJobConfig {
     public JobLauncher simpleJobLauncher(JobRepository jobRepository) throws Exception {
         final TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
+        jobLauncher.afterPropertiesSet();
+        return jobLauncher;
+    }
+
+    @Profile({"tut1-api"})
+    @Bean
+    public JobLauncher apiJobLauncher(JobRepository jobRepository) throws Exception {
+        final TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
+        jobLauncher.setJobRepository(jobRepository);
+        jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
         jobLauncher.afterPropertiesSet();
         return jobLauncher;
     }
