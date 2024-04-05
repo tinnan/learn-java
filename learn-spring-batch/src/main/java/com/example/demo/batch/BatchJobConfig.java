@@ -6,8 +6,10 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
 @Configuration
@@ -30,5 +32,21 @@ public class BatchJobConfig {
                 .writer(writer)
                 .build()
                 ;
+    }
+
+    @Bean
+    public FlatFileItemReader<Person> reader() {
+        return new FlatFileItemReaderBuilder<Person>().name("personItemReader")
+                .resource(new ClassPathResource(
+                        "sample-data.csv"))
+                .delimited()
+                .names("firstName", "lastName")
+                .targetType(Person.class)
+                .build();
+    }
+
+    @Bean
+    public PersonItemProcessor processor() {
+        return new PersonItemProcessor();
     }
 }
