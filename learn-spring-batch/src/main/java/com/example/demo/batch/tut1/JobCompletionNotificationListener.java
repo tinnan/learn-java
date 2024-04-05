@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @AllArgsConstructor
-@Profile({ "tut1" })
+@Profile({ "tut1", "api" })
 public class JobCompletionNotificationListener implements JobExecutionListener {
     private final PeopleRepository peopleRepository;
     private final JobRepository jobRepository;

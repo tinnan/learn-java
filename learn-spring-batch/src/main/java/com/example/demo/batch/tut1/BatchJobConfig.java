@@ -13,35 +13,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
 @Configuration
-@Profile({"tut1"})
+@Profile({"tut1", "api"})
 public class BatchJobConfig {
 
-    @Profile({"tut1-simple"})
+    @Profile({"tut1"})
     @Bean
-    public JobLauncher simpleJobLauncher(JobRepository jobRepository) throws Exception {
+    public JobLauncher tut1JobLauncher(JobRepository jobRepository) throws Exception {
         final TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
         jobLauncher.afterPropertiesSet();
         return jobLauncher;
     }
 
-    @Profile({"tut1-api"})
     @Bean
-    public JobLauncher apiJobLauncher(JobRepository jobRepository) throws Exception {
-        final TaskExecutorJobLauncher jobLauncher = new TaskExecutorJobLauncher();
-        jobLauncher.setJobRepository(jobRepository);
-        jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
-        jobLauncher.afterPropertiesSet();
-        return jobLauncher;
-    }
-
-    @Bean
-    public Job importUserJob(JobRepository jobRepository, Step step1, JobCompletionNotificationListener listener) {
-        return new JobBuilder("importUserJob", jobRepository).listener(listener)
+    public Job tut1Job(JobRepository jobRepository, Step step1, JobCompletionNotificationListener listener) {
+        return new JobBuilder("tut1Job", jobRepository).listener(listener)
                 .start(step1)
                 .build();
     }

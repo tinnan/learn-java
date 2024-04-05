@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-@Profile({ "tut1" })
+@Profile({ "tut1", "api" })
 public class PeopleItemWriter implements ItemWriter<People> {
     private final PeopleRepository peopleRepository;
     @Override

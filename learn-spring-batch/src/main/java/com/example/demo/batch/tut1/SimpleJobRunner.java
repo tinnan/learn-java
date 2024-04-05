@@ -1,4 +1,4 @@
-package com.example.demo.batch.tut1.runner;
+package com.example.demo.batch.tut1;
 
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -8,16 +8,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile({"tut1-simple"})
+@Profile({"tut1"})
 @Configuration
 @AllArgsConstructor
 public class SimpleJobRunner implements CommandLineRunner {
-    private final JobLauncher simpleJobLauncher;
-    private final Job importUserJob;
+    private final JobLauncher tut1JobLauncher;
+    private final Job tut1Job;
 
     @Override
     public void run(String... args) throws Exception {
         JobParameters jobParameters = new JobParameters();
-        simpleJobLauncher.run(importUserJob, jobParameters);
+        tut1JobLauncher.run(tut1Job, jobParameters);
     }
 }

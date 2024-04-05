@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Profile({ "tut1" })
+@Profile({ "tut1", "api" })
 public class People {
     @Id
     @SequenceGenerator(name = "person_id_generator", sequenceName = "person_id_generator")

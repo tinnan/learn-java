@@ -1,4 +1,4 @@
-package com.example.demo.batch.tut1.runner;
+package com.example.demo.batch.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Profile({"tut1-api"})
+@Profile({"api"})
 @RestController
-@RequestMapping("/api/v1/job/tut1")
+@RequestMapping("/api/v1/job/run")
 @AllArgsConstructor
 public class JobRunnerController {
     private final JobLauncher apiJobLauncher;
-    private final Job importUserJob;
+    private final Job tut1Job;
 
-    @PostMapping
-    public void start() throws Exception {
+    @PostMapping("tut1")
+    public void startTut1() throws Exception {
         final JobParameters jobParameters = new JobParameters();
-        apiJobLauncher.run(importUserJob, jobParameters);
+        apiJobLauncher.run(tut1Job, jobParameters);
     }
 }
