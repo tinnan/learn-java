@@ -1,5 +1,8 @@
 package com.example.demo.batch.tut1;
 
+import com.example.demo.batch.tut1.data.People;
+import com.example.demo.batch.tut1.data.PeopleRepository;
+import com.example.demo.batch.tut1.service.JobCompletionNotificationListener;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.Job;
@@ -11,8 +14,6 @@ import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
@@ -23,9 +24,6 @@ import java.util.List;
 @SpringBatchTest
 @SpringJUnitConfig({BatchJobConfig.class, JobCompletionNotificationListener.class})
 @EnableAutoConfiguration // Auto initialize some necessary beans (eg. dataSource, transactionManager)
-@PropertySources({
-        @PropertySource("classpath:application.properties")
-})
 public class Tut1E2ETest {
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;

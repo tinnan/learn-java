@@ -1,6 +1,11 @@
 package com.example.demo.batch.tut1;
 
 
+import com.example.demo.batch.tut1.data.People;
+import com.example.demo.batch.tut1.data.PeopleRepository;
+import com.example.demo.batch.tut1.data.Person;
+import com.example.demo.batch.tut1.service.PeopleItemWriter;
+import com.example.demo.batch.tut1.service.PersonItemProcessor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

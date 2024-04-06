@@ -1,5 +1,7 @@
-package com.example.demo.batch.tut1;
+package com.example.demo.batch.tut1.service;
 
+import com.example.demo.batch.tut1.data.People;
+import com.example.demo.batch.tut1.data.Person;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 

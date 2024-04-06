@@ -1,5 +1,11 @@
 package com.example.demo.batch.tut1;
 
+import com.example.demo.batch.tut1.data.People;
+import com.example.demo.batch.tut1.data.PeopleRepository;
+import com.example.demo.batch.tut1.data.Person;
+import com.example.demo.batch.tut1.service.JobCompletionNotificationListener;
+import com.example.demo.batch.tut1.service.PeopleItemWriter;
+import com.example.demo.batch.tut1.service.PersonItemProcessor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;

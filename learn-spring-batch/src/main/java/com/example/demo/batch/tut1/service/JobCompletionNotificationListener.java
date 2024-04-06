@@ -1,13 +1,12 @@
-package com.example.demo.batch.tut1;
+package com.example.demo.batch.tut1.service;
 
+import com.example.demo.batch.tut1.data.PeopleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 @AllArgsConstructor
