@@ -21,7 +21,7 @@ import java.util.List;
 
 @ActiveProfiles({"tut1"})
 @SpringBatchTest
-@SpringJUnitConfig({BatchJobConfig.class, PeopleItemWriter.class, JobCompletionNotificationListener.class})
+@SpringJUnitConfig({BatchJobConfig.class, JobCompletionNotificationListener.class})
 @EnableAutoConfiguration // Auto initialize some necessary beans (eg. dataSource, transactionManager)
 @PropertySources({
         @PropertySource("classpath:application.properties")
@@ -36,6 +36,7 @@ public class Tut1E2ETest {
 
     private JobParameters defaultParameters() {
         JobParametersBuilder builder = new JobParametersBuilder();
+        builder.addString("file.input.classpath", "tut1/sample-data.csv");
         return builder.toJobParameters();
     }
 

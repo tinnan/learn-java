@@ -2,7 +2,7 @@ package com.example.demo.batch.tut1;
 
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,8 @@ public class SimpleJobRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        JobParameters jobParameters = new JobParameters();
-        tut1JobLauncher.run(tut1Job, jobParameters);
+        JobParametersBuilder builder = new JobParametersBuilder();
+        builder.addString("file.input.classpath", "tut1/sample-data.csv");
+        tut1JobLauncher.run(tut1Job, builder.toJobParameters());
     }
 }

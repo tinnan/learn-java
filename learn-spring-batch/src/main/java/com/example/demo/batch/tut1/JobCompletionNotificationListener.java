@@ -9,10 +9,8 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
 @AllArgsConstructor
-@Profile({ "tut1", "api" })
 public class JobCompletionNotificationListener implements JobExecutionListener {
     private final PeopleRepository peopleRepository;
     private final JobRepository jobRepository;

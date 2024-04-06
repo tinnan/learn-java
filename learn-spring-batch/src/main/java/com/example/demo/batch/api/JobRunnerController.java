@@ -2,6 +2,7 @@ package com.example.demo.batch.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.converter.DefaultJobParametersConverter;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.context.annotation.Profile;
@@ -19,8 +20,15 @@ public class JobRunnerController {
 
     @PostMapping("{jobName}")
     public void startJob(@PathVariable("jobName") String jobName) throws Exception {
-        final JobParameters jobParameters = new JobParameters();
         final DefaultJobParametersConverter parametersConverter = new DefaultJobParametersConverter();
-        apiJobOperator.start(jobName, parametersConverter.getProperties(jobParameters));
+        apiJobOperator.start(jobName, parametersConverter.getProperties(getJobParameters(jobName)));
+    }
+
+    private JobParameters getJobParameters(String jobName) {
+        JobParametersBuilder builder = new JobParametersBuilder();
+        if ("tut1Job".equals(jobName)) {
+            builder.addString("file.input.classpath", "tut1/sample-data.csv");
+        }
+        return builder.toJobParameters();
     }
 }
