@@ -1,4 +1,4 @@
-package com.example.demo.batch.api;
+package com.example.demo.batch.restapi.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.launch.JobOperator;

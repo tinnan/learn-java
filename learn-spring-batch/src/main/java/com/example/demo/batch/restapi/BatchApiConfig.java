@@ -1,4 +1,4 @@
-package com.example.demo.batch.api;
+package com.example.demo.batch.restapi;
 
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;

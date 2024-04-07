@@ -2,7 +2,7 @@ package com.example.demo.batch.tut1;
 
 import com.example.demo.batch.tut1.data.People;
 import com.example.demo.batch.tut1.data.PeopleRepository;
-import com.example.demo.batch.tut1.service.JobCompletionNotificationListener;
+import com.example.demo.batch.tut1.service.JobNotificationListener;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.Job;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @ActiveProfiles({"tut1"})
 @SpringBatchTest
-@SpringJUnitConfig({BatchJobConfig.class, JobCompletionNotificationListener.class})
+@SpringJUnitConfig({BatchJobConfig.class, JobNotificationListener.class})
 @EnableAutoConfiguration // Auto initialize some necessary beans (eg. dataSource, transactionManager)
 public class Tut1E2ETest {
     @Autowired

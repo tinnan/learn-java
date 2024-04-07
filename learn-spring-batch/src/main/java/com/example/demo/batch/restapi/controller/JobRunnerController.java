@@ -1,4 +1,4 @@
-package com.example.demo.batch.api;
+package com.example.demo.batch.restapi.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.JobParameters;
@@ -28,6 +28,8 @@ public class JobRunnerController {
         JobParametersBuilder builder = new JobParametersBuilder();
         if ("tut1Job".equals(jobName)) {
             builder.addString("file.input.classpath", "tut1/sample-data.csv");
+            // This parameter is for starting new instance with same input file.
+            builder.addLong("guid", System.currentTimeMillis());
         }
         return builder.toJobParameters();
     }
