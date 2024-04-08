@@ -12,14 +12,21 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ControllerMetricAspect {
 
-    @Pointcut("within(com.example.aopdemo.controller.*)")
-    public void controllerTargetedPointcut() {
-        // Targets all methods in all controllers within package com.example.aopdemo.controller
-        // NOTE: It does target classes under sub-package. Alternatively: create a custom annotation to annotate the
-        // target class and use @target in pointcut instead.
+    @Pointcut("within(com.example.aopdemo.controller..*)")
+    public void packagePointcut() {
+        // Targets all methods in all classes within package com.example.aopdemo.controller and subpackage.
+    }
+    @Pointcut("@target(com.example.aopdemo.aop.annotation.EnableElapsedTimeLog)")
+    public void annotatedTypePointcut() {
     }
 
-    @Around("controllerTargetedPointcut()")
+    /*
+        !!! IMPORTANT !!!
+        We should always limit pointcut scope. Pointcut annotatedTypePointcut() is considered a global scope, as
+        every bean will be advised and you may get an error when trying to start the application due to exception
+        starting filters.
+     */
+    @Around("packagePointcut() && annotatedTypePointcut()")
     public Object logExecutionElapsedTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
         try {
