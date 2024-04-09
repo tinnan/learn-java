@@ -32,7 +32,8 @@ class UserControllerTest {
         String userJson = """
                 {
                     "name": "John Doe",
-                    "email": "john.d@gmail.com"
+                    "email": "john.d@gmail.com",
+                    "age": 20
                 }
                 """;
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users")
@@ -47,6 +48,7 @@ class UserControllerTest {
         User expectedSavedUser = new User();
         expectedSavedUser.setName("John Doe");
         expectedSavedUser.setEmail("john.d@gmail.com");
+        expectedSavedUser.setAge(20);
         Mockito.verify(userRepository, Mockito.times(1))
                 .save(expectedSavedUser);
     }
@@ -55,7 +57,8 @@ class UserControllerTest {
     public void whenPostRequestToUserWithInvalidUser_thenCorrectResponse() throws Exception {
         String userJson = """
                 {
-                    "name": "John Doe"
+                    "name": "John Doe",
+                    "age": 20
                 }
                 """;
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users")
