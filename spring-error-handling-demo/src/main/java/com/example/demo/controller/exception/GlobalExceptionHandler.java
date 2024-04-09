@@ -1,6 +1,7 @@
 package com.example.demo.controller.exception;
 
 import com.example.demo.domain.ApiError;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,11 @@ import java.util.Collections;
 import java.util.List;
 
 @ControllerAdvice({"com.example.demo.controller"})
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler({UserNotFoundException.class, ContentNotAllowedException.class, Exception.class})
     public ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
+        log.error("Handling exception: {}", ex.getClass().getName());
         HttpHeaders headers = new HttpHeaders();
 
         if (ex instanceof UserNotFoundException unfe) {
