@@ -1,0 +1,2 @@
+Demo app for leaning Spring error handling (`@ExceptionHandler`, `@ControllerAdvice`).
+Learning from [Understanding Spring’s @ControllerAdvice](https://medium.com/@jovannypcg/understanding-springs-controlleradvice-cd96a364033f) guide.
