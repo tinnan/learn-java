@@ -1,10 +1,10 @@
 package com.example.demo.domain;
 
+import com.example.demo.validation.constraints.Between;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +25,6 @@ public class User {
     @NotBlank(message = "{validation.email.notBlank}")
     private String email;
 
-    @Min(value = 10, message = "{validation.age.min}")
+    @Between(min = 10, max = 60, message = "{validation.age.between}")
     private Integer age;
 }
