@@ -1,1 +1,0 @@
-Learning Spring security from [Securing a Web Application](https://spring.io/guides/gs/securing-web).
