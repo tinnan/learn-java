@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(Between.List.class)
 @Constraint(validatedBy = {BetweenValidatorForInteger.class})
 public @interface Between {
-    String message() default "Value must be between {min} and {max}";
+    String message() default "{validation.constraints.between.message}";
 
     Class<?>[] groups() default {};
 

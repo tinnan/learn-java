@@ -2,11 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.User;
 import com.example.demo.repo.UserRepository;
-import jakarta.validation.Valid;
+import com.example.demo.validation.marker.AllUser;
+import com.example.demo.validation.marker.RegularUser;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,7 @@ public class UserController {
     private final UserRepository userRepository;
 
     @PostMapping
-    ResponseEntity<String> addUser(@Valid @RequestBody User user) {
+    ResponseEntity<String> addUser(@Validated({AllUser.class, RegularUser.class}) @RequestBody User user) {
         // When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
         userRepository.save(user);
         return ResponseEntity.ok("User is valid.");
