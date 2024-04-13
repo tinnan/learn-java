@@ -18,13 +18,15 @@ public class User {
     private String username;
     private String email;
     private LocalDate joinDate;
+    private Integer carsOwned;
     @Transient
     private int daysSinceJoined;
 
-    public User(String username, String email, LocalDate joinDate) {
+    public User(String username, String email, LocalDate joinDate, Integer carsOwned) {
         this.username = username;
         this.email = email;
         this.joinDate = joinDate;
+        this.carsOwned = carsOwned;
     }
 
     public int getDaysSinceJoined() {
