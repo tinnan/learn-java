@@ -2,12 +2,14 @@ package com.example.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.Period;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"email"})
 )

@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -35,5 +36,9 @@ public class UserService {
     public User getUser(String id) {
         return userRepository.findById(id)
                 .orElse(null);
+    }
+
+    public Collection<User> listUsers() {
+        return userRepository.findAll();
     }
 }
