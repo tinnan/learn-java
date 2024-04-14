@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      # This is the database to run creation script /docker-entrypoint-initdb.d/*.js
+      # But database to run script can also be switched from inside the script:
+      #    db = connect('mongodb://localhost/product');
+    #      MONGO_INITDB_DATABASE: product
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
