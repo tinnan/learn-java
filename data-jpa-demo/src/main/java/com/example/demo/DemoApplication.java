@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.Collection;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.example.demo")
 @Slf4j
 public class DemoApplication {
 
