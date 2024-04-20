@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -23,6 +25,14 @@ public class Course {
     private Teacher teacher;
     @OneToOne(mappedBy = "course", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private CourseMaterial courseMaterial;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    // JoinTable will set up a table that represents relationship between Student and Course.
+    // The table will contain 2 columns named: course_id (owning side), student_id (referencing side).
+    @JoinTable(name = "students_courses",
+            joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id")
+    )
+    private List<Student> students;
 
     @Override
     public String toString() {
