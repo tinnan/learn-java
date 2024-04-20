@@ -27,6 +27,7 @@ class TeacherCourseTest {
         Course course = new Course("JAVA101", "Java 101", teacher);
         // This works because "cascade" option on field "teacher" in Course entity is set to PERSIST.
         // Otherwise, it would have thrown PersistentObjectException because teacher is not a managed entity.
+        // In that case, you will have to persist Teacher object first then persist Course object.
         courseRepository.save(course);
 
         Optional<Course> savedCourse = courseRepository.findById(course.getId());
