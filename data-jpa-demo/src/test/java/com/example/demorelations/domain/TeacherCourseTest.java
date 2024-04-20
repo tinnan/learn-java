@@ -34,7 +34,7 @@ class TeacherCourseTest {
         Teacher teacher = new Teacher(null, "John", "Doe");
         CourseMaterial courseMaterial = new CourseMaterial(null, "https://github.com/uni/course/materials/java101",
                 null);
-        Student student1 = new Student(null, "Sarah", "Liu", LocalDate.of(2005, 3, 1), true, null);
+        Student student1 = new Student(null, "Sarah", "Liu", LocalDate.of(2005, 3, 1), true, Student.Gender.FEMALE, null);
         Course course = new Course("JAVA101", "Java 101", teacher, courseMaterial, List.of(student1));
         courseMaterial.setCourse(course);
         student1.setCourses(List.of(course));
@@ -55,17 +55,26 @@ class TeacherCourseTest {
         assertEquals("https://github.com/uni/course/materials/java101", savedCourse.getCourseMaterial()
                 .getUrl());
 
-        assertNotNull(savedCourse.getStudents().get(0));
-        assertEquals(1, savedCourse.getStudents().get(0).getId());
-        assertEquals("Sarah", savedCourse.getStudents().get(0).getFirstName());
+        assertNotNull(savedCourse.getStudents()
+                .get(0));
+        assertEquals(1, savedCourse.getStudents()
+                .get(0)
+                .getId());
+        assertEquals("Sarah", savedCourse.getStudents()
+                .get(0)
+                .getFirstName());
 
         Optional<Student> studentOpt = studentRepository.findById(savedCourse.getStudents()
                 .get(0)
                 .getId());
         assertTrue(studentOpt.isPresent());
         Student student = studentOpt.get();
-        assertNotNull(student.getCourses().get(0));
-        assertEquals("JAVA101", student.getCourses().get(0).getId());
+        assertNotNull(student.getCourses()
+                .get(0));
+        assertEquals("JAVA101", student.getCourses()
+                .get(0)
+                .getId());
+        assertEquals(Student.Gender.FEMALE, student.getGender());
     }
 
     @Test

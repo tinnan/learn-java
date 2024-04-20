@@ -23,7 +23,15 @@ public class Student {
     private String lastName;
     private LocalDate birthDate;
     private boolean wantsNewsLetter;
+    // Gender will be persisted as enumerated type.
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     // See field "students" in Course entity.
     @ManyToMany(mappedBy = "students")
     private List<Course> courses;
+
+    public enum Gender {
+        MALE,
+        FEMALE
+    }
 }
