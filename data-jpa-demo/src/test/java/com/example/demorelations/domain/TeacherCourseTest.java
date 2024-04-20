@@ -11,8 +11,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Slf4j
@@ -21,6 +20,19 @@ class TeacherCourseTest {
     private TeacherRepository teacherRepository;
     @Autowired
     private CourseRepository courseRepository;
+
+    @Test
+    public void givenTeacherAndCourseData_whenPersist_thenSuccess() {
+        Teacher teacher = new Teacher(null, "John", "Doe");
+        teacherRepository.save(teacher);
+
+        Course course = new Course("JAVA101", "Java 101", teacher);
+        courseRepository.save(course);
+
+        Optional<Course> savedCourse = courseRepository.findById(course.getId());
+        assertTrue(savedCourse.isPresent());
+        assertNotNull(savedCourse.get().getTeacher());
+    }
 
     @Test
     @Sql("/test-data/relations/teacher.sql")
