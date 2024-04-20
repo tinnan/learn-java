@@ -26,6 +26,15 @@ public class Student {
     // Gender will be persisted as enumerated type.
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    // Wrap student's address related fields in Address object.
+    // AttributeOverrides annotation maps field "name" of Address object with Student table "column" name.
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "number", column = @Column(name = "st_number")),
+            @AttributeOverride(name = "street", column = @Column(name = "st_street")),
+            @AttributeOverride(name = "city", column = @Column(name = "st_city")),
+    })
+    private Address address;
     // See field "students" in Course entity.
     @ManyToMany(mappedBy = "students")
     private List<Course> courses;

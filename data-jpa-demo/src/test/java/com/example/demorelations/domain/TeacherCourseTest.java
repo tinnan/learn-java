@@ -34,7 +34,15 @@ class TeacherCourseTest {
         Teacher teacher = new Teacher(null, "John", "Doe");
         CourseMaterial courseMaterial = new CourseMaterial(null, "https://github.com/uni/course/materials/java101",
                 null);
-        Student student1 = new Student(null, "Sarah", "Liu", LocalDate.of(2005, 3, 1), true, Student.Gender.FEMALE, null);
+        Address studentAddress = new Address("101", "Baker street", "New York");
+        Student student1 = new Student(null,
+                "Sarah",
+                "Liu",
+                LocalDate.of(2005, 3, 1),
+                true,
+                Student.Gender.FEMALE,
+                studentAddress,
+                null);
         Course course = new Course("JAVA101", "Java 101", teacher, courseMaterial, List.of(student1));
         courseMaterial.setCourse(course);
         student1.setCourses(List.of(course));
@@ -75,6 +83,7 @@ class TeacherCourseTest {
                 .get(0)
                 .getId());
         assertEquals(Student.Gender.FEMALE, student.getGender());
+        assertEquals(studentAddress, student.getAddress());
     }
 
     @Test
