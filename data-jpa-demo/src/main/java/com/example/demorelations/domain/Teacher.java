@@ -18,7 +18,7 @@ public class Teacher {
     private Integer id;
     private String firstName;
     private String lastName;
-    // Name of field that owns the relation (field inside associated entity, which is field "teacher" in "Course"
+    // Name of field that owns the relation (field inside associated entity, which is referred to "teacher" in "Course"
     // entity in this case).
     @OneToMany(mappedBy = "teacher", cascade = {CascadeType.ALL})
     // Map primary key of associated table to key value of Map. Teacher class is the "owning side" of one-to-many
