@@ -41,7 +41,7 @@ class TeacherCourseTest {
                 .forEach(c -> c.setTitle(c.getTitle() + " - test"));
         // Insert new course for this teacher. This works because cascase type is set to ALL.
         teacher.getCourses()
-                .put("BA-ME101", new Course("BA-ME101", "Macro Economic 101", teacher.getId(), teacher));
+                .put("BA-ME101", new Course("BA-ME101", "Macro Economic 101", teacher));
         teacherRepository.save(teacher);
 
         Optional<Course> courseOpt = courseRepository.findById("CS-JV101");

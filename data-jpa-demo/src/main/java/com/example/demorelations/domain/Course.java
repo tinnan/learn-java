@@ -18,13 +18,10 @@ public class Course {
     @Id
     private String id;
     private String title;
-    private Integer teacherId;
     @ManyToOne
     @JoinColumn(
-            name = "teacherId", // Join key column name on the table "course"
-            referencedColumnName = "id", // which referenced to ID column name of table "teacher".
-            insertable = false,
-            updatable = false
+            name = "teacher_id", // Join key column name on the table "course"
+            referencedColumnName = "id" // which referenced to ID column name of table "teacher".
     )
     private Teacher teacher;
 
@@ -33,7 +30,6 @@ public class Course {
         return "Course{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
-                ", teacherId=" + teacherId +
                 '}';
     }
 }
