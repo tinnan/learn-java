@@ -24,14 +24,17 @@ class TeacherCourseTest {
     @Test
     public void givenTeacherAndCourseData_whenPersist_thenSuccess() {
         Teacher teacher = new Teacher(null, "John", "Doe");
-        teacherRepository.save(teacher);
-
         Course course = new Course("JAVA101", "Java 101", teacher);
+        // This works because "cascade" option on field "teacher" in Course entity is set to PERSIST.
+        // Otherwise, it would have thrown PersistentObjectException because teacher is not a managed entity.
         courseRepository.save(course);
 
         Optional<Course> savedCourse = courseRepository.findById(course.getId());
         assertTrue(savedCourse.isPresent());
         assertNotNull(savedCourse.get().getTeacher());
+        // Teacher#getId() can return auto-generated ID here because "cascade" option on field "teacher" in Course
+        // entity is set to REFRESH.
+        assertEquals(1, savedCourse.get().getTeacher().getId());
     }
 
     @Test
