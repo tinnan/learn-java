@@ -2,6 +2,7 @@ package com.example.demorelations.domain;
 
 import com.example.demorelations.repo.CourseRepository;
 import com.example.demorelations.repo.TeacherRepository;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,16 @@ class TeacherCourseTest {
     private TeacherRepository teacherRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
-    public void givenTeacherAndCourseData_whenPersist_thenSuccess() {
+    public void givenDataToSave_whenPersist_thenSuccess() {
         Teacher teacher = new Teacher(null, "John", "Doe");
-        Course course = new Course("JAVA101", "Java 101", teacher);
+        CourseMaterial courseMaterial = new CourseMaterial(null, "https://github.com/uni/course/materials/java101",
+                null);
+        Course course = new Course("JAVA101", "Java 101", teacher, courseMaterial);
+        courseMaterial.setCourse(course);
         // This works because "cascade" option on field "teacher" in Course entity is set to PERSIST.
         // Otherwise, it would have thrown PersistentObjectException because teacher is not a managed entity.
         // In that case, you will have to persist Teacher object first then persist Course object.
@@ -32,10 +38,18 @@ class TeacherCourseTest {
 
         Optional<Course> savedCourse = courseRepository.findById(course.getId());
         assertTrue(savedCourse.isPresent());
-        assertNotNull(savedCourse.get().getTeacher());
+        assertNotNull(savedCourse.get()
+                .getTeacher());
         // Teacher#getId() can return auto-generated ID here because "cascade" option on field "teacher" in Course
         // entity is set to REFRESH.
-        assertEquals(1, savedCourse.get().getTeacher().getId());
+        assertEquals(1, savedCourse.get()
+                .getTeacher()
+                .getId());
+        assertNotNull(savedCourse.get()
+                .getCourseMaterial());
+        assertEquals("https://github.com/uni/course/materials/java101", savedCourse.get()
+                .getCourseMaterial()
+                .getUrl());
     }
 
     @Test
@@ -57,7 +71,7 @@ class TeacherCourseTest {
                 .forEach(c -> c.setTitle(c.getTitle() + " - test"));
         // Insert new course for this teacher. This works because cascase type is set to ALL.
         teacher.getCourses()
-                .put("BA-ME101", new Course("BA-ME101", "Macro Economic 101", teacher));
+                .put("BA-ME101", new Course("BA-ME101", "Macro Economic 101", teacher, null));
         teacherRepository.save(teacher);
 
         Optional<Course> courseOpt = courseRepository.findById("CS-JV101");

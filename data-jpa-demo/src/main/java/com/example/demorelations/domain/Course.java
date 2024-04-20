@@ -21,6 +21,8 @@ public class Course {
             referencedColumnName = "id" // which referenced to ID column name of table "teacher".
     )
     private Teacher teacher;
+    @OneToOne(mappedBy = "course", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private CourseMaterial courseMaterial;
 
     @Override
     public String toString() {
