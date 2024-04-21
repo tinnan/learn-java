@@ -6,12 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 import java.util.Collection;
 
-@SpringBootApplication(scanBasePackages = "com.example.demo")
+@SpringBootApplication(scanBasePackages = "com.example.demo", exclude = {
+        WebMvcAutoConfiguration.class
+})
+@PropertySources({
+        @PropertySource("classpath:application-${spring.profiles.active}.properties")
+})
 @Slf4j
 public class DemoApplication {
 
