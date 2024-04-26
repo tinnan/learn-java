@@ -103,6 +103,16 @@ class ActivityLogSpec extends Specification {
         activityLogService
     }
 
+    def "findByX method"() {
+        def activityLogs = activityLogRepository.findByStaffId("62007")
+        expect:
+        verifyAll(activityLogs) {
+            size() == 2
+            get(0).id == 2
+            get(1).id == 3
+        }
+    }
+
     def "Find all should return all activity logs in collection"() {
         when:
         def activityLogs = activityLogRepository.findAll()
