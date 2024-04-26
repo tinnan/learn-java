@@ -20,8 +20,10 @@ dependencies {
 	// mandatory dependencies for using Spock
 	implementation platform('org.apache.groovy:groovy-bom:4.0.20')
 	implementation 'org.apache.groovy:groovy'
-	testImplementation platform("org.spockframework:spock-bom:2.3-groovy-4.0")
-	testImplementation "org.spockframework:spock-core"
+	testImplementation platform("org.spockframework:spock-bom:2.4-M1-groovy-4.0")
+	testImplementation 'org.spockframework:spock-core'
+	// Using Spock with Spring also requires spock-spring module.
+	testImplementation 'org.spockframework:spock-spring'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
