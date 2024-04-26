@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 public class ActivityLog {
     @Id
-    private String id;
+    private Long id;
     private LocalDateTime txDatetime;
     private String staffId;
     private String branchCode;
