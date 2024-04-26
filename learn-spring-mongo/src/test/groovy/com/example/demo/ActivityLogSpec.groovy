@@ -189,8 +189,8 @@ class ActivityLogSpec extends Specification {
         def activityLogs = activityLogService.queryLogs(queryParam)
 
         then: "Only filtered data is returned in descend sorting order"
-        activityLogs.size() == 2
         verifyAll(activityLogs) {
+            size() == 2
             get(0).id == 4
             get(1).id == 1
         }
@@ -207,8 +207,10 @@ class ActivityLogSpec extends Specification {
         def activityLogs = activityLogService.queryLogs(queryParam)
 
         then: "Only filtered data is returned"
-        activityLogs.size() == 1
-        activityLogs.get(0).id == 4
+        verifyAll(activityLogs) {
+            size() == 1
+            get(0).id == 4
+        }
     }
 
     def "Query with search criteria and pagination"() {
@@ -223,7 +225,9 @@ class ActivityLogSpec extends Specification {
         def activityLogs = activityLogService.queryLogs(queryParam)
 
         then: "Only data on page is returned"
-        activityLogs.size() == 1
-        activityLogs.get(0).id == 4
+        verifyAll(activityLogs) {
+            size() == 1
+            get(0).id == 4
+        }
     }
 }

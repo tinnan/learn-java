@@ -24,10 +24,20 @@ dependencies {
     testImplementation 'org.spockframework:spock-core'
     testImplementation 'org.spockframework:spock-spring'
 
-//    implementation 'com.querydsl:querydsl-mongodb'
-//    annotationProcessor 'com.querydsl:querydsl-mongodb'
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    // Query DSL
+    implementation('com.querydsl:querydsl-mongodb:5.1.0') {
+        // Exclude outdated dependency.
+        // org.mongodb.mongo-java-driver is relocated to org.mongodb.mongodb-driver-sync
+        // which is already bundled with org.springframework.boot:spring-boot-starter-data-mongodb.
+        // This outdated dependency causes NoSuchMethodException com.mongodb.client.MongoCursor.available()
+        // when call MongoTemplate.find() method.
+        exclude module: 'mongo-java-driver'
+    }
+    annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:general'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

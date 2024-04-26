@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import com.querydsl.core.annotations.QueryEntity;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,11 +10,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("activity_log")
+@QueryEntity
 @Getter
 @Setter
 public class ActivityLog {
+
     @Id
-    private Long id;
+    private BigInteger id;
     private LocalDateTime txDatetime;
     private String staffId;
     private String branchCode;
@@ -25,10 +29,11 @@ public class ActivityLog {
     private String activityStatus;
     private Detail detail;
 
+    @AllArgsConstructor
     @Getter
     @Setter
-    @AllArgsConstructor
     public static class Detail {
+
         private String errorCode;
         private String errorMsg;
     }
