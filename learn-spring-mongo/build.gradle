@@ -22,6 +22,7 @@ dependencies {
     implementation 'org.apache.groovy:groovy'
     testImplementation platform("org.spockframework:spock-bom:2.4-M1-groovy-4.0")
     testImplementation 'org.spockframework:spock-core'
+    // This one is for using Spock framework with Spring.
     testImplementation 'org.spockframework:spock-spring'
 
     // Lombok
