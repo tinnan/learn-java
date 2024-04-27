@@ -1,6 +1,8 @@
 package com.example.demo.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.data.domain.Sort.Direction;
@@ -15,7 +17,7 @@ public class ActivityLogQueryParam {
     private String channel;
     private String idType;
     private String idNo;
-    private String activityType;
+    private List<String> activityType;
     private String activityStatus;
     private Integer rmidEc;
     private PaginationAndSort paginationAndSort;
@@ -27,21 +29,24 @@ public class ActivityLogQueryParam {
 
     @Getter
     public static class PaginationAndSort {
-
-        /**
-         * 0 will be ignored.
-         */
+        private boolean paged = false;
         private int pageNumber = 0;
-        /**
-         * 0 will be ignored.
-         */
         private int pageSize = 0;
-        private boolean sort = false;
+        private boolean sorted = false;
         private String sortField;
         private Direction sortDirection;
 
+        /**
+         * Set pagination.
+         * @param pageNumber must be over zero.
+         * @param pageSize must be over zero.
+         * @return this
+         */
         public PaginationAndSort setPage(int pageNumber, int pageSize) {
-            this.pageNumber = pageNumber;
+            assert pageNumber > 0;
+            assert pageSize > 0;
+            this.paged = true;
+            this.pageNumber = pageNumber - 1; // Convert to zero-based index.
             this.pageSize = pageSize;
             return this;
         }
@@ -57,7 +62,7 @@ public class ActivityLogQueryParam {
         }
 
         private void setSort(String fieldName, Direction direction) {
-            this.sort = true;
+            this.sorted = true;
             this.sortField = fieldName;
             this.sortDirection = direction;
         }
