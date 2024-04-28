@@ -14,6 +14,7 @@ public class ProductController {
     private final ProductService productService;
     @PostMapping("/api/v1/product/apply")
     public void applyProduct(@RequestBody ProductApplicationRequest request) {
+        log.info("Product {} apply request for customer ID {}", request.productId(), request.customerId());
         productService.apply(request.customerId(), request.productId());
     }
 }

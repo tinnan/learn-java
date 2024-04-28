@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'groovy'
 	id 'org.springframework.boot' version '3.2.5'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
@@ -26,6 +27,14 @@ repositories {
 }
 
 dependencies {
+	// mandatory dependencies for using Spock
+	implementation platform('org.apache.groovy:groovy-bom:4.0.20')
+	implementation 'org.apache.groovy:groovy'
+	testImplementation platform("org.spockframework:spock-bom:2.4-M1-groovy-4.0")
+	testImplementation 'org.spockframework:spock-core'
+	// This one is for using Spock framework with Spring.
+	testImplementation 'org.spockframework:spock-spring'
+
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
