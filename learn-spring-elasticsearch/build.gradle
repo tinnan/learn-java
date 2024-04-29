@@ -1,0 +1,40 @@
+plugins {
+	id 'java'
+	id 'groovy'
+	id 'org.springframework.boot' version '3.2.5'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// mandatory dependencies for using Spock
+	implementation platform('org.apache.groovy:groovy-bom:4.0.20')
+	implementation 'org.apache.groovy:groovy'
+	testImplementation platform("org.spockframework:spock-bom:2.4-M1-groovy-4.0")
+	testImplementation 'org.spockframework:spock-core'
+	// This one is for using Spock framework with Spring.
+	testImplementation 'org.spockframework:spock-spring'
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	testImplementation 'org.testcontainers:spock:1.19.7'
+	testImplementation 'org.testcontainers:junit-jupiter:1.19.7'
+	testImplementation 'org.testcontainers:elasticsearch:1.19.7'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
