@@ -50,7 +50,8 @@ public class ActivityLogService {
         final AtomicInteger counter = new AtomicInteger(0);
         try (
             Stream<ActivityLog> stream = mongoTemplate.stream(query, ActivityLog.class);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(exportFilePath, StandardCharsets.UTF_8))
+            FileWriter fileWriter = new FileWriter(exportFilePath, StandardCharsets.UTF_8);
+            BufferedWriter writer = new BufferedWriter(fileWriter)
         ) {
             writer.write(toCsvRow(headers));
             writer.newLine();
@@ -76,7 +77,10 @@ public class ActivityLogService {
         Query query = createQuery(param, true);
         long start = System.currentTimeMillis();
         List<ActivityLog> activityLogs = mongoTemplate.find(query, ActivityLog.class);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(exportFilePath, StandardCharsets.UTF_8))) {
+        try (
+            FileWriter fileWriter = new FileWriter(exportFilePath, StandardCharsets.UTF_8);
+            BufferedWriter writer = new BufferedWriter(fileWriter)
+        ) {
             writer.write(toCsvRow(headers));
             writer.newLine();
             for (ActivityLog activityLog : activityLogs) {
