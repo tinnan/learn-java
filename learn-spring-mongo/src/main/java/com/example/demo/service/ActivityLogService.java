@@ -30,6 +30,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ActivityLogService {
 
+    private static final List<String> headers = List.of("วันเวลาทำรายการ", "Staff ID", "Branch Code", "Channel",
+        "RM ID/EC",
+        "ID Type", "ID No.", "Service Type", "Activity Type", "Activity Status", "Detail");
+
     @Value("${activity-log.export.path}")
     private String exportFilePath;
     private final MongoTemplate mongoTemplate;
@@ -40,7 +44,7 @@ public class ActivityLogService {
         return mongoTemplate.find(query, ActivityLog.class);
     }
 
-    public void exportLogs(ActivityLogQueryParam param) {
+    public void exportLogsWithStream(ActivityLogQueryParam param) {
         Query query = createQuery(param, true);
         long start = System.currentTimeMillis();
         final AtomicInteger counter = new AtomicInteger(0);
@@ -48,26 +52,12 @@ public class ActivityLogService {
             Stream<ActivityLog> stream = mongoTemplate.stream(query, ActivityLog.class);
             BufferedWriter writer = new BufferedWriter(new FileWriter(exportFilePath, StandardCharsets.UTF_8))
         ) {
-            List<String> headers = List.of("วันเวลาทำรายการ", "Staff ID", "Branch Code", "Channel", "RM ID/EC",
-                "ID Type", "ID No.", "Service Type", "Activity Type", "Activity Status", "Detail");
+            writer.close();
             writer.write(toCsvRow(headers));
             writer.newLine();
             stream.forEach(activityLog -> {
                 try {
-                    List<String> detailRow = List.of(
-                        activityLog.getTxDatetime().toString(),
-                        activityLog.getStaffId(),
-                        activityLog.getBranchCode(),
-                        activityLog.getChannel(),
-                        activityLog.getRmidEc().toString(),
-                        activityLog.getIdType(),
-                        activityLog.getIdNo(),
-                        activityLog.getServiceType(),
-                        activityLog.getActivityType(),
-                        activityLog.getActivityStatus(),
-                        activityLog.getDetail() == null ? "" : activityLog.getDetail().toString()
-                    );
-                    writer.write(toCsvRow(detailRow));
+                    writer.write(logToCsvRow(activityLog));
                     writer.newLine();
                     counter.getAndIncrement();
                 } catch (IOException e) {
@@ -79,8 +69,45 @@ public class ActivityLogService {
             throw new RuntimeException(e);
         } finally {
             long end = System.currentTimeMillis();
+            log.info("Export CSV file process with stream API took: {} ms", end - start);
+        }
+    }
+
+    public void exportLogs(ActivityLogQueryParam param) {
+        Query query = createQuery(param, true);
+        long start = System.currentTimeMillis();
+        List<ActivityLog> activityLogs = mongoTemplate.find(query, ActivityLog.class);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(exportFilePath, StandardCharsets.UTF_8))) {
+            writer.write(toCsvRow(headers));
+            writer.newLine();
+            for (ActivityLog activityLog : activityLogs) {
+                writer.write(logToCsvRow(activityLog));
+                writer.newLine();
+            }
+            writer.write(String.valueOf(activityLogs.size()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            long end = System.currentTimeMillis();
             log.info("Export CSV file process took: {} ms", end - start);
         }
+    }
+
+    private String logToCsvRow(ActivityLog activityLog) {
+        List<String> detailRow = List.of(
+            activityLog.getTxDatetime().toString(),
+            activityLog.getStaffId(),
+            activityLog.getBranchCode(),
+            activityLog.getChannel(),
+            activityLog.getRmidEc().toString(),
+            activityLog.getIdType(),
+            activityLog.getIdNo(),
+            activityLog.getServiceType(),
+            activityLog.getActivityType(),
+            activityLog.getActivityStatus(),
+            activityLog.getDetail() == null ? "" : activityLog.getDetail().toString()
+        );
+        return toCsvRow(detailRow);
     }
 
     private String toCsvRow(List<String> dataRow) {

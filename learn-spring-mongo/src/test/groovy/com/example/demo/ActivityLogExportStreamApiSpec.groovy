@@ -5,7 +5,7 @@ import org.apache.commons.io.input.ReversedLinesFileReader
 
 import java.time.LocalDateTime
 
-class ActivityLogExportSpec extends ActivityLogExportSpecBase {
+class ActivityLogExportStreamApiSpec extends ActivityLogExportSpecBase {
     def "export large data set to CSV file should success with data row count as expected"() {
         given:
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam()
@@ -13,7 +13,7 @@ class ActivityLogExportSpec extends ActivityLogExportSpecBase {
         queryParam.dateTimeTo = LocalDateTime.parse("2024-05-30T23:59:59")
 
         when:
-        activityLogService.exportLogs(queryParam)
+        activityLogService.exportLogsWithStream(queryParam)
         def fileReader = ReversedLinesFileReader.builder().setFile(exportFilePath).get()
         def recordCount = fileReader.readLine()
 
