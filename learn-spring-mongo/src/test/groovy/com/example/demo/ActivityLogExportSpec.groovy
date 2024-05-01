@@ -3,6 +3,7 @@ package com.example.demo
 import com.example.demo.domain.ActivityLogQueryParam
 import com.example.demo.service.ActivityLogService
 import groovy.util.logging.Slf4j
+import org.apache.commons.io.FileUtils
 import org.apache.commons.io.input.ReversedLinesFileReader
 import org.spockframework.spring.EnableSharedInjection
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,7 +30,8 @@ import java.util.concurrent.TimeUnit
 @EnableSharedInjection
 class ActivityLogExportSpec extends Specification {
     @Value('${activity-log.export.path}')
-    private String exportFilePath
+    @Shared
+    String exportFilePath
     @Shared
     static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0")
             .withCopyFileToContainer(MountableFile.forClasspathResource("./data/init-activity-log.js"),
@@ -51,8 +53,8 @@ class ActivityLogExportSpec extends Specification {
         consumer.waitUntil(frame -> frame.getUtf8String().contains("MongoDB init process complete"), 60, TimeUnit.SECONDS)
         long end = System.currentTimeMillis()
         log.info("MongoDB container initialization process took: {} ms", end - start)
-        def containerLogs = mongoDBContainer.logs
-        log.info(containerLogs)
+//        def containerLogs = mongoDBContainer.logs
+//        log.info(containerLogs)
     }
 
     @DynamicPropertySource
@@ -81,6 +83,10 @@ class ActivityLogExportSpec extends Specification {
                 "--eval", "'db.activity_log.findOne()'",
                 "mongodb://localhost/")
         log.info("First activity log: {}", execResult.getStdout())
+    }
+
+    def cleanup() {
+        FileUtils.deleteQuietly(new File(exportFilePath))
     }
 
     def "when context loaded, all expected beans are created"() {
