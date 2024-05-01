@@ -39,6 +39,8 @@ dependencies {
     }
     annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:general'
 
+    implementation 'commons-io:commons-io:2.16.1'
+    implementation 'com.opencsv:opencsv:5.9'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

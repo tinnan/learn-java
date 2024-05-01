@@ -25,9 +25,6 @@ import java.time.LocalDateTime
 abstract class ActivityLogSpecBase extends Specification {
     @Shared
     static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0")
-    // todo: investigate how to init DB container with script file.
-//            .withCopyFileToContainer(MountableFile.forClasspathResource("/data/init-activity-log.js"),
-//                    "/docker-entrypoint-initdb.d/*.js:ro")
     @Autowired(required = false)
     @Shared
     ActivityLogRepository activityLogRepository
@@ -92,6 +89,10 @@ abstract class ActivityLogSpecBase extends Specification {
         activityLog4.activityType = "Address Info Input"
         activityLog4.activityStatus = "Pass"
         activityLogRepository.saveAll(List.of(activityLog1, activityLog2, activityLog3, activityLog4))
+    }
+
+    def cleanupSpec() {
+        mongoDBContainer.stop()
     }
 
     def "when context is loaded, all expected bean are created"() {
