@@ -52,7 +52,6 @@ public class ActivityLogService {
             Stream<ActivityLog> stream = mongoTemplate.stream(query, ActivityLog.class);
             BufferedWriter writer = new BufferedWriter(new FileWriter(exportFilePath, StandardCharsets.UTF_8))
         ) {
-            writer.close();
             writer.write(toCsvRow(headers));
             writer.newLine();
             stream.forEach(activityLog -> {
