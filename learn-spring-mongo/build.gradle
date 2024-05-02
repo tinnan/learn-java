@@ -49,9 +49,10 @@ dependencies {
     testImplementation 'org.testcontainers:mongodb:1.19.7'
 }
 
-tasks.named('test') {
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
     testLogging {
         events "PASSED", "SKIPPED", "FAILED"
     }
+    jvmArgs += ['-Xmx2g']
 }
