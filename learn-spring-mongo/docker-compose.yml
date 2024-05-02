@@ -8,4 +8,4 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - "./src/test/resources/data/init-activity-log.js:/docker-entrypoint-initdb.d/init-activity-log.js"
+      - "./src/test/resources/data/init-data.js:/docker-entrypoint-initdb.d/init-data.js"

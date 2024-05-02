@@ -3,8 +3,8 @@ package com.example.demo.service;
 import com.example.demo.domain.ActivityLog;
 import com.example.demo.domain.ActivityLogQueryParam;
 import com.example.demo.domain.QActivityLog;
+import com.example.demo.domain.csv.ReportHeaderMappingStrategy;
 import com.example.demo.repository.ActivityLogRepository;
-import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
@@ -12,6 +12,8 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Stream;
@@ -41,6 +43,23 @@ public class ActivityLogService {
     public List<ActivityLog> queryLogs(ActivityLogQueryParam param) {
         Query query = createQuery(param, false);
         return mongoTemplate.find(query, ActivityLog.class);
+    }
+
+    public String downloadLogs(ActivityLogQueryParam param)
+        throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
+        Query query = createQuery(param, true);
+        long start = System.currentTimeMillis();
+        try
+            (Stream<ActivityLog> stream = mongoTemplate.stream(query, ActivityLog.class);
+                StringWriter stringWriter = new StringWriter()
+            ) {
+            StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(stringWriter);
+            csvWriter.write(stream);
+            return stringWriter.toString();
+        } finally {
+            long end = System.currentTimeMillis();
+            log.info("Create CSV download data took: {} ms", end - start);
+        }
     }
 
     public void exportLogsWithStream(ActivityLogQueryParam param) {
@@ -81,32 +100,11 @@ public class ActivityLogService {
         }
     }
 
-    private StatefulBeanToCsv<ActivityLog> createCsvWriter(FileWriter fileWriter) {
-        HeaderColumnNameMappingStrategy<ActivityLog> strategy = new HeaderColumnNameMappingStrategy<>();
+    private StatefulBeanToCsv<ActivityLog> createCsvWriter(Writer fileWriter) {
+        ReportHeaderMappingStrategy<ActivityLog> strategy = new ReportHeaderMappingStrategy<>();
         strategy.setType(ActivityLog.class);
         StatefulBeanToCsvBuilder<ActivityLog> csvBuilder = new StatefulBeanToCsvBuilder<>(fileWriter);
         return csvBuilder.withMappingStrategy(strategy).build();
-    }
-
-    private String logToCsvRow(ActivityLog activityLog) {
-        List<String> detailRow = List.of(
-            activityLog.getTxDatetime().toString(),
-            activityLog.getStaffId(),
-            activityLog.getBranchCode(),
-            activityLog.getChannel(),
-            activityLog.getRmidEc().toString(),
-            activityLog.getIdType(),
-            activityLog.getIdNo(),
-            activityLog.getServiceType(),
-            activityLog.getActivityType(),
-            activityLog.getActivityStatus(),
-            activityLog.getDetail() == null ? "" : activityLog.getDetail().toString()
-        );
-        return toCsvRow(detailRow);
-    }
-
-    private String toCsvRow(List<String> dataRow) {
-        return String.join(",", dataRow.stream().map(s -> "\"" + s + "\"").toArray(String[]::new));
     }
 
     private Query createQuery(ActivityLogQueryParam param, boolean ignorePagination) {

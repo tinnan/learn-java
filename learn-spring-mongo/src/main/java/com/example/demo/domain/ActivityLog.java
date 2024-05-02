@@ -25,59 +25,59 @@ public class ActivityLog {
     private BigInteger id;
 
     @Field(name = "tx_datetime")
-    @CsvBindByName(column = "Transaction Date-Time")
     @CsvBindByPosition(position = 0)
+    @CsvBindByName(column = "Transaction Date-Time")
     @CsvDate("yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime txDatetime;
 
     @Field(name = "staff_id")
-    @CsvBindByName(column = "Staff ID")
     @CsvBindByPosition(position = 1)
+    @CsvBindByName(column = "Staff ID")
     private String staffId;
 
     @Field(name = "branch_code")
-    @CsvBindByName(column = "Branch Code")
     @CsvBindByPosition(position = 2)
+    @CsvBindByName(column = "Branch Code")
     private String branchCode;
 
     @Field(name = "channel")
-    @CsvBindByName(column = "Channel")
     @CsvBindByPosition(position = 3)
+    @CsvBindByName(column = "Channel")
     private String channel;
 
     @Field(name = "rmid_ec")
-    @CsvBindByName(column = "RM ID/EC")
     @CsvBindByPosition(position = 4)
+    @CsvBindByName(column = "RM ID/EC")
     private Integer rmidEc;
 
     @Field(name = "id_type")
-    @CsvBindByName(column = "ID Type")
     @CsvBindByPosition(position = 5)
+    @CsvBindByName(column = "ID Type")
     private String idType;
 
     @Field(name = "id_no")
-    @CsvBindByName(column = "ID No.")
     @CsvBindByPosition(position = 6)
+    @CsvBindByName(column = "ID No.")
     private String idNo;
 
     @Field(name = "service_type")
-    @CsvBindByName(column = "Service Type")
     @CsvBindByPosition(position = 7)
+    @CsvBindByName(column = "Service Type")
     private String serviceType;
 
     @Field(name = "activity_type")
-    @CsvBindByName(column = "Activity Type")
     @CsvBindByPosition(position = 8)
+    @CsvBindByName(column = "Activity Type")
     private String activityType;
 
     @Field(name = "activity_status")
-    @CsvBindByName(column = "Activity Status")
     @CsvBindByPosition(position = 9)
+    @CsvBindByName(column = "Activity Status")
     private String activityStatus;
 
     @Field(name = "detail")
-    @CsvBindByName(column = "Detail")
     @CsvBindByPosition(position = 10)
+    @CsvBindByName(column = "Detail")
     private Detail detail;
 
     @AllArgsConstructor
