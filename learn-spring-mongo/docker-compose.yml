@@ -1,0 +1,11 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: learn_spring_mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./src/test/resources/data/init-activity-log.js:/docker-entrypoint-initdb.d/init-activity-log.js"

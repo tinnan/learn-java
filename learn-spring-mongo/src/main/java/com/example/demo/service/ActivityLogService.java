@@ -4,13 +4,16 @@ import com.example.demo.domain.ActivityLog;
 import com.example.demo.domain.ActivityLogQueryParam;
 import com.example.demo.domain.QActivityLog;
 import com.example.demo.repository.ActivityLogRepository;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,10 +33,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ActivityLogService {
 
-    private static final List<String> headers = List.of("วันเวลาทำรายการ", "Staff ID", "Branch Code", "Channel",
-        "RM ID/EC",
-        "ID Type", "ID No.", "Service Type", "Activity Type", "Activity Status", "Detail");
-
     @Value("${activity-log.export.path}")
     private String exportFilePath;
     private final MongoTemplate mongoTemplate;
@@ -47,25 +46,13 @@ public class ActivityLogService {
     public void exportLogsWithStream(ActivityLogQueryParam param) {
         Query query = createQuery(param, true);
         long start = System.currentTimeMillis();
-        final AtomicInteger counter = new AtomicInteger(0);
         try (
             Stream<ActivityLog> stream = mongoTemplate.stream(query, ActivityLog.class);
             FileWriter fileWriter = new FileWriter(exportFilePath, StandardCharsets.UTF_8);
-            BufferedWriter writer = new BufferedWriter(fileWriter)
         ) {
-            writer.write(toCsvRow(headers));
-            writer.newLine();
-            stream.forEach(activityLog -> {
-                try {
-                    writer.write(logToCsvRow(activityLog));
-                    writer.newLine();
-                    counter.getAndIncrement();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            writer.write(String.valueOf(counter.get()));
-        } catch (IOException e) {
+            StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(fileWriter);
+            csvWriter.write(stream);
+        } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new RuntimeException(e);
         } finally {
             long end = System.currentTimeMillis();
@@ -75,25 +62,30 @@ public class ActivityLogService {
 
     public void exportLogs(ActivityLogQueryParam param) {
         Query query = createQuery(param, true);
-        long start = System.currentTimeMillis();
+        long start;
+        long end;
+        start = System.currentTimeMillis();
         List<ActivityLog> activityLogs = mongoTemplate.find(query, ActivityLog.class);
-        try (
-            FileWriter fileWriter = new FileWriter(exportFilePath, StandardCharsets.UTF_8);
-            BufferedWriter writer = new BufferedWriter(fileWriter)
-        ) {
-            writer.write(toCsvRow(headers));
-            writer.newLine();
-            for (ActivityLog activityLog : activityLogs) {
-                writer.write(logToCsvRow(activityLog));
-                writer.newLine();
-            }
-            writer.write(String.valueOf(activityLogs.size()));
-        } catch (IOException e) {
+        end = System.currentTimeMillis();
+        log.info("Query data took: {} ms", end - start);
+
+        start = System.currentTimeMillis();
+        try (FileWriter fileWriter = new FileWriter(exportFilePath, StandardCharsets.UTF_8)) {
+            StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(fileWriter);
+            csvWriter.write(activityLogs);
+        } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new RuntimeException(e);
         } finally {
-            long end = System.currentTimeMillis();
-            log.info("Export CSV file process took: {} ms", end - start);
+            end = System.currentTimeMillis();
+            log.info("Export file took: {} ms", end - start);
         }
+    }
+
+    private StatefulBeanToCsv<ActivityLog> createCsvWriter(FileWriter fileWriter) {
+        HeaderColumnNameMappingStrategy<ActivityLog> strategy = new HeaderColumnNameMappingStrategy<>();
+        strategy.setType(ActivityLog.class);
+        StatefulBeanToCsvBuilder<ActivityLog> csvBuilder = new StatefulBeanToCsvBuilder<>(fileWriter);
+        return csvBuilder.withMappingStrategy(strategy).build();
     }
 
     private String logToCsvRow(ActivityLog activityLog) {
