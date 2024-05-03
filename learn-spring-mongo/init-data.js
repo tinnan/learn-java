@@ -11,6 +11,10 @@ db.createUser({
     ]
 });
 
+db.activity_log.createIndex({tx_datetime: 1});
+db.activity_log.createIndex({tx_datetime: 1, branch_code: 1});
+db.activity_log.createIndex({staff_id: 1});
+
 const dataSize = 1000000;
 const bulkSize = 100000;
 const epochSeed = 1714475447000; // 2024-04-30T18:10:47.000+07:00
@@ -20,7 +24,7 @@ for (let i = 1; i <= dataSize; i += 1) {
     const l = {
         'tx_datetime': new Date(epoch),
         'staff_id': '52134',
-        'branch_code': '001',
+        'branch_code': '0'.repeat(5).concat(Math.random().toFixed(3) * 1000).substr(-5),
         'channel': 'Branch',
         'rmid_ec': Int32(77318491),
         'id_type': 'CID',

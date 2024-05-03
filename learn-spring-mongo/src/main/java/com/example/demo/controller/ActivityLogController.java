@@ -24,12 +24,12 @@ public class ActivityLogController implements ActivityLogSvcClient {
     private final ActivityLogService activityLogService;
 
     @Override
-    public ResponseEntity<Resource> download()
+    public ResponseEntity<Resource> download(LocalDateTime txFrom, LocalDateTime txTo)
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
         log.info("Service layer received request.");
         ActivityLogQueryParam param = new ActivityLogQueryParam();
-        param.setDateTimeFrom(LocalDateTime.parse("2024-04-30T00:00:00"));
-        param.setDateTimeTo(LocalDateTime.parse("2024-05-30T23:59:59"));
+        param.setDateTimeFrom(txFrom);
+        param.setDateTimeTo(txTo);
         ByteArrayResource resource = new ByteArrayResource(activityLogService.downloadLogs(param).getBytes());
 
         HttpHeaders headers = new HttpHeaders();
