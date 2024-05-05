@@ -19,4 +19,10 @@ public interface ActivityLogSvcClient {
         @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txFrom,
         @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txTo)
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException;
+
+    @GetMapping(value = "/api/v1/svc/logs/generate")
+    ResponseEntity<String> generate(
+        @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txFrom,
+        @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txTo
+    );
 }

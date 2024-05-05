@@ -66,7 +66,7 @@ public class ActivityLogService {
         }
     }
 
-    public void exportLogsWithStream(ActivityLogQueryParam param) {
+    public String exportLogsWithStream(ActivityLogQueryParam param) {
         Query query = createQuery(param, true);
         long start = System.currentTimeMillis();
         try (
@@ -76,6 +76,7 @@ public class ActivityLogService {
         ) {
             StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(osw);
             csvWriter.write(stream);
+            return exportFilePath;
         } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new RuntimeException(e);
         } finally {
