@@ -2,6 +2,7 @@ package com.example.demo
 
 import com.example.demo.service.ActivityLogService
 import groovy.util.logging.Slf4j
+import org.apache.commons.io.FileUtils
 import org.spockframework.spring.EnableSharedInjection
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -81,9 +82,9 @@ abstract class ActivityLogExportSpecBase extends Specification {
         log.info("First activity log: {}", execResult.getStdout())
     }
 
-//    def cleanup() {
-//        FileUtils.deleteQuietly(new File(exportFilePath))
-//    }
+    def cleanup() {
+        FileUtils.deleteQuietly(new File(exportFilePath))
+    }
 
     def "when context loaded, all expected beans are created"() {
         expect:

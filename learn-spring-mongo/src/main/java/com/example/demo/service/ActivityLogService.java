@@ -10,11 +10,11 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -71,9 +71,10 @@ public class ActivityLogService {
         long start = System.currentTimeMillis();
         try (
             Stream<ActivityLog> stream = mongoTemplate.stream(query, ActivityLog.class);
-            FileWriter fileWriter = new FileWriter(exportFilePath, StandardCharsets.UTF_8);
+            FileOutputStream fos = new FileOutputStream(exportFilePath);
+            OutputStreamWriter osw = new OutputStreamWriter(fos)
         ) {
-            StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(fileWriter);
+            StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(osw);
             csvWriter.write(stream);
         } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new RuntimeException(e);
@@ -93,8 +94,12 @@ public class ActivityLogService {
         log.info("Query data took: {} ms", end - start);
 
         start = System.currentTimeMillis();
-        try (FileWriter fileWriter = new FileWriter(exportFilePath, StandardCharsets.UTF_8)) {
-            StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(fileWriter);
+
+        try (
+            FileOutputStream fos = new FileOutputStream(exportFilePath);
+            OutputStreamWriter osw = new OutputStreamWriter(fos)
+        ) {
+            StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(osw);
             csvWriter.write(activityLogs);
         } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new RuntimeException(e);
