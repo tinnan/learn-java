@@ -65,5 +65,4 @@ tasks.withType(Test).configureEach {
     testLogging {
         events "PASSED", "SKIPPED", "FAILED"
     }
-    jvmArgs += ['-Xmx2g']
 }

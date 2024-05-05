@@ -1,11 +1,11 @@
 package com.example.demo.clients;
 
+import com.example.demo.domain.ActivityLogResponse;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ActivityLogSvcClient {
 
     @GetMapping(value = "/api/v1/svc/logs/download")
-    ResponseEntity<Resource> download(@RequestParam("txFrom") LocalDateTime txFrom,
+    ResponseEntity<ActivityLogResponse> download(@RequestParam("txFrom") LocalDateTime txFrom,
         @RequestParam("txTo") LocalDateTime txTo)
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException;
 }

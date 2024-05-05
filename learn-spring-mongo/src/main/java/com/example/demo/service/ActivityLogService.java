@@ -41,20 +41,24 @@ public class ActivityLogService {
     private final ActivityLogRepository activityLogRepository;
 
     public List<ActivityLog> queryLogs(ActivityLogQueryParam param) {
-        Query query = createQuery(param, false);
-        return mongoTemplate.find(query, ActivityLog.class);
+        final long start = System.currentTimeMillis();
+        List<ActivityLog> activityLogs = null;
+        try {
+            Query query = createQuery(param, false);
+            activityLogs = mongoTemplate.find(query, ActivityLog.class);
+        } finally {
+            final long end = System.currentTimeMillis();
+            log.info("Query activity log data took: {} ms", end - start);
+        }
+        return activityLogs;
     }
 
-    public String downloadLogs(ActivityLogQueryParam param)
+    public String beanToCsvText(List<ActivityLog> activityLogs)
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
-        Query query = createQuery(param, true);
         long start = System.currentTimeMillis();
-        try
-            (Stream<ActivityLog> stream = mongoTemplate.stream(query, ActivityLog.class);
-                StringWriter stringWriter = new StringWriter()
-            ) {
+        try (StringWriter stringWriter = new StringWriter()) {
             StatefulBeanToCsv<ActivityLog> csvWriter = createCsvWriter(stringWriter);
-            csvWriter.write(stream);
+            csvWriter.write(activityLogs);
             return stringWriter.toString();
         } finally {
             long end = System.currentTimeMillis();
