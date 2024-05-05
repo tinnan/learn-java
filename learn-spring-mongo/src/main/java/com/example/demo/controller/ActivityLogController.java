@@ -26,6 +26,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
     public ResponseEntity<ActivityLogResponse> download(LocalDateTime txFrom, LocalDateTime txTo)
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
         log.info("Service layer received request.");
+        log.info("Query: Tx {} - {}", txFrom, txTo);
         ActivityLogQueryParam param = new ActivityLogQueryParam();
         param.setDateTimeFrom(txFrom);
         param.setDateTimeTo(txTo);
