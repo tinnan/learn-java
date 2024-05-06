@@ -4,11 +4,15 @@ import com.example.demo.clients.ActivityLogSvcClient;
 import com.example.demo.domain.ActivityLog;
 import com.example.demo.domain.ActivityLogQueryParam;
 import com.example.demo.domain.ActivityLogResponse;
+import com.example.demo.domain.ActivityLogWithPageResponse;
+import com.example.demo.domain.ActivityLogWithPageResponse.PageInfo;
+import com.example.demo.service.ActivityLogPaginationService;
 import com.example.demo.service.ActivityLogService;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ActivityLogController implements ActivityLogSvcClient {
 
     private final ActivityLogService activityLogService;
+    private final ActivityLogPaginationService activityLogPaginationService;
 
     @Override
     public ResponseEntity<ActivityLogResponse> download(LocalDateTime txFrom, LocalDateTime txTo) {
@@ -38,5 +43,20 @@ public class ActivityLogController implements ActivityLogSvcClient {
         param.setDateTimeTo(txTo);
         final String exportFilePath = activityLogService.exportLogsWithStream(param);
         return ResponseEntity.ok(exportFilePath);
+    }
+
+    @Override
+    public ResponseEntity<ActivityLogWithPageResponse> queryWithPage(LocalDateTime txFrom, LocalDateTime txTo,
+        Integer page, Integer pageSize) {
+        ActivityLogQueryParam param = new ActivityLogQueryParam();
+        param.setDateTimeFrom(txFrom);
+        param.setDateTimeTo(txTo);
+
+        Page<ActivityLog> activityLogPage = activityLogPaginationService.findWithPage(param, page, pageSize);
+        PageInfo pageInfo = new PageInfo(page, pageSize, activityLogPage.getTotalPages(), activityLogPage.hasPrevious(),
+            activityLogPage.hasNext(), activityLogPage.isLast());
+        ActivityLogWithPageResponse response = new ActivityLogWithPageResponse(
+            activityLogPage.getContent(), pageInfo);
+        return ResponseEntity.ok(response);
     }
 }

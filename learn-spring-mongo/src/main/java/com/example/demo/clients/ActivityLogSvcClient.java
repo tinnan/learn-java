@@ -1,6 +1,7 @@
 package com.example.demo.clients;
 
 import com.example.demo.domain.ActivityLogResponse;
+import com.example.demo.domain.ActivityLogWithPageResponse;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.io.IOException;
@@ -25,4 +26,11 @@ public interface ActivityLogSvcClient {
         @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txFrom,
         @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txTo
     );
+
+    @GetMapping(value = "/api/v1/svc/logs")
+    ResponseEntity<ActivityLogWithPageResponse> queryWithPage(
+        @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txFrom,
+        @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txTo,
+        @RequestParam("page") Integer page,
+        @RequestParam("pageSize") Integer pageSize);
 }
