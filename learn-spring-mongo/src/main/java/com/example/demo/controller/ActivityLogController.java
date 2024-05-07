@@ -53,9 +53,13 @@ public class ActivityLogController implements ActivityLogSvcClient {
         param.setDateTimeTo(txTo);
 
         Page<ActivityLog> activityLogPage = activityLogPaginationService.findWithPage(param, pageNumber, pageSize);
-        PageInfo pageInfo = new PageInfo(pageNumber, pageSize, activityLogPage.getTotalPages(),
+        PageInfo pageInfo = new PageInfo(pageNumber, pageSize,
+            activityLogPage.getTotalPages(),
+            activityLogPage.getTotalElements(),
             activityLogPage.hasPrevious(),
-            activityLogPage.hasNext(), activityLogPage.isLast());
+            activityLogPage.hasNext(),
+            activityLogPage.isLast()
+        );
         ActivityLogWithPageResponse response = new ActivityLogWithPageResponse(
             activityLogPage.getContent(), pageInfo);
         return ResponseEntity.ok(response);
