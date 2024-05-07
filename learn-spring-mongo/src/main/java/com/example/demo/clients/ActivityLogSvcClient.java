@@ -31,6 +31,6 @@ public interface ActivityLogSvcClient {
     ResponseEntity<ActivityLogWithPageResponse> queryWithPage(
         @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txFrom,
         @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txTo,
-        @RequestParam("page") Integer page,
+        @RequestParam("page") Integer pageNumber,
         @RequestParam("pageSize") Integer pageSize);
 }

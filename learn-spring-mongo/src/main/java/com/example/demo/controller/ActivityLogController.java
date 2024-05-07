@@ -47,13 +47,14 @@ public class ActivityLogController implements ActivityLogSvcClient {
 
     @Override
     public ResponseEntity<ActivityLogWithPageResponse> queryWithPage(LocalDateTime txFrom, LocalDateTime txTo,
-        Integer page, Integer pageSize) {
+        Integer pageNumber, Integer pageSize) {
         ActivityLogQueryParam param = new ActivityLogQueryParam();
         param.setDateTimeFrom(txFrom);
         param.setDateTimeTo(txTo);
 
-        Page<ActivityLog> activityLogPage = activityLogPaginationService.findWithPage(param, page, pageSize);
-        PageInfo pageInfo = new PageInfo(page, pageSize, activityLogPage.getTotalPages(), activityLogPage.hasPrevious(),
+        Page<ActivityLog> activityLogPage = activityLogPaginationService.findWithPage(param, pageNumber, pageSize);
+        PageInfo pageInfo = new PageInfo(pageNumber, pageSize, activityLogPage.getTotalPages(),
+            activityLogPage.hasPrevious(),
             activityLogPage.hasNext(), activityLogPage.isLast());
         ActivityLogWithPageResponse response = new ActivityLogWithPageResponse(
             activityLogPage.getContent(), pageInfo);
