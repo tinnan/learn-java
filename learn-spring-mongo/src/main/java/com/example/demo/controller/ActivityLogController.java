@@ -64,4 +64,10 @@ public class ActivityLogController implements ActivityLogSvcClient {
             activityLogPage.getContent(), pageInfo);
         return ResponseEntity.ok(response);
     }
+
+    @Override
+    public ResponseEntity<ActivityLog> create(ActivityLog activityLog) {
+        ActivityLog saved = activityLogService.create(activityLog);
+        return ResponseEntity.ok(saved);
+    }
 }

@@ -11,6 +11,8 @@ db.createUser({
     ]
 });
 
+db.createCollection('activity_log', {});
+
 db.activity_log.createIndex({tx_datetime: 1});
 db.activity_log.createIndex({tx_datetime: 1, branch_code: 1});
 db.activity_log.createIndex({staff_id: 1});
@@ -31,14 +33,15 @@ for (let i = 1; i <= dataSize; i += 1) {
         'id_no': '1123900091841',
         'service_type': 'Create RM',
         'activity_type': 'Dip Chip',
-        'activity_status': 'Failed',
+        'activity_status': 'Pass',
     };
     if (Math.random() < 0.1) {
-        l.detail = Object({"errorCode":"400","errorMsg":"Generic Server Error"});
+        l.activity_status = 'Failed';
+        l.detail = Object({"error_code": "400", "error_msg": "Generic Server Error"});
     }
     dat.push(l);
     if (i % bulkSize == 0) {
         db.activity_log.insertMany(dat);
         dat = [];
-    } 
+    }
 }

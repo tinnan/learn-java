@@ -150,12 +150,4 @@ class ActivityLogSpec extends ActivityLogSpecBase {
             get(1).id == 3
         }
     }
-
-    def "tetset"() {
-        when:
-        activityLogService.exportOpenCsv()
-
-        then:
-        1 == 1
-    }
 }

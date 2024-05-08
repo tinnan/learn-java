@@ -14,7 +14,7 @@ public abstract class ActivityLogServiceBase {
         Query query = createQuery(param);
         query.with(createSort(param));
         PaginationAndSort paginationAndSort = param.getPaginationAndSort();
-        if (!ignorePagination && paginationAndSort != null && paginationAndSort.isSorted()) {
+        if (!ignorePagination && paginationAndSort != null && paginationAndSort.isPaged()) {
             query.with(createPageable(paginationAndSort.getPageNumber(), paginationAndSort.getPageSize()));
         }
         return query;

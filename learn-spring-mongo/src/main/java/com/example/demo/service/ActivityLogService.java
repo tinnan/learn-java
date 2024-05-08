@@ -39,6 +39,10 @@ public class ActivityLogService extends ActivityLogServiceBase {
     private final MongoTemplate mongoTemplate;
     private final ActivityLogRepository activityLogRepository;
 
+    public ActivityLog create(ActivityLog activityLog) {
+        return activityLogRepository.save(activityLog);
+    }
+
     public List<ActivityLog> queryLogs(ActivityLogQueryParam param) {
         final long start = System.currentTimeMillis();
         List<ActivityLog> activityLogs = null;

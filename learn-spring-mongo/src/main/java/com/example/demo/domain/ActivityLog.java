@@ -85,7 +85,9 @@ public class ActivityLog {
     @Setter
     public static class Detail {
 
+        @Field(name = "error_code")
         private String errorCode;
+        @Field(name = "error_msg")
         private String errorMsg;
 
         @Override

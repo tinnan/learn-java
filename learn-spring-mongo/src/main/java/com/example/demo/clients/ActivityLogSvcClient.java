@@ -1,5 +1,6 @@
 package com.example.demo.clients;
 
+import com.example.demo.domain.ActivityLog;
 import com.example.demo.domain.ActivityLogResponse;
 import com.example.demo.domain.ActivityLogWithPageResponse;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
@@ -10,6 +11,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "svc", url = "http://localhost:8080")
@@ -33,4 +36,7 @@ public interface ActivityLogSvcClient {
         @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txTo,
         @RequestParam("page") Integer pageNumber,
         @RequestParam("pageSize") Integer pageSize);
+
+    @PostMapping(value = "/api/v1/svc/logs")
+    ResponseEntity<ActivityLog> create(@RequestBody ActivityLog activityLog);
 }
