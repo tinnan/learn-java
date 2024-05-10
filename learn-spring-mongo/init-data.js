@@ -12,6 +12,17 @@ db.createUser({
 });
 
 db.createCollection('activity_log', {});
+db.createView('activity_log_view', 'activity_log',
+    [
+        {
+            $addFields: {
+                user_activity: {
+                    $concat: ['$service_type', '_', '$activity_status']
+                }
+            }
+        }
+    ]
+);
 
 db.activity_log.createIndex({tx_datetime: 1});
 db.activity_log.createIndex({tx_datetime: 1, branch_code: 1});

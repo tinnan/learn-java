@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.ActivityLog;
+import com.example.demo.domain.ActivityLogForAggregate;
 import com.example.demo.domain.ActivityLogQueryParam;
 import com.example.demo.domain.ActivityLogQueryParam.PaginationAndSort;
 import java.util.ArrayList;
@@ -31,21 +31,22 @@ public class ActivityLogAggregationService extends ActivityLogServiceBase {
 
     private final MongoTemplate mongoTemplate;
 
-    public List<ActivityLog> queryAggregation(ActivityLogQueryParam param) {
+    public List<ActivityLogForAggregate> queryAggregation(ActivityLogQueryParam param) {
         Aggregation aggregate = createAggregateQuery(param);
         // Since each aggregation stages have 100MB memory limit set on them, if the dataset is too large
         // and memory exceeds the limit Mongo will produce error.
         // To allow pipeline to exceed the limit one may set option allowDiskUse to MongoTemplate.aggregate() method.
         AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).build();
-        AggregationResults<ActivityLog> aggregateResult = mongoTemplate.aggregate(aggregate.withOptions(options),
-            ActivityLog.class,
-            ActivityLog.class);
+        AggregationResults<ActivityLogForAggregate> aggregateResult = mongoTemplate.aggregate(
+            aggregate.withOptions(options),
+            ActivityLogForAggregate.class,
+            ActivityLogForAggregate.class);
         return aggregateResult.getMappedResults();
     }
 
     private Aggregation createAggregateQuery(ActivityLogQueryParam param) {
         List<AggregationOperation> stages = new ArrayList<>();
-        ProjectionOperation projectionStage = Aggregation.project(ActivityLog.class)
+        ProjectionOperation projectionStage = Aggregation.project(ActivityLogForAggregate.class)
             .and(Concat.valueOf("service_type").concat("_").concatValueOf("activity_status"))
             .as("user_activity");
         stages.add(projectionStage);

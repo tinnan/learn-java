@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.clients.ActivityLogSvcClient;
 import com.example.demo.domain.ActivityLog;
+import com.example.demo.domain.ActivityLogForAggregate;
 import com.example.demo.domain.ActivityLogQueryParam;
 import com.example.demo.domain.ActivityLogQueryParam.PaginationAndSort;
 import com.example.demo.domain.ActivityLogResponse;
@@ -79,7 +80,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
         PaginationAndSort paginationAndSort = param.createPaginationAndSort();
         paginationAndSort.setPage(pageNumber, pageSize);
 
-        List<ActivityLog> activityLogs = activityLogAggregationService.queryAggregation(param);
+        List<ActivityLogForAggregate> activityLogs = activityLogAggregationService.queryAggregation(param);
         ActivityLogWithPageResponse response = new ActivityLogWithPageResponse(activityLogs, null);
         return ResponseEntity.ok(response);
     }
