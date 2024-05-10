@@ -3,9 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.clients.ActivityLogSvcClient;
 import com.example.demo.domain.ActivityLog;
 import com.example.demo.domain.ActivityLogQueryParam;
+import com.example.demo.domain.ActivityLogQueryParam.PaginationAndSort;
 import com.example.demo.domain.ActivityLogResponse;
 import com.example.demo.domain.ActivityLogWithPageResponse;
 import com.example.demo.domain.ActivityLogWithPageResponse.PageInfo;
+import com.example.demo.service.ActivityLogAggregationService;
 import com.example.demo.service.ActivityLogPaginationService;
 import com.example.demo.service.ActivityLogService;
 import java.time.LocalDateTime;
@@ -23,6 +25,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
 
     private final ActivityLogService activityLogService;
     private final ActivityLogPaginationService activityLogPaginationService;
+    private final ActivityLogAggregationService activityLogAggregationService;
 
     @Override
     public ResponseEntity<ActivityLogResponse> download(LocalDateTime txFrom, LocalDateTime txTo) {
@@ -62,6 +65,22 @@ public class ActivityLogController implements ActivityLogSvcClient {
         );
         ActivityLogWithPageResponse response = new ActivityLogWithPageResponse(
             activityLogPage.getContent(), pageInfo);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<ActivityLogWithPageResponse> queryWithAgg(LocalDateTime txFrom, LocalDateTime txTo,
+        String serviceType, String activityStatus, Integer pageNumber, Integer pageSize) {
+        ActivityLogQueryParam param = new ActivityLogQueryParam();
+        param.setDateTimeFrom(txFrom);
+        param.setDateTimeTo(txTo);
+        param.setServiceType(serviceType);
+        param.setActivityStatus(activityStatus);
+        PaginationAndSort paginationAndSort = param.createPaginationAndSort();
+        paginationAndSort.setPage(pageNumber, pageSize);
+
+        List<ActivityLog> activityLogs = activityLogAggregationService.queryAggregation(param);
+        ActivityLogWithPageResponse response = new ActivityLogWithPageResponse(activityLogs, null);
         return ResponseEntity.ok(response);
     }
 

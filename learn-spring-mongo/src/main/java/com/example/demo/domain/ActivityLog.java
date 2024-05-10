@@ -80,6 +80,12 @@ public class ActivityLog {
     @CsvBindByName(column = "Detail")
     private Detail detail;
 
+    @Field(name = "user_activity")
+    private String userActivity;
+
+    @Field(name = "row_num")
+    private Long rowNum;
+
     @AllArgsConstructor
     @Getter
     @Setter
