@@ -45,7 +45,7 @@ public class ActivityLogService extends ActivityLogServiceBase {
 
     public List<ActivityLog> queryLogs(ActivityLogQueryParam param) {
         final long start = System.currentTimeMillis();
-        List<ActivityLog> activityLogs = null;
+        List<ActivityLog> activityLogs;
         try {
             Query query = createQuery(param, false);
             activityLogs = mongoTemplate.find(query, ActivityLog.class);

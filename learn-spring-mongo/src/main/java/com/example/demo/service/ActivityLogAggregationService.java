@@ -52,9 +52,8 @@ public class ActivityLogAggregationService extends ActivityLogServiceBase {
         stages.add(projectionStage);
 
         Criteria c = Criteria.where("tx_datetime").gte(param.getDateTimeFrom()).lte(param.getDateTimeTo());
-        if (param.getServiceType() != null && param.getActivityStatus() != null) {
-            final String dat = param.getServiceType() + "_" + param.getActivityStatus();
-            c.and("user_activity").is(dat);
+        if (param.getUserActivity() != null) {
+            c.and("user_activity").is(param.getUserActivity());
         }
         MatchOperation matchStage = Aggregation.match(c);
         stages.add(matchStage);

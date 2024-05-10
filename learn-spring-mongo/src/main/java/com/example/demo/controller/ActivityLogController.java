@@ -71,12 +71,11 @@ public class ActivityLogController implements ActivityLogSvcClient {
 
     @Override
     public ResponseEntity<ActivityLogWithPageResponse> queryWithAgg(LocalDateTime txFrom, LocalDateTime txTo,
-        String serviceType, String activityStatus, Integer pageNumber, Integer pageSize) {
+        String userActivity, Integer pageNumber, Integer pageSize) {
         ActivityLogQueryParam param = new ActivityLogQueryParam();
         param.setDateTimeFrom(txFrom);
         param.setDateTimeTo(txTo);
-        param.setServiceType(serviceType);
-        param.setActivityStatus(activityStatus);
+        param.setUserActivity(userActivity);
         PaginationAndSort paginationAndSort = param.createPaginationAndSort();
         paginationAndSort.setPage(pageNumber, pageSize);
 
