@@ -37,6 +37,15 @@ public interface ActivityLogSvcClient {
         @RequestParam("page") Integer pageNumber,
         @RequestParam("pageSize") Integer pageSize);
 
+    @GetMapping(value = "/api/v1/svc/logs/view")
+    ResponseEntity<ActivityLogWithPageResponse> queryWithView(
+        @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txFrom,
+        @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txTo,
+        @RequestParam(name = "userActivity", required = false) String userActivity,
+        @RequestParam("page") Integer pageNumber,
+        @RequestParam("pageSize") Integer pageSize
+    );
+
     @GetMapping(value = "/api/v1/svc/logs/agg")
     ResponseEntity<ActivityLogWithPageResponse> queryWithAgg(
         @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime txFrom,

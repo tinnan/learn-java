@@ -86,7 +86,7 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam();
         queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-13T00:00:00")
         queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T05:01:50")
-        queryParam.createPaginationAndSort().setSortDesc("id")
+        queryParam.getPaginationAndSort().setSortDesc("id")
 
         when: "Query data"
         def activityLogs = activityLogService.queryLogs(queryParam)
@@ -121,7 +121,7 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam()
         queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-12T00:00:00")
         queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T23:59:59")
-        queryParam.createPaginationAndSort().setPage(2, 3)
+        queryParam.getPaginationAndSort().setPage(2, 3)
 
         when: "Query data"
         def activityLogs = activityLogService.queryLogs(queryParam)

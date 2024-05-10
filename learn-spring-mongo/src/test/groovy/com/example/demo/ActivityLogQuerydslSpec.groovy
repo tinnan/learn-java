@@ -10,7 +10,7 @@ class ActivityLogQuerydslSpec extends ActivityLogSpecBase {
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam();
         queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-13T00:00:00")
         queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T05:01:50")
-        queryParam.createPaginationAndSort().setSortDesc("id");
+        queryParam.getPaginationAndSort().setSortDesc("id");
 
         when: "Query data"
         def pair = activityLogService.queryDslLogs(queryParam)
@@ -53,7 +53,7 @@ class ActivityLogQuerydslSpec extends ActivityLogSpecBase {
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam()
         queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-12T00:00:00")
         queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T23:59:59")
-        queryParam.createPaginationAndSort().setPage(2, 3)
+        queryParam.getPaginationAndSort().setPage(2, 3)
 
         when: "Query data"
         def pair = activityLogService.queryDslLogs(queryParam)
@@ -77,7 +77,7 @@ class ActivityLogQuerydslSpec extends ActivityLogSpecBase {
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam()
         queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-12T00:00:00")
         queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T23:59:59")
-        queryParam.createPaginationAndSort().setPage(1, 2).setSortAcs("rmidEc")
+        queryParam.getPaginationAndSort().setPage(1, 2).setSortAcs("rmidEc")
 
         when: "Query data"
         def pair = activityLogService.queryDslLogs(queryParam)

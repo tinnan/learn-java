@@ -6,11 +6,13 @@ import com.example.demo.domain.ActivityLogForAggregate;
 import com.example.demo.domain.ActivityLogQueryParam;
 import com.example.demo.domain.ActivityLogQueryParam.PaginationAndSort;
 import com.example.demo.domain.ActivityLogResponse;
+import com.example.demo.domain.ActivityLogView;
 import com.example.demo.domain.ActivityLogWithPageResponse;
 import com.example.demo.domain.ActivityLogWithPageResponse.PageInfo;
 import com.example.demo.service.ActivityLogAggregationService;
 import com.example.demo.service.ActivityLogPaginationService;
 import com.example.demo.service.ActivityLogService;
+import com.example.demo.service.ActivityLogViewService;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
     private final ActivityLogService activityLogService;
     private final ActivityLogPaginationService activityLogPaginationService;
     private final ActivityLogAggregationService activityLogAggregationService;
+    private final ActivityLogViewService activityLogViewService;
 
     @Override
     public ResponseEntity<ActivityLogResponse> download(LocalDateTime txFrom, LocalDateTime txTo) {
@@ -70,13 +73,30 @@ public class ActivityLogController implements ActivityLogSvcClient {
     }
 
     @Override
+    public ResponseEntity<ActivityLogWithPageResponse> queryWithView(LocalDateTime txFrom, LocalDateTime txTo,
+        String userActivity, Integer pageNumber, Integer pageSize) {
+        ActivityLogQueryParam param = new ActivityLogQueryParam();
+        param.setDateTimeFrom(txFrom);
+        param.setDateTimeTo(txTo);
+        param.setUserActivity(userActivity);
+        param.getPaginationAndSort().setPage(pageNumber, pageSize);
+
+        Page<ActivityLogView> page = activityLogViewService.query(param);
+        PageInfo pageInfo = new PageInfo(pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(),
+            page.hasPrevious(), page.hasNext(), page.isLast()
+        );
+        ActivityLogWithPageResponse response = new ActivityLogWithPageResponse(page.getContent(), pageInfo);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
     public ResponseEntity<ActivityLogWithPageResponse> queryWithAgg(LocalDateTime txFrom, LocalDateTime txTo,
         String userActivity, Integer pageNumber, Integer pageSize) {
         ActivityLogQueryParam param = new ActivityLogQueryParam();
         param.setDateTimeFrom(txFrom);
         param.setDateTimeTo(txTo);
         param.setUserActivity(userActivity);
-        PaginationAndSort paginationAndSort = param.createPaginationAndSort();
+        PaginationAndSort paginationAndSort = param.getPaginationAndSort();
         paginationAndSort.setPage(pageNumber, pageSize);
 
         List<ActivityLogForAggregate> activityLogs = activityLogAggregationService.queryAggregation(param);

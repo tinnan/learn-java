@@ -22,8 +22,10 @@ public class ActivityLogQueryParam {
     private String userActivity; // userActivity = serviceType + "_" + activityStatus
     private PaginationAndSort paginationAndSort;
 
-    public PaginationAndSort createPaginationAndSort() {
-        this.paginationAndSort = new PaginationAndSort();
+    public PaginationAndSort getPaginationAndSort() {
+        if (this.paginationAndSort == null) {
+            this.paginationAndSort = new PaginationAndSort();
+        }
         return this.paginationAndSort;
     }
 

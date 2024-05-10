@@ -13,11 +13,14 @@ public abstract class ActivityLogServiceBase {
     protected Query createQuery(ActivityLogQueryParam param, boolean ignorePagination) {
         Query query = createQuery(param);
         query.with(createSort(param));
-        PaginationAndSort paginationAndSort = param.getPaginationAndSort();
-        if (!ignorePagination && paginationAndSort != null && paginationAndSort.isPaged()) {
-            query.with(createPageable(paginationAndSort.getPageNumber(), paginationAndSort.getPageSize()));
+        if (!ignorePagination) {
+            query.with(createPageable(param));
         }
         return query;
+    }
+
+    protected Query createQuery(ActivityLogQueryParam param, Pageable pageable) {
+        return createQuery(param).with(createSort(param)).with(pageable);
     }
 
     protected Query createQuery(ActivityLogQueryParam param) {
@@ -43,6 +46,9 @@ public abstract class ActivityLogServiceBase {
         if (param.getRmidEc() != null) {
             c.and("rmidEc").is(param.getRmidEc());
         }
+        if (param.getUserActivity() != null) {
+            c.and("userActivity").is(param.getUserActivity());
+        }
         return new Query(c);
     }
 
@@ -53,6 +59,14 @@ public abstract class ActivityLogServiceBase {
 
         return Sort.by(param.getPaginationAndSort().getSortDirection(),
             param.getPaginationAndSort().getSortField());
+    }
+
+    protected Pageable createPageable(ActivityLogQueryParam param) {
+        PaginationAndSort paginationAndSort = param.getPaginationAndSort();
+        if (paginationAndSort != null && paginationAndSort.isPaged()) {
+            return createPageable(paginationAndSort.getPageNumber(), paginationAndSort.getPageSize());
+        }
+        return Pageable.unpaged();
     }
 
     protected Pageable createPageable(int pageNumber, int pageSize) {
