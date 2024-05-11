@@ -73,6 +73,8 @@ class CustomerControllerTest extends Specification {
         *         obj.message == CUSTOMER_REGISTERED_MESSAGE
         * } as Notification) >> NOTIFIED
         */
+        // Read more about Argument constraints at
+        // https://spockframework.org/spock/docs/2.0/all_in_one.html#_argument_constraints
     }
 
     def "should success when registering eligible customer"() {
