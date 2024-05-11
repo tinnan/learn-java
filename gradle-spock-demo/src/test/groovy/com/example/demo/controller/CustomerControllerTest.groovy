@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
-import spock.lang.Shared
 import spock.lang.Specification
 
 import static groovy.json.JsonOutput.toJson
@@ -23,11 +22,8 @@ import static org.springframework.test.util.TestSocketUtils.findAvailableTcpPort
 class CustomerControllerTest extends Specification {
     private static final String BASE_URI = "http://localhost"
     private static final int PORT = findAvailableTcpPort()
-
-    @Shared
-    def eligibleCustomerEmail = "john.d@gmail.com"
-    @Shared
-    def fraudsterCustomerEmail = "jane.d@gmail.com"
+    private static final String ELIGIBLE_CUSTOMER_EMAIL = "john.d@gmail.com"
+    private static final String FRAUDSTER_CUSTOMER_EMAIL = "jane.d@gmail.com"
 
     @DynamicPropertySource
     static void dynamicProps(DynamicPropertyRegistry registry) {
@@ -48,14 +44,14 @@ class CustomerControllerTest extends Specification {
 
     @SpringBean
     FraudClient fraudClient = Stub() {
-        isFraudster(eligibleCustomerEmail) >> false
-        isFraudster(fraudsterCustomerEmail) >> true
+        isFraudster(ELIGIBLE_CUSTOMER_EMAIL) >> false
+        isFraudster(FRAUDSTER_CUSTOMER_EMAIL) >> true
     }
 
     def "should success when registering eligible customer"() {
         given:
         Map request = [username: "johnd",
-                       email   : eligibleCustomerEmail]
+                       email   : ELIGIBLE_CUSTOMER_EMAIL]
 
         when:
         def response = RestAssured.with()
@@ -69,7 +65,7 @@ class CustomerControllerTest extends Specification {
     def "should fail when registering ineligible customer"() {
         given:
         Map request = [username: "janed",
-                       email   : fraudsterCustomerEmail]
+                       email   : FRAUDSTER_CUSTOMER_EMAIL]
 
         when:
         def response = RestAssured.with()

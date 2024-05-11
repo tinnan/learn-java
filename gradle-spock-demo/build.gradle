@@ -46,6 +46,9 @@ dependencies {
 	testImplementation 'io.rest-assured:rest-assured'
 }
 
-tasks.named('test') {
+tasks.withType(Test).configureEach {
 	useJUnitPlatform()
+	testLogging {
+		events 'PASSED', 'SKIPPED', 'FAILED'
+	}
 }
