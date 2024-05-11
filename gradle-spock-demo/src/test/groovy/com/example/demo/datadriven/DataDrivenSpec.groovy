@@ -1,4 +1,4 @@
-package spockexample
+package com.example.demo.datadriven
 
 import spock.lang.Specification
 
