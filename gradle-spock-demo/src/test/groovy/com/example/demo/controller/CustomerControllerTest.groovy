@@ -1,7 +1,10 @@
 package com.example.demo.controller
 
 import com.example.demo.clients.FraudClient
+import com.example.demo.clients.NotificationClient
 import com.example.demo.controller.advisor.ExceptionHandlers
+import com.example.demo.domain.CustomerRegisterResult
+import com.example.demo.domain.Notification
 import io.restassured.RestAssured
 import io.restassured.config.LogConfig
 import io.restassured.filter.log.LogDetail
@@ -14,6 +17,7 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import spock.lang.Specification
 
+import static com.example.demo.service.CustomerService.CUSTOMER_REGISTERED_MESSAGE
 import static groovy.json.JsonOutput.toJson
 import static io.restassured.http.ContentType.JSON
 import static org.springframework.test.util.TestSocketUtils.findAvailableTcpPort
@@ -24,17 +28,22 @@ class CustomerControllerTest extends Specification {
     private static final int PORT = findAvailableTcpPort()
     private static final String ELIGIBLE_CUSTOMER_EMAIL = "john.d@gmail.com"
     private static final String FRAUDSTER_CUSTOMER_EMAIL = "jane.d@gmail.com"
+    private static final Notification NOTIFIED = new Notification()
+            .setId(1)
+            .setNotifyToEmail(ELIGIBLE_CUSTOMER_EMAIL)
+            .setMessage(CUSTOMER_REGISTERED_MESSAGE)
 
     @DynamicPropertySource
     static void dynamicProps(DynamicPropertyRegistry registry) {
+        def feignClientUrl = "${BASE_URI}:${PORT}"
         registry.add("server.port", () -> PORT)
-        registry.add("feign.client.customer.url", () -> "${BASE_URI}:${PORT}")
-        registry.add("feign.client.fraud.url", () -> "${BASE_URI}:${PORT}")
-        RestAssured.port = PORT
+        registry.add("feign.client.customer.url", () -> feignClientUrl)
+        registry.add("feign.client.fraud.url", () -> feignClientUrl)
     }
 
     def setupSpec() {
         RestAssured.baseURI = BASE_URI
+        RestAssured.port = PORT
         RestAssured.config = RestAssured.config()
                 .logConfig(LogConfig.logConfig()
                         .enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL)
@@ -46,6 +55,24 @@ class CustomerControllerTest extends Specification {
     FraudClient fraudClient = Stub() {
         isFraudster(ELIGIBLE_CUSTOMER_EMAIL) >> false
         isFraudster(FRAUDSTER_CUSTOMER_EMAIL) >> true
+    }
+
+    @SpringBean
+    NotificationClient notificationClient = Stub() {
+        // "it" is reference to the argument object.
+        notify({
+            it.notifyToEmail == ELIGIBLE_CUSTOMER_EMAIL
+            it.message == CUSTOMER_REGISTERED_MESSAGE
+        } as Notification) >> NOTIFIED
+
+        /*
+        * This style works the same as above:
+        * notify({
+        *     obj ->
+        *         obj.notifyToEmail == ELIGIBLE_CUSTOMER_EMAIL
+        *         obj.message == CUSTOMER_REGISTERED_MESSAGE
+        * } as Notification) >> NOTIFIED
+        */
     }
 
     def "should success when registering eligible customer"() {
@@ -60,6 +87,12 @@ class CustomerControllerTest extends Specification {
 
         then:
         response.statusCode() == HttpStatus.OK.value()
+        verifyAll(response.body.as(CustomerRegisterResult)) {
+            registered.username == "johnd"
+            registered.email == ELIGIBLE_CUSTOMER_EMAIL
+            registered.joinDate
+            notified == NOTIFIED
+        }
     }
 
     def "should fail when registering ineligible customer"() {

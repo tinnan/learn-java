@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.clients.CustomerClient;
 import com.example.demo.domain.Customer;
+import com.example.demo.domain.CustomerRegisterResult;
 import com.example.demo.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,7 +19,7 @@ public class CustomerController implements CustomerClient {
 
     @Override
     @SneakyThrows
-    public Customer register(Customer customer) {
+    public CustomerRegisterResult register(Customer customer) {
         log.info("Registering customer.");
         return customerService.register(customer);
     }

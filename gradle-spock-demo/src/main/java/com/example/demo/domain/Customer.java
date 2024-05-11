@@ -1,13 +1,17 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.time.Period;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -27,6 +31,8 @@ public class Customer {
     @Email
     private String email;
     private LocalDate joinDate;
+    @Transient
+    private int daysSinceJoin;
 
     public int getDaysSinceJoin() {
         return Period.between(joinDate, LocalDate.now())
