@@ -8,9 +8,13 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.Period;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Entity
 @Data
+@Accessors(chain = true)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Customer {
     @Id

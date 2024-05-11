@@ -3,13 +3,15 @@ package com.example.demo.clients;
 import com.example.demo.domain.Customer;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "customer", url = "http://localhost:8080")
-@RequestMapping("/api/v1/customer")
+@FeignClient(name = "customer", url = "${feign.client.customer.url}")
 public interface CustomerClient {
     @PostMapping
     Customer register(@Valid @RequestBody Customer customer);
+    @GetMapping
+    Customer get(@RequestParam("customerId") long customerId);
 }
