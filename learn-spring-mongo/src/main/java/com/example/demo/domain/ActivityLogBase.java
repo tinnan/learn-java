@@ -69,6 +69,9 @@ public abstract class ActivityLogBase {
     @CsvBindByName(column = "Activity Status")
     private String activityStatus;
 
+    @Field(name = "meta_data")
+    private String metaData;
+
     @Field(name = "detail")
     @CsvBindByPosition(position = 10)
     @CsvBindByName(column = "Detail")

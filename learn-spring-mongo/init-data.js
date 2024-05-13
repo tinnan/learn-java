@@ -45,6 +45,7 @@ for (let i = 1; i <= dataSize; i += 1) {
         'service_type': 'Create RM',
         'activity_type': 'Dip Chip',
         'activity_status': 'Pass',
+        'meta_data': Object({'device_id': 'BB00931', 'device_app_version': '1.0.0'})
     };
     if (Math.random() < 0.1) {
         l.activity_status = 'Failed';
