@@ -86,6 +86,8 @@ public abstract class ActivityLogBase {
         private String errorCode;
         @Field(name = "error_msg")
         private String errorMsg;
+        @Field(name = "error_fields")
+        private String[] errorFields;
 
         @Override
         public String toString() {
