@@ -5,9 +5,10 @@ import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -77,7 +78,8 @@ public abstract class ActivityLogBase {
     @CsvBindByName(column = "Detail")
     private ActivityLog.Detail detail;
 
-    @AllArgsConstructor
+    @NoArgsConstructor
+    @Accessors(chain = true)
     @Getter
     @Setter
     public static class Detail {

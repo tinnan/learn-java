@@ -12,8 +12,8 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         expect:
         verifyAll(activityLogs) {
             size() == 2
-            get(0).id == 2
-            get(1).id == 3
+            get(0).id == ID_2
+            get(1).id == ID_3
         }
     }
 
@@ -26,7 +26,7 @@ class ActivityLogSpec extends ActivityLogSpecBase {
             !empty
             size() == 4
             verifyAll(get(0)) {
-                id == 1
+                id == ID_1
                 txDatetime == LocalDateTime.parse("2024-04-15T03:41:33")
                 staffId == "52134"
                 branchCode == "001"
@@ -63,9 +63,9 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         activityLogsPage1.hasNext()
         activityLogs1.size() == 3
         verifyAll(activityLogs1) {
-            get(0).id == 3
-            get(1).id == 1
-            get(2).id == 4
+            get(0).id == ID_3
+            get(1).id == ID_1
+            get(2).id == ID_4
         }
 
         when: "Query page 2 with descending sort"
@@ -77,7 +77,7 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         !activityLogsPage2.hasNext()
         activityLogs2.size() == 1
         verifyAll(activityLogs2) {
-            get(0).id == 2
+            get(0).id == ID_2
         }
     }
 
@@ -86,7 +86,7 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam();
         queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-13T00:00:00")
         queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T05:01:50")
-        queryParam.getPaginationAndSort().setSortDesc("id")
+        queryParam.getPaginationAndSort().setSortDesc("txDatetime")
 
         when: "Query data"
         def activityLogs = activityLogService.queryLogs(queryParam)
@@ -94,8 +94,8 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         then: "Only filtered data is returned in descend sorting order"
         verifyAll(activityLogs) {
             size() == 2
-            get(0).id == 4
-            get(1).id == 1
+            get(0).id == ID_1
+            get(1).id == ID_4
         }
     }
 
@@ -112,7 +112,7 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         then: "Only filtered data is returned"
         verifyAll(activityLogs) {
             size() == 1
-            get(0).id == 4
+            get(0).id == ID_4
         }
     }
 
@@ -129,7 +129,7 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         then: "Only data on page is returned"
         verifyAll(activityLogs) {
             size() == 1
-            get(0).id == 4
+            get(0).id == ID_4
         }
     }
 
@@ -146,8 +146,8 @@ class ActivityLogSpec extends ActivityLogSpecBase {
         then: "Only filtered data is returned"
         verifyAll(activityLogs) {
             size() == 2
-            get(0).id == 1
-            get(1).id == 3
+            get(0).id == ID_1
+            get(1).id == ID_3
         }
     }
 }
