@@ -2,14 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.domain.ActivityLog;
 import com.example.demo.domain.ActivityLogQueryParam;
-import com.example.demo.domain.QActivityLog;
 import com.example.demo.domain.csv.ReportHeaderMappingStrategy;
 import com.example.demo.repository.ActivityLogRepository;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -20,13 +18,8 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -118,59 +111,5 @@ public class ActivityLogService extends ActivityLogServiceBase {
         strategy.setType(ActivityLog.class);
         StatefulBeanToCsvBuilder<ActivityLog> csvBuilder = new StatefulBeanToCsvBuilder<>(fileWriter);
         return csvBuilder.withMappingStrategy(strategy).build();
-    }
-
-    /*
-        Query composing with Domain Specific Language (DSL).
-     */
-    public Pair<Page<ActivityLog>, List<ActivityLog>> queryDslLogs(ActivityLogQueryParam param) {
-        QActivityLog qActivityLog = QActivityLog.activityLog;
-        BooleanExpression expression = qActivityLog.txDatetime.between(param.getDateTimeFrom(), param.getDateTimeTo());
-        if (param.getServiceType() != null) {
-            expression = expression.and(qActivityLog.serviceType.eq(param.getServiceType()));
-        }
-        if (param.getBranchCode() != null) {
-            expression = expression.and(qActivityLog.branchCode.eq(param.getBranchCode()));
-        }
-        if (param.getChannel() != null) {
-            expression = expression.and(qActivityLog.channel.eq(param.getChannel()));
-        }
-        if (param.getIdType() != null && param.getIdNo() != null) {
-            expression =
-                expression.and(qActivityLog.idType.eq(param.getIdType())).and(qActivityLog.idNo.eq(param.getIdNo()));
-        }
-        if (param.getActivityType() != null) {
-            expression = expression.and(qActivityLog.activityType.in(param.getActivityType()));
-        }
-        if (param.getActivityStatus() != null) {
-            expression = expression.and(qActivityLog.activityStatus.eq(param.getActivityStatus()));
-        }
-        if (param.getRmidEc() != null) {
-            expression = expression.and(qActivityLog.rmidEc.eq(param.getRmidEc()));
-        }
-
-        ActivityLogQueryParam.PaginationAndSort paginationAndSort = param.getPaginationAndSort();
-        Pageable pageable = null;
-        Sort sort = null;
-        if (paginationAndSort != null) {
-            if (paginationAndSort.isSorted()) {
-                sort = Sort.by(paginationAndSort.getSortDirection(), paginationAndSort.getSortField());
-            }
-            if (paginationAndSort.isPaged() && sort != null) {
-                // Pagination with sorting.
-                pageable = PageRequest.of(paginationAndSort.getPageNumber(), paginationAndSort.getPageSize(), sort);
-            } else if (paginationAndSort.isPaged()) {
-                pageable = PageRequest.of(paginationAndSort.getPageNumber(), paginationAndSort.getPageSize());
-            }
-        }
-
-        if (pageable != null) {
-            Page<ActivityLog> page = activityLogRepository.findAll(expression, pageable);
-            return Pair.of(page, page.toList());
-        } else if (sort != null) {
-            List<ActivityLog> activityLogs = activityLogRepository.findAll(expression, sort);
-            return Pair.of(Page.empty(Pageable.unpaged(sort)), activityLogs);
-        }
-        return Pair.of(Page.empty(), activityLogRepository.findAll(expression));
     }
 }
