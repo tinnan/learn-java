@@ -35,6 +35,7 @@ let dat = [];
 for (let i = 1; i <= dataSize; i += 1) {
     const epoch = epochSeed + (i * 1000); // 1 activity log every 1 second.
     const l = {
+        '_id': UUID(),
         'tx_datetime': new Date(epoch),
         'staff_id': '52134',
         'branch_code': '0'.repeat(5).concat(Math.random().toFixed(3) * 1000).substr(-5),

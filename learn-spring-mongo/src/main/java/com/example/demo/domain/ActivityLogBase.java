@@ -3,8 +3,8 @@ package com.example.demo.domain;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public abstract class ActivityLogBase {
 
     @Id
-    private BigInteger id;
+    private UUID id;
 
     @Field(name = "tx_datetime")
     @CsvBindByPosition(position = 0)
