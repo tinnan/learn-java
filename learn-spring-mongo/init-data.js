@@ -30,7 +30,7 @@ db.activity_log.createIndex({staff_id: 1});
 
 const dataSize = 1000000;
 const bulkSize = 100000;
-const epochSeed = 1714475447000; // 2024-04-30T18:10:47.000+07:00
+const epochSeed = 1714475447000; // 2024-04-30T11:10:47.000Z
 let dat = [];
 for (let i = 1; i <= dataSize; i += 1) {
     const epoch = epochSeed + (i * 1000); // 1 activity log every 1 second.

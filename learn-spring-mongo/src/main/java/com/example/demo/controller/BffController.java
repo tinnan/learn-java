@@ -8,6 +8,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class BffController {
     private final ActivityLogService activityLogService;
 
     @GetMapping(value = "/api/v1/bff/logs/download/bytes", produces = "text/csv")
-    public ResponseEntity<Resource> downloadBytes(@RequestParam("txFrom") LocalDateTime txFrom,
-        @RequestParam("txTo") LocalDateTime txTo)
+    public ResponseEntity<Resource> downloadBytes(@RequestParam("txFrom") Instant txFrom,
+        @RequestParam("txTo") Instant txTo)
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
         log.info("BFF layer received request - download bytes.");
         log.info("Query: Tx {} - {}", txFrom, txTo);
@@ -45,8 +46,8 @@ public class BffController {
     }
 
     @GetMapping(value = "/api/v1/bff/logs/download/stream", produces = "text/csv")
-    public ResponseEntity<Resource> downloadStream(@RequestParam("txFrom") LocalDateTime txFrom,
-        @RequestParam("txTo") LocalDateTime txTo) throws IOException {
+    public ResponseEntity<Resource> downloadStream(@RequestParam("txFrom") Instant txFrom,
+        @RequestParam("txTo") Instant txTo) throws IOException {
         log.info("BFF layer received request - download stream.");
         log.info("Query: Tx {} - {}", txFrom, txTo);
         ResponseEntity<String> logData = activityLogSvcClient.generate(txFrom, txTo);

@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import lombok.Data;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import org.springframework.data.domain.Sort.Direction;
 @Data
 public class ActivityLogQueryParam {
 
-    private LocalDateTime dateTimeFrom;
-    private LocalDateTime dateTimeTo;
+    private Instant dateTimeFrom;
+    private Instant dateTimeTo;
     private String serviceType;
     private String branchCode;
     private String channel;

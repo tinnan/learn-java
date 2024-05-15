@@ -13,7 +13,7 @@ import com.example.demo.service.ActivityLogAggregationService;
 import com.example.demo.service.ActivityLogPaginationService;
 import com.example.demo.service.ActivityLogService;
 import com.example.demo.service.ActivityLogViewService;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
     private final ActivityLogViewService activityLogViewService;
 
     @Override
-    public ResponseEntity<ActivityLogResponse> download(LocalDateTime txFrom, LocalDateTime txTo) {
+    public ResponseEntity<ActivityLogResponse> download(Instant txFrom, Instant txTo) {
         log.info("Service layer received request - download.");
         log.info("Query: Tx {} - {}", txFrom, txTo);
         ActivityLogQueryParam param = new ActivityLogQueryParam();
@@ -43,7 +43,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
     }
 
     @Override
-    public ResponseEntity<String> generate(LocalDateTime txFrom, LocalDateTime txTo) {
+    public ResponseEntity<String> generate(Instant txFrom, Instant txTo) {
         log.info("Service layer received request - generate.");
         ActivityLogQueryParam param = new ActivityLogQueryParam();
         param.setDateTimeFrom(txFrom);
@@ -53,7 +53,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
     }
 
     @Override
-    public ResponseEntity<ActivityLogWithPageResponse> queryWithPage(LocalDateTime txFrom, LocalDateTime txTo,
+    public ResponseEntity<ActivityLogWithPageResponse> queryWithPage(Instant txFrom, Instant txTo,
         Integer pageNumber, Integer pageSize) {
         ActivityLogQueryParam param = new ActivityLogQueryParam();
         param.setDateTimeFrom(txFrom);
@@ -73,7 +73,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
     }
 
     @Override
-    public ResponseEntity<ActivityLogWithPageResponse> queryWithView(LocalDateTime txFrom, LocalDateTime txTo,
+    public ResponseEntity<ActivityLogWithPageResponse> queryWithView(Instant txFrom, Instant txTo,
         String userActivity, Integer pageNumber, Integer pageSize) {
         ActivityLogQueryParam param = new ActivityLogQueryParam();
         param.setDateTimeFrom(txFrom);
@@ -90,7 +90,7 @@ public class ActivityLogController implements ActivityLogSvcClient {
     }
 
     @Override
-    public ResponseEntity<ActivityLogWithPageResponse> queryWithAgg(LocalDateTime txFrom, LocalDateTime txTo,
+    public ResponseEntity<ActivityLogWithPageResponse> queryWithAgg(Instant txFrom, Instant txTo,
         String userActivity, Integer pageNumber, Integer pageSize) {
         ActivityLogQueryParam param = new ActivityLogQueryParam();
         param.setDateTimeFrom(txFrom);

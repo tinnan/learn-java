@@ -3,7 +3,7 @@ package com.example.demo.domain;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ public abstract class ActivityLogBase {
     @CsvBindByPosition(position = 0)
     @CsvBindByName(column = "Transaction Date-Time")
     @CsvDate("yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime txDatetime;
+    private Instant txDatetime;
 
     @Field(name = "staff_id")
     @CsvBindByPosition(position = 1)

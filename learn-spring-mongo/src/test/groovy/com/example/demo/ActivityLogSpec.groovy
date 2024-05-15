@@ -4,7 +4,7 @@ import com.example.demo.domain.ActivityLogQueryParam
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 
-import java.time.LocalDateTime
+import java.time.Instant
 
 class ActivityLogSpec extends ActivityLogSpecBase {
     def "findByX method"() {
@@ -27,7 +27,7 @@ class ActivityLogSpec extends ActivityLogSpecBase {
             size() == 4
             verifyAll(get(0)) {
                 id == ID_1
-                txDatetime == LocalDateTime.parse("2024-04-15T03:41:33")
+                txDatetime == Instant.parse("2024-04-15T03:41:33Z")
                 staffId == "52134"
                 branchCode == "001"
                 channel == "Branch"
@@ -84,8 +84,8 @@ class ActivityLogSpec extends ActivityLogSpecBase {
     def "Query with search criteria"() {
         given: "Search criteria transaction date from-to and descending sorting by field 'id'"
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam();
-        queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-13T00:00:00")
-        queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T05:01:50")
+        queryParam.dateTimeFrom = Instant.parse("2024-04-13T00:00:00Z")
+        queryParam.dateTimeTo = Instant.parse("2024-04-15T05:01:50Z")
         queryParam.getPaginationAndSort().setSortDesc("txDatetime")
 
         when: "Query data"
@@ -102,8 +102,8 @@ class ActivityLogSpec extends ActivityLogSpecBase {
     def "Query with more search criteria"() {
         given: "Search criteria transaction date from-to and activity status = Pass"
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam()
-        queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-13T00:00:00")
-        queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T05:01:50")
+        queryParam.dateTimeFrom = Instant.parse("2024-04-13T00:00:00Z")
+        queryParam.dateTimeTo = Instant.parse("2024-04-15T05:01:50Z")
         queryParam.activityStatus = "Pass"
 
         when: "Query data"
@@ -119,8 +119,8 @@ class ActivityLogSpec extends ActivityLogSpecBase {
     def "Query with search criteria and pagination"() {
         given: "Search criteria transaction date from-to and select 2 with page size 3"
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam()
-        queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-12T00:00:00")
-        queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T23:59:59")
+        queryParam.dateTimeFrom = Instant.parse("2024-04-12T00:00:00Z")
+        queryParam.dateTimeTo = Instant.parse("2024-04-15T23:59:59Z")
         queryParam.getPaginationAndSort().setPage(2, 3)
 
         when: "Query data"
@@ -136,8 +136,8 @@ class ActivityLogSpec extends ActivityLogSpecBase {
     def "Query with search criteria activity type (multi select)"() {
         given: "Search criteria transaction date from-to and activity type 'Dip Chip', 'Personal Info Input'"
         ActivityLogQueryParam queryParam = new ActivityLogQueryParam()
-        queryParam.dateTimeFrom = LocalDateTime.parse("2024-04-12T00:00:00")
-        queryParam.dateTimeTo = LocalDateTime.parse("2024-04-15T23:59:59")
+        queryParam.dateTimeFrom = Instant.parse("2024-04-12T00:00:00Z")
+        queryParam.dateTimeTo = Instant.parse("2024-04-15T23:59:59Z")
         queryParam.activityType = List.of("Dip Chip", "Personal Info Input")
 
         when: "Query data"

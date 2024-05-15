@@ -15,7 +15,7 @@ import org.testcontainers.spock.Testcontainers
 import spock.lang.Shared
 import spock.lang.Specification
 
-import java.time.LocalDateTime
+import java.time.Instant
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Testcontainers
@@ -44,7 +44,7 @@ abstract class ActivityLogSpecBase extends Specification {
     def setupSpec() {
         ActivityLog activityLog1 = new ActivityLog()
         activityLog1.id = ID_1
-        activityLog1.txDatetime = LocalDateTime.parse("2024-04-15T03:41:33")
+        activityLog1.txDatetime = Instant.parse("2024-04-15T03:41:33Z")
         activityLog1.staffId = "52134"
         activityLog1.branchCode = "001"
         activityLog1.channel = "Branch"
@@ -58,7 +58,7 @@ abstract class ActivityLogSpecBase extends Specification {
                 .setErrorCode("400").setErrorMsg("Generic Server Error").setErrorFields("field_1")
         ActivityLog activityLog2 = new ActivityLog()
         activityLog2.id = ID_2
-        activityLog2.txDatetime = LocalDateTime.parse("2024-04-12T06:03:12")
+        activityLog2.txDatetime = Instant.parse("2024-04-12T06:03:12Z")
         activityLog2.staffId = "62007"
         activityLog2.branchCode = "002"
         activityLog2.channel = "Branch"
@@ -70,7 +70,7 @@ abstract class ActivityLogSpecBase extends Specification {
         activityLog2.activityStatus = "Pass"
         ActivityLog activityLog3 = new ActivityLog();
         activityLog3.id = ID_3
-        activityLog3.txDatetime = LocalDateTime.parse("2024-04-15T06:12:01")
+        activityLog3.txDatetime = Instant.parse("2024-04-15T06:12:01Z")
         activityLog3.staffId = "62007"
         activityLog3.branchCode = "001"
         activityLog3.channel = "Branch"
@@ -82,7 +82,7 @@ abstract class ActivityLogSpecBase extends Specification {
         activityLog3.activityStatus = "Pass"
         ActivityLog activityLog4 = new ActivityLog();
         activityLog4.id = ID_4
-        activityLog4.txDatetime = LocalDateTime.parse("2024-04-14T10:54:34")
+        activityLog4.txDatetime = Instant.parse("2024-04-14T10:54:34Z")
         activityLog4.staffId = "57219"
         activityLog4.branchCode = "003"
         activityLog4.channel = "Off Site"
