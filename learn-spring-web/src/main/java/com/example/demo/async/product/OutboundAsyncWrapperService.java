@@ -1,9 +1,9 @@
-package com.example.demo.product;
+package com.example.demo.async.product;
 
-import com.example.demo.clients.CustomerClient;
-import com.example.demo.clients.FraudClient;
-import com.example.demo.model.CustomerInfoResponse;
-import com.example.demo.model.FraudCheckResponse;
+import com.example.demo.async.clients.CustomerClient;
+import com.example.demo.async.clients.FraudClient;
+import com.example.demo.async.model.CustomerInfoResponse;
+import com.example.demo.async.model.FraudCheckResponse;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;

@@ -1,7 +1,7 @@
-package com.example.demo.fraud;
+package com.example.demo.async.fraud;
 
-import com.example.demo.model.FraudCheckResponse;
-import com.example.demo.clients.FraudClient;
+import com.example.demo.async.clients.FraudClient;
+import com.example.demo.async.model.FraudCheckResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;

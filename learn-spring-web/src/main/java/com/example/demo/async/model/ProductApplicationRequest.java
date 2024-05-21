@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.async.model;
 
 public record ProductApplicationRequest(Integer customerId, String productId) {
 

@@ -1,3 +1,4 @@
-# Learn Spring + Async for parallel API call
+# Learn Spring Web
 
-See test `com.example.demo.AsyncApiCallSpecs`.
+### With Async for parallel API call
+See test `com.example.demo.async.AsyncApiCallSpecs`.

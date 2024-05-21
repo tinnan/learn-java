@@ -1,7 +1,7 @@
-package com.example.demo.product;
+package com.example.demo.async.product;
 
-import com.example.demo.model.CustomerInfoResponse;
-import com.example.demo.model.FraudCheckResponse;
+import com.example.demo.async.model.CustomerInfoResponse;
+import com.example.demo.async.model.FraudCheckResponse;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

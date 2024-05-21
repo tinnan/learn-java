@@ -1,6 +1,6 @@
-package com.example.demo.product;
+package com.example.demo.async.product;
 
-import com.example.demo.model.ProductApplicationRequest;
+import com.example.demo.async.model.ProductApplicationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

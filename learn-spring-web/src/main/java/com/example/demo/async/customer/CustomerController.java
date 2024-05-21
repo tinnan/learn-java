@@ -1,7 +1,7 @@
-package com.example.demo.customer;
+package com.example.demo.async.customer;
 
-import com.example.demo.clients.CustomerClient;
-import com.example.demo.model.CustomerInfoResponse;
+import com.example.demo.async.clients.CustomerClient;
+import com.example.demo.async.model.CustomerInfoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;

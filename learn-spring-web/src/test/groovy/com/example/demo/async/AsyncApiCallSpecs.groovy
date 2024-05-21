@@ -1,4 +1,5 @@
-package com.example.demo
+package com.example.demo.async
+
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.spockframework.spring.EnableSharedInjection
@@ -15,7 +16,7 @@ import spock.lang.Specification
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = DemoApplication)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = AsyncDemoApplication)
 @AutoConfigureMockMvc
 @EnableSharedInjection
 class AsyncApiCallSpecs extends Specification {

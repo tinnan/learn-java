@@ -1,6 +1,6 @@
-package com.example.demo.clients;
+package com.example.demo.async.clients;
 
-import com.example.demo.model.CustomerInfoResponse;
+import com.example.demo.async.model.CustomerInfoResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
