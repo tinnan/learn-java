@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.libuser.TokenDecodeFilterTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2024-05-22T16:45:41" hostname="TTB-FVFHP4HBQ05P" time="0.981">
+  <properties/>
+  <testcase name="Test access endpoints [token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjYxNjQzIiwicGVybWlzc2lvbnMiOlsiSU5RVUlSRSIsIlJPTEVfR0VORVJBVEUiXX0.HqQ-NGw3b6DZ8FhMoLwvblRNgziUdLe6CAKgzTqjqFI, url: /api/v1/secure/inquire, expectedStatus: 200, #0]" classname="com.example.libuser.TokenDecodeFilterTest" time="0.859"/>
+  <testcase name="Test access endpoints [token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjYxNjQzIiwicGVybWlzc2lvbnMiOlsiSU5RVUlSRSIsIlJPTEVfR0VORVJBVEUiXX0.HqQ-NGw3b6DZ8FhMoLwvblRNgziUdLe6CAKgzTqjqFI, url: /api/v1/secure/generate, expectedStatus: 200, #1]" classname="com.example.libuser.TokenDecodeFilterTest" time="0.025"/>
+  <testcase name="Test access endpoints [token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjYxNjQzIiwicGVybWlzc2lvbnMiOlsiSU5RVUlSRSIsIlJPTEVfR0VORVJBVEUiXX0.HqQ-NGw3b6DZ8FhMoLwvblRNgziUdLe6CAKgzTqjqFI, url: /api/v1/secure/count, expectedStatus: 403, #2]" classname="com.example.libuser.TokenDecodeFilterTest" time="0.028"/>
+  <testcase name="Test access endpoints [token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6IjYxNjQzIiwicGVybWlzc2lvbnMiOlsiSU5RVUlSRSIsIlJPTEVfR0VORVJBVEUiXX0.HqQ-NGw3b6DZ8FhMoLwvblRNgziUdLe6CAKgzTqjqFI, url: /api/v1/secure/sum, expectedStatus: 200, #3]" classname="com.example.libuser.TokenDecodeFilterTest" time="0.013"/>
+  <testcase name="Test access endpoints [token: , url: /api/v1/secure/inquire, expectedStatus: 403, #4]" classname="com.example.libuser.TokenDecodeFilterTest" time="0.009"/>
+  <testcase name="Test access endpoints [token: , url: /api/v1/secure/generate, expectedStatus: 403, #5]" classname="com.example.libuser.TokenDecodeFilterTest" time="0.015"/>
+  <testcase name="Test access endpoints [token: , url: /api/v1/secure/count, expectedStatus: 403, #6]" classname="com.example.libuser.TokenDecodeFilterTest" time="0.014"/>
+  <testcase name="Test access endpoints [token: , url: /api/v1/secure/sum, expectedStatus: 200, #7]" classname="com.example.libuser.TokenDecodeFilterTest" time="0.012"/>
+  <system-out><![CDATA[
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2024-05-22T23:45:40.758+07:00  INFO 8529 --- [    Test worker] c.example.libuser.TokenDecodeFilterTest  : Starting TokenDecodeFilterTest using Java 17.0.11 with PID 8529 (started by 61643 in /Users/tin/Code/tinnan/learn-java/learn-build-spring-lib/lib-user-app)
+2024-05-22T23:45:40.759+07:00  INFO 8529 --- [    Test worker] c.example.libuser.TokenDecodeFilterTest  : No active profile set, falling back to 1 default profile: "default"
+2024-05-22T23:45:41.233+07:00  INFO 8529 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 36907 (http)
+2024-05-22T23:45:41.240+07:00  INFO 8529 --- [    Test worker] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-05-22T23:45:41.240+07:00  INFO 8529 --- [    Test worker] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-22T23:45:41.288+07:00  INFO 8529 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-05-22T23:45:41.290+07:00  INFO 8529 --- [    Test worker] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 511 ms
+2024-05-22T23:45:41.410+07:00 DEBUG 8529 --- [    Test worker] swordEncoderAuthenticationManagerBuilder : No authenticationProviders and no parentAuthenticationManager defined. Returning null.
+2024-05-22T23:45:41.552+07:00  INFO 8529 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/**/secure/**'] with [org.springframework.security.web.session.DisableEncodeUrlFilter@51813065, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4f581211, org.springframework.security.web.context.SecurityContextHolderFilter@7b3c2ae0, org.springframework.security.web.header.HeaderWriterFilter@29c25bbc, org.springframework.web.filter.CorsFilter@e0847a9, org.springframework.security.web.csrf.CsrfFilter@b841713, org.springframework.security.web.authentication.logout.LogoutFilter@4ab455e2, org.example.security.configuration.filter.JwtDecodeFilter@51743cc0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@41059616, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@34e25492, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@92e2c93, org.springframework.security.web.session.SessionManagementFilter@716ae973, org.springframework.security.web.access.ExceptionTranslationFilter@1f60824e]
+2024-05-22T23:45:41.647+07:00  INFO 8529 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 36907 (http) with context path ''
+2024-05-22T23:45:41.652+07:00  INFO 8529 --- [    Test worker] c.example.libuser.TokenDecodeFilterTest  : Started TokenDecodeFilterTest in 1.049 seconds (process running for 1.787)
+2024-05-22T23:45:42.425+07:00  INFO 8529 --- [io-36907-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-05-22T23:45:42.426+07:00  INFO 8529 --- [io-36907-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-05-22T23:45:42.426+07:00  INFO 8529 --- [io-36907-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2024-05-22T23:45:42.435+07:00 DEBUG 8529 --- [io-36907-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/secure/inquire
+2024-05-22T23:45:42.468+07:00 DEBUG 8529 --- [io-36907-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/secure/inquire
+2024-05-22T23:45:42.475+07:00 DEBUG 8529 --- [io-36907-exec-1] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public java.lang.String com.example.libuser.controller.SpringSecurityController.inquire(); target is of class [com.example.libuser.controller.SpringSecurityController]
+2024-05-22T23:45:42.488+07:00 DEBUG 8529 --- [io-36907-exec-1] horizationManagerBeforeMethodInterceptor : Authorized method invocation ReflectiveMethodInvocation: public java.lang.String com.example.libuser.controller.SpringSecurityController.inquire(); target is of class [com.example.libuser.controller.SpringSecurityController]
+2024-05-22T23:45:42.524+07:00 DEBUG 8529 --- [io-36907-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/secure/generate
+2024-05-22T23:45:42.530+07:00 DEBUG 8529 --- [io-36907-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/secure/generate
+2024-05-22T23:45:42.531+07:00 DEBUG 8529 --- [io-36907-exec-2] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public java.lang.String com.example.libuser.controller.SpringSecurityController.generate(); target is of class [com.example.libuser.controller.SpringSecurityController]
+2024-05-22T23:45:42.533+07:00 DEBUG 8529 --- [io-36907-exec-2] horizationManagerBeforeMethodInterceptor : Authorized method invocation ReflectiveMethodInvocation: public java.lang.String com.example.libuser.controller.SpringSecurityController.generate(); target is of class [com.example.libuser.controller.SpringSecurityController]
+2024-05-22T23:45:42.551+07:00 DEBUG 8529 --- [io-36907-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/secure/count
+2024-05-22T23:45:42.552+07:00 DEBUG 8529 --- [io-36907-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/secure/count
+2024-05-22T23:45:42.552+07:00 DEBUG 8529 --- [io-36907-exec-3] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public java.lang.Integer com.example.libuser.controller.SpringSecurityController.count(); target is of class [com.example.libuser.controller.SpringSecurityController]
+2024-05-22T23:45:42.554+07:00 DEBUG 8529 --- [io-36907-exec-3] horizationManagerBeforeMethodInterceptor : Failed to authorize ReflectiveMethodInvocation: public java.lang.Integer com.example.libuser.controller.SpringSecurityController.count(); target is of class [com.example.libuser.controller.SpringSecurityController] with authorization manager org.springframework.security.config.annotation.method.configuration.DeferringObservationAuthorizationManager@1973a5c and decision ExpressionAuthorizationDecision [granted=false, expressionAttribute=hasRole('COUNT')]
+2024-05-22T23:45:42.556+07:00 DEBUG 8529 --- [io-36907-exec-3] o.s.s.w.access.AccessDeniedHandlerImpl   : Responding with 403 status code
+2024-05-22T23:45:42.580+07:00 DEBUG 8529 --- [io-36907-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/secure/sum
+2024-05-22T23:45:42.581+07:00 DEBUG 8529 --- [io-36907-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/secure/sum
+2024-05-22T23:45:42.591+07:00 DEBUG 8529 --- [io-36907-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/secure/inquire
+2024-05-22T23:45:42.591+07:00 DEBUG 8529 --- [io-36907-exec-5] o.e.security.service.JwtDecodeService    : Token is empty.
+2024-05-22T23:45:42.591+07:00 DEBUG 8529 --- [io-36907-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/secure/inquire
+2024-05-22T23:45:42.591+07:00 DEBUG 8529 --- [io-36907-exec-5] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public java.lang.String com.example.libuser.controller.SpringSecurityController.inquire(); target is of class [com.example.libuser.controller.SpringSecurityController]
+2024-05-22T23:45:42.591+07:00 DEBUG 8529 --- [io-36907-exec-5] horizationManagerBeforeMethodInterceptor : Failed to authorize ReflectiveMethodInvocation: public java.lang.String com.example.libuser.controller.SpringSecurityController.inquire(); target is of class [com.example.libuser.controller.SpringSecurityController] with authorization manager org.springframework.security.config.annotation.method.configuration.DeferringObservationAuthorizationManager@1973a5c and decision ExpressionAuthorizationDecision [granted=false, expressionAttribute=hasAuthority('INQUIRE')]
+2024-05-22T23:45:42.592+07:00 DEBUG 8529 --- [io-36907-exec-5] o.s.s.w.access.AccessDeniedHandlerImpl   : Responding with 403 status code
+2024-05-22T23:45:42.602+07:00 DEBUG 8529 --- [io-36907-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/secure/generate
+2024-05-22T23:45:42.602+07:00 DEBUG 8529 --- [io-36907-exec-6] o.e.security.service.JwtDecodeService    : Token is empty.
+2024-05-22T23:45:42.602+07:00 DEBUG 8529 --- [io-36907-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/secure/generate
+2024-05-22T23:45:42.602+07:00 DEBUG 8529 --- [io-36907-exec-6] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public java.lang.String com.example.libuser.controller.SpringSecurityController.generate(); target is of class [com.example.libuser.controller.SpringSecurityController]
+2024-05-22T23:45:42.602+07:00 DEBUG 8529 --- [io-36907-exec-6] horizationManagerBeforeMethodInterceptor : Failed to authorize ReflectiveMethodInvocation: public java.lang.String com.example.libuser.controller.SpringSecurityController.generate(); target is of class [com.example.libuser.controller.SpringSecurityController] with authorization manager org.springframework.security.config.annotation.method.configuration.DeferringObservationAuthorizationManager@1973a5c and decision ExpressionAuthorizationDecision [granted=false, expressionAttribute=hasRole('GENERATE')]
+2024-05-22T23:45:42.603+07:00 DEBUG 8529 --- [io-36907-exec-6] o.s.s.w.access.AccessDeniedHandlerImpl   : Responding with 403 status code
+2024-05-22T23:45:42.617+07:00 DEBUG 8529 --- [io-36907-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/secure/count
+2024-05-22T23:45:42.618+07:00 DEBUG 8529 --- [io-36907-exec-7] o.e.security.service.JwtDecodeService    : Token is empty.
+2024-05-22T23:45:42.618+07:00 DEBUG 8529 --- [io-36907-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/secure/count
+2024-05-22T23:45:42.619+07:00 DEBUG 8529 --- [io-36907-exec-7] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public java.lang.Integer com.example.libuser.controller.SpringSecurityController.count(); target is of class [com.example.libuser.controller.SpringSecurityController]
+2024-05-22T23:45:42.619+07:00 DEBUG 8529 --- [io-36907-exec-7] horizationManagerBeforeMethodInterceptor : Failed to authorize ReflectiveMethodInvocation: public java.lang.Integer com.example.libuser.controller.SpringSecurityController.count(); target is of class [com.example.libuser.controller.SpringSecurityController] with authorization manager org.springframework.security.config.annotation.method.configuration.DeferringObservationAuthorizationManager@1973a5c and decision ExpressionAuthorizationDecision [granted=false, expressionAttribute=hasRole('COUNT')]
+2024-05-22T23:45:42.620+07:00 DEBUG 8529 --- [io-36907-exec-7] o.s.s.w.access.AccessDeniedHandlerImpl   : Responding with 403 status code
+2024-05-22T23:45:42.632+07:00 DEBUG 8529 --- [io-36907-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/secure/sum
+2024-05-22T23:45:42.633+07:00 DEBUG 8529 --- [io-36907-exec-8] o.e.security.service.JwtDecodeService    : Token is empty.
+2024-05-22T23:45:42.633+07:00 DEBUG 8529 --- [io-36907-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/secure/sum
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

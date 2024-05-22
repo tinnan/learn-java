@@ -1,0 +1,70 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'java'
+    id 'groovy'
+    // The bootJar task tries to create an executable jar, and that requires a main() method.
+    // As a result, you need to disable it by disabling the the Spring Boot plugin,
+    // while keeping it for its dependency management features.
+    id 'org.springframework.boot' version '3.2.5' apply false
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+dependencyManagement {
+    imports {
+        // Since plugin is disabled, it needs BOM to manage dependencies.
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+group = 'org.example.security'
+version = '0.1.0'
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.springframework.boot:spring-boot-autoconfigure'
+    implementation 'org.springframework.security:spring-security-web'
+    implementation 'org.springframework.security:spring-security-config'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core'
+    implementation 'org.slf4j:slf4j-api'
+
+    testImplementation platform('org.apache.groovy:groovy-bom:4.0.20')
+    testImplementation 'org.apache.groovy:groovy'
+    testImplementation platform("org.spockframework:spock-bom:2.4-M1-groovy-4.0")
+    testImplementation 'org.spockframework:spock-core'
+    testImplementation 'org.spockframework:spock-spring'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+// Apply a specific Java toolchain to ease working on different environments.
+java {
+    sourceCompatibility = 17
+    withSourcesJar()
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-parameters")
+}

@@ -1,0 +1,4 @@
+rootProject.name = 'learn-build-spring-lib'
+include('token-decode-helper')
+include 'lib-user-app'
+
