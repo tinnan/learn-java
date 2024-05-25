@@ -1,9 +1,9 @@
-package com.example.libuser;
+package com.example.libtester;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"com.example.libuser", "org.example.security"})
+@SpringBootApplication(scanBasePackages = {"com.example.libtester", "org.example.security"})
 public class LibTesterApplication {
 
     public static void main(String[] args) {

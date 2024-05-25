@@ -3,13 +3,13 @@
 ### Test API
 Start app `SpringSecurityApplication`
 
-`GET /v1/secure/inquire` - Secured by authority `INQUIRE`.
+`GET /v1/secure/filter/inquire` - Secured by authority `INQUIRE`.
 
-`GET /v1/secure/generate` - Secured by role `ROLE_GENERATE`.
+`GET /v1/secure/filter/generate` - Secured by role `ROLE_GENERATE`.
 
-`GET /v1/secure/count` - Secured by role `ROLE_COUNT`.
+`GET /v1/secure/filter/count` - Secured by role `ROLE_COUNT`.
 
-`GET /v1/secure/sum` - Unsecured.
+`GET /v1/secure/filter/sum` - Unsecured.
 
 ### JWT Token for test
 ```

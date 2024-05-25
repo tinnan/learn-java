@@ -22,7 +22,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.security:spring-security-core'
-    implementation project(':token-decode-helper')
+    implementation project(':token-decode-filter-helper')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation platform('org.apache.groovy:groovy-bom:4.0.20')
@@ -36,4 +36,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

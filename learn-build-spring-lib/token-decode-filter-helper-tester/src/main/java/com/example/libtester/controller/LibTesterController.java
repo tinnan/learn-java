@@ -1,24 +1,17 @@
-package com.example.libuser.controller;
+package com.example.libtester.controller;
 
-import com.example.libuser.service.TestService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/api/v1/secure")
+@RequestMapping("/api/v1/secure/filter")
 @RestController
 public class LibTesterController {
-    private final TestService testService;
-
-    public LibTesterController(TestService testService) {
-        this.testService = testService;
-    }
-
     @GetMapping("/inquire")
     @PreAuthorize("hasAuthority('INQUIRE')")
     public String inquire() {
-        return testService.inquire();
+        return "Hello inquire.";
     }
 
     @GetMapping("/generate")

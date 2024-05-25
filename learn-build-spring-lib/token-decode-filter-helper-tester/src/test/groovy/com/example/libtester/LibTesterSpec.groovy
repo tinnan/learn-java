@@ -1,4 +1,4 @@
-package com.example.libuser
+package com.example.libtester
 
 import io.restassured.RestAssured
 import org.springframework.boot.test.context.SpringBootTest
@@ -42,14 +42,14 @@ class LibTesterSpec extends Specification {
 
         where:
         token | url                   | expectedStatus
-        JWT   | "/api/v1/secure/inquire"  | 200
-        JWT   | "/api/v1/secure/generate" | 200
-        JWT   | "/api/v1/secure/count"    | 403
-        JWT   | "/api/v1/secure/sum"      | 200
-        ""    | "/api/v1/secure/inquire"  | 403
-        ""    | "/api/v1/secure/generate" | 403
-        ""    | "/api/v1/secure/count"    | 403
-        ""    | "/api/v1/secure/sum"      | 200
+        JWT   | "/api/v1/secure/filter/inquire"  | 200
+        JWT   | "/api/v1/secure/filter/generate" | 200
+        JWT   | "/api/v1/secure/filter/count"    | 403
+        JWT   | "/api/v1/secure/filter/sum"      | 200
+        ""    | "/api/v1/secure/filter/inquire"  | 403
+        ""    | "/api/v1/secure/filter/generate" | 403
+        ""    | "/api/v1/secure/filter/count"    | 403
+        ""    | "/api/v1/secure/filter/sum"      | 200
     }
 
     def createHeaders(String token) {
