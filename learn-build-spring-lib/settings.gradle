@@ -2,3 +2,4 @@ rootProject.name = 'learn-build-spring-lib'
 include('token-decode-filter-helper')
 include('token-decode-filter-helper-tester')
 include('token-decode-interceptor-helper')
+include('token-decode-interceptor-helper-tester')

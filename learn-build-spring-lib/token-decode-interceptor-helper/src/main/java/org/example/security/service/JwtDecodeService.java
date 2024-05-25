@@ -7,9 +7,11 @@ import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.example.security.model.JwtPayload;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Slf4j
+@Service
 public class JwtDecodeService {
     public List<String> extractPermissions(String authorizationHeader) {
         String decodedTokenPayload = extractPayload(authorizationHeader);
