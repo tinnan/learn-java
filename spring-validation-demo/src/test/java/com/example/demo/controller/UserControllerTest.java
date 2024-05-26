@@ -12,12 +12,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.nio.charset.StandardCharsets;
 
 @WebMvcTest
 @AutoConfigureMockMvc
@@ -32,23 +31,24 @@ class UserControllerTest {
 
     @Test
     public void whenPostRequestToUserWithValidUser_thenCorrectResponse() throws Exception {
-        MediaType textPlainUtf8 = new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8);
-        String userJson = """
+        String acceptLang = "en-EN";
+        String jsonBody = """
                 {
                     "name": "John Doe",
                     "email": "john.d@gmail.com",
                     "age": 25
                 }
                 """;
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users")
-                        .content(userJson)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status()
-                        .isOk())
-                .andExpect(MockMvcResultMatchers.content()
-                        .contentType(textPlainUtf8))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string("User is valid."));
+        MediaType requestType = MediaType.APPLICATION_JSON;
+        int responseData = 200;
+        MediaType responseType = MediaType.APPLICATION_JSON;
+        String responseJson = """
+                {
+                    "message": "User is valid."
+                }
+                """;
+        performRequest(acceptLang, jsonBody, requestType, responseData, responseType, responseJson);
+
         User expectedSavedUser = new User();
         expectedSavedUser.setName("John Doe");
         expectedSavedUser.setEmail("john.d@gmail.com");
@@ -58,26 +58,58 @@ class UserControllerTest {
     }
 
     @Test
-    public void whenPostRequestToUserWithInvalidUser_thenCorrectResponse() throws Exception {
-        String userJson = """
+    public void whenPostRequestToUserWithInvalidUser_thenCorrectResponse_EN() throws Exception {
+        String acceptLang = "en-EN";
+        String jsonBody = """
                 {
                     "name": "John Doe",
                     "age": 25
                 }
                 """;
+        MediaType requestType = MediaType.APPLICATION_JSON;
+        int responseStatus = 400;
+        MediaType responseType = MediaType.APPLICATION_JSON;
+        String responseJson = """
+                {
+                    "email": "Email is mandatory"
+                }
+                """;
+        performRequest(acceptLang, jsonBody, requestType, responseStatus, responseType, responseJson);
+    }
+
+    @Test
+    public void whenPostRequestToUserWithInvalidUser_thenCorrectResponse_TH() throws Exception {
+        String acceptLang = "th-TH";
+        String jsonBody = """
+                {
+                    "name": "John Doe",
+                    "age": 25
+                }
+                """;
+        MediaType requestType = MediaType.APPLICATION_JSON;
+        int responseStatus = 400;
+        MediaType responseType = MediaType.APPLICATION_JSON;
+        String responseJson = """
+                {
+                    "email": "Email จำเป็นต้องกรอก"
+                }
+                """;
+        performRequest(acceptLang, jsonBody, requestType, responseStatus, responseType, responseJson);
+    }
+
+    private void performRequest(String acceptLang, String jsonBody, MediaType requestType,
+        int status, MediaType responseType, String responseJson)
+        throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users")
-                        .content(userJson)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status()
-                        .isBadRequest())
-                .andExpect(MockMvcResultMatchers.content()
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.content()
-                        .json("""
-                                {
-                                    "email": "Email is mandatory"
-                                }
-                                """));
+                .header(HttpHeaders.ACCEPT_LANGUAGE, acceptLang)
+                .content(jsonBody)
+                .contentType(requestType))
+            .andExpect(MockMvcResultMatchers.status()
+                .is(status))
+            .andExpect(MockMvcResultMatchers.content()
+                .contentType(responseType))
+            .andExpect(MockMvcResultMatchers.content()
+                .json(responseJson));
     }
 
     @TestConfiguration

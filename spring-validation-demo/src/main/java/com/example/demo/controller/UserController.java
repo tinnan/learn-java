@@ -6,6 +6,7 @@ import com.example.demo.validation.marker.AllUser;
 import com.example.demo.validation.marker.RegularUser;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,7 @@ public class UserController {
     ResponseEntity<String> addUser(@Validated({AllUser.class, RegularUser.class}) @RequestBody User user) {
         // When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
         userRepository.save(user);
-        return ResponseEntity.ok("User is valid.");
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"User is valid.\"}");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
