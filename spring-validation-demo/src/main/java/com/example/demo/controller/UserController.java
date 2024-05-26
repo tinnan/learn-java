@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.User;
 import com.example.demo.repo.UserRepository;
+import com.example.demo.service.UserService;
 import com.example.demo.validation.marker.AllUser;
 import com.example.demo.validation.marker.RegularUser;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @PostMapping
     ResponseEntity<String> addUser(@Validated({AllUser.class, RegularUser.class}) @RequestBody User user) {
@@ -29,10 +32,16 @@ public class UserController {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"User is valid.\"}");
     }
 
+    @GetMapping
+    ResponseEntity<String> getUser(@RequestParam("email") String email) {
+        String user = userService.getUser(email);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(user);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+        final Map<String, String> errors = new HashMap<>();
         ex.getBindingResult()
                 .getAllErrors()
                 .forEach((error) -> {
@@ -40,6 +49,18 @@ public class UserController {
                     String errorMessage = error.getDefaultMessage();
                     errors.put(fieldName, errorMessage);
                 });
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Map<String, String> handleConstraintViolationException(ConstraintViolationException ex) {
+        final Map<String, String> errors = new HashMap<>();
+        ex.getConstraintViolations().forEach((error) -> {
+            String field = error.getPropertyPath().toString();
+            String errorMessage = error.getMessage();
+            errors.put(field, errorMessage);
+        });
         return errors;
     }
 }

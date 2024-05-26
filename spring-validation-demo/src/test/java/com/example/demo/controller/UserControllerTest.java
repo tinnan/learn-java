@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.User;
 import com.example.demo.repo.UserRepository;
+import com.example.demo.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ class UserControllerTest {
 
     @MockBean
     private UserRepository userRepository;
-    @Autowired
-    private UserController userController;
+    @MockBean
+    private UserService userService;
     @Autowired
     private MockMvc mockMvc;
 
@@ -58,7 +59,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void whenPostRequestToUserWithInvalidUser_thenCorrectResponse_EN() throws Exception {
+    public void whenPostRequestToUserWithInvalidUser_thenReturnBadRequest_EN() throws Exception {
         String acceptLang = "en-EN";
         String jsonBody = """
                 {
@@ -78,7 +79,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void whenPostRequestToUserWithInvalidUser_thenCorrectResponse_TH() throws Exception {
+    public void whenPostRequestToUserWithInvalidUser_thenReturnBadRequest_TH() throws Exception {
         String acceptLang = "th-TH";
         String jsonBody = """
                 {
@@ -113,7 +114,7 @@ class UserControllerTest {
     }
 
     @TestConfiguration
-    public static class UserControllerTestConfiguration {
+    public static class TestMessageConfig {
         @Bean
         public MessageSource messageSource() {
             ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
