@@ -8,7 +8,6 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.io.IOException;
 import java.time.Instant;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,27 +19,27 @@ public interface ActivityLogSvcClient {
 
     @GetMapping(value = "/api/v1/svc/logs/download")
     ResponseEntity<ActivityLogResponse> download(
-        @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txFrom,
-        @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txTo)
+        @RequestParam("txFrom") Instant txFrom,
+        @RequestParam("txTo") Instant txTo)
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException;
 
     @GetMapping(value = "/api/v1/svc/logs/generate")
     ResponseEntity<String> generate(
-        @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txFrom,
-        @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txTo
+        @RequestParam("txFrom") Instant txFrom,
+        @RequestParam("txTo") Instant txTo
     );
 
     @GetMapping(value = "/api/v1/svc/logs")
     ResponseEntity<ActivityLogWithPageResponse> queryWithPage(
-        @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txFrom,
-        @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txTo,
+        @RequestParam("txFrom") Instant txFrom,
+        @RequestParam("txTo") Instant txTo,
         @RequestParam("page") Integer pageNumber,
         @RequestParam("pageSize") Integer pageSize);
 
     @GetMapping(value = "/api/v1/svc/logs/view")
     ResponseEntity<ActivityLogWithPageResponse> queryWithView(
-        @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txFrom,
-        @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txTo,
+        @RequestParam("txFrom") Instant txFrom,
+        @RequestParam("txTo") Instant txTo,
         @RequestParam(name = "userActivity", required = false) String userActivity,
         @RequestParam("page") Integer pageNumber,
         @RequestParam("pageSize") Integer pageSize
@@ -48,8 +47,8 @@ public interface ActivityLogSvcClient {
 
     @GetMapping(value = "/api/v1/svc/logs/agg")
     ResponseEntity<ActivityLogWithPageResponse> queryWithAgg(
-        @RequestParam("txFrom") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txFrom,
-        @RequestParam("txTo") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Instant txTo,
+        @RequestParam("txFrom") Instant txFrom,
+        @RequestParam("txTo") Instant txTo,
         @RequestParam(name = "userActivity", required = false) String userActivity,
         @RequestParam("page") Integer pageNumber,
         @RequestParam("pageSize") Integer pageSize
