@@ -71,10 +71,6 @@ see [Installation Requirements](https://www.mongodb.com/docs/manual/core/queryab
 1. (Optional) If you are using KMIP for key management, you need to add
    the location of your keystore and truststore to the JVM options.
 
-   - If you are using Maven, open the `maven.config.tpl` file in the project
-     directory to view the JVM options. Assign the appropriate values and add
-     these JVM options to your run configuration.
-
    - If you are using Gradle, open the `gradle.build` file in the project
      directory, uncomment the `applicationDefaultJvmArgs` array. Assign the
      appropriate values to the placeholders.
@@ -85,17 +81,6 @@ see [Installation Requirements](https://www.mongodb.com/docs/manual/core/queryab
 
 1. Compile the project and run the `QueryableEncryptionTutorial.java` class in
    the `/java/src/main/java/com/mongodb/tutorials/qe/` directory.
-
-   - If you are using `maven` on the command line, you can run the following
-     commands from the project root that contains the `pom.xml` to build and run
-     it.
-
-     > **Note:** If you are using KMIP for key management, add the VM options to the `java` command.
-
-     ```
-     mvn clean package
-     java -jar target/queryable-encryption-tutorial.jar
-     ```
 
    - If you are using `gradle` on the command line, you can run the following
      command from the project root that contains the `gradle.build` file to
