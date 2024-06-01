@@ -24,8 +24,9 @@ see [Installation Requirements](https://www.mongodb.com/docs/manual/core/queryab
 
 1. Copy the `env_template` file in the root of the project directory to a file named `.env`.
 
-1. Place downloaded library `mongo_crypt_v1.dylib` into `lib` directory in project root
-   and set `SHARED_LIB_PATH` in `.env` to `lib/mongo_crypt_v1.dylib`.
+1. Place downloaded Automatic Encryption Shared Library `mongo_crypt_v1.dylib` 
+   into `lib` directory in project root and set `SHARED_LIB_PATH` in `.env`
+   to `lib/mongo_crypt_v1.dylib`.
 
 1. Replace the placeholder values in the `.env` file with your own credentials.
    For more information on setting credentials, see
@@ -34,16 +35,7 @@ see [Installation Requirements](https://www.mongodb.com/docs/manual/core/queryab
    [Quick Start](https://www.mongodb.com/docs/manual/core/queryable-encryption/quick-start/)
    for local key provider credentials.
 
-1. Start a MongoDB replica set with three nodes.
-
-   **Note:** If you are using [mtools](https://github.com/rueckstiess/mtools),
-   you can create a replica set by running the following command:
-
-   ```sh
-   mlaunch init --replicaset --nodes 3
-   ```
-   
-   For this example, run
+1. Start a MongoDB replica set with three nodes. Run:
    ```sh
    docker compose up -d
    ```
@@ -55,9 +47,7 @@ see [Installation Requirements](https://www.mongodb.com/docs/manual/core/queryab
 
 1. Download the project dependencies.
 
-   - If you use Maven, you can use the
-     `pom.xml` file included in the project directory.
-   - If you use Gradle, you can use the `gradle.build` file included in the project directory.
+   - Use the `gradle.build` file included in the project directory.
 
    Otherwise, make sure you
    include dependencies for `mongodb-driver-sync`, `mongodb-driver-core`, `bson`
@@ -71,7 +61,7 @@ see [Installation Requirements](https://www.mongodb.com/docs/manual/core/queryab
 1. (Optional) If you are using KMIP for key management, you need to add
    the location of your keystore and truststore to the JVM options.
 
-   - If you are using Gradle, open the `gradle.build` file in the project
+   - Open the `gradle.build` file in the project
      directory, uncomment the `applicationDefaultJvmArgs` array. Assign the
      appropriate values to the placeholders.
 
@@ -82,14 +72,11 @@ see [Installation Requirements](https://www.mongodb.com/docs/manual/core/queryab
 1. Compile the project and run the `QueryableEncryptionTutorial.java` class in
    the `/java/src/main/java/com/mongodb/tutorials/qe/` directory.
 
-   - If you are using `gradle` on the command line, you can run the following
-     command from the project root that contains the `gradle.build` file to
+   - Run the following command from the project root that contains the `gradle.build` file to
      build and run the project.
 
      ```sh
      gradle clean build run
      ```
-
-   Otherwise, follow the procedure for running a project in your IDE.
 
 1. If successful, the application will print the sample document to the console.
