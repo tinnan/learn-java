@@ -201,12 +201,14 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
                         .append("ssn", new Document()
                             .append("encrypt", new Document()
                                 .append("bsonType", "string")
+                                // A deterministically encrypted field cannot have a keyId represented by a JSON pointer.
                                 .append("algorithm", ALGO_DETERMINISTIC)))
                         .append("billing", new Document()
                             .append("encrypt", new Document()
                                 .append("bsonType", "object")
                                 // The keyId is JSON pointer referencing to field "dekAltName" in Patient object.
                                 // The value of field "dekAltName" is DEK alt name stored inside key vault.
+                                // This enables dynamically key assignment runtime.
                                 .append("keyId", "/dekAltName")
                                 .append("algorithm", ALGO_RANDOMIZED))))));
         Map<String, BsonDocument> schemaMap = new HashMap<>();
