@@ -141,11 +141,7 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
             log.error("Not found data.");
             return;
         }
-        log.info("Encrypted Document: {}", result);
-        PatientRecord patientRecord = result.getPatientRecord();
-
-        log.info("Decrypted SSN: {}", patientRecord.getSsn());
-        log.info("Decrypted Billing: {}", patientRecord.getBilling());
+        log.info("Decrypted Document: {}", result);
     }
 
     private static void deterministicVsRandomize(MongoCollection<Patient> collection) {
@@ -169,8 +165,8 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
         Patient patient2 = createDocument(patientName, ssn, cardType, cardNumber);
         collection.insertOne(patient2);
 
-        // Cannot check from query result in program.
-        // Export and verify from MongoDB Compass instead.
+        log.info("* - Cannot check from query result in program.");
+        log.info("* - Export and verify from MongoDB Compass instead.");
     }
 
     private static BsonBinary createKey(ClientEncryption clientEncryption, String keyAltName) {
