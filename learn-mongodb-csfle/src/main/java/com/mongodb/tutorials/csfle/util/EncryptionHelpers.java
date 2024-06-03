@@ -5,6 +5,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,32 +15,42 @@ import org.bson.BsonDocument;
 import org.bson.BsonString;
 
 public final class EncryptionHelpers {
+    private static final String LOCAL_KEY_FILE_NAME = "customer-master-key.txt";
     // This loads the variables defined in the .env file
     private static final Dotenv dotEnv = Dotenv.configure()
         .directory("./.env")
         .load();
+    public static void deleteLocalKeyFile() throws IOException {
+        Path keyFilePath = Path.of(".", LOCAL_KEY_FILE_NAME);
+        if (Files.isRegularFile(keyFilePath)) {
+            Files.delete(keyFilePath);
+        }
+    }
+    public static void createLocalKeyFile() throws Exception {
+        // Reuse the key from the customer-master-key.txt file if it exists
+        if (!new File("./" + LOCAL_KEY_FILE_NAME).isFile()) {
+            // start-generate-local-key
+            byte[] localCustomerMasterKey = new byte[96];
+            new SecureRandom().nextBytes(localCustomerMasterKey);
+            try (FileOutputStream stream = new FileOutputStream(LOCAL_KEY_FILE_NAME)) {
+                stream.write(localCustomerMasterKey);
+
+                // ...
+                // end-generate-local-key
+            } catch (Exception e) {
+                throw new Exception("Unable to write Customer Master Key file due to the following error:" + e.getMessage());
+            }
+        }
+    }
     public static Map<String, Map<String, Object>> getKmsProviderCredentials(String kmsProviderName) throws Exception {
 
         if (kmsProviderName == "local") {
-            // Reuse the key from the customer-master-key.txt file if it exists
-            if (!new File("./customer-master-key.txt").isFile()) {
-                // start-generate-local-key
-                byte[] localCustomerMasterKey = new byte[96];
-                new SecureRandom().nextBytes(localCustomerMasterKey);
-                try (FileOutputStream stream = new FileOutputStream("customer-master-key.txt")) {
-                    stream.write(localCustomerMasterKey);
-
-                    // ...
-                    // end-generate-local-key
-                } catch (Exception e) {
-                    throw new Exception("Unable to write Customer Master Key file due to the following error:" + e.getMessage());
-                }
-            }
+            createLocalKeyFile();
 
             // start-get-local-key
             byte[] localCustomerMasterKey = new byte[96];
 
-            try (FileInputStream fis = new FileInputStream("customer-master-key.txt")) {
+            try (FileInputStream fis = new FileInputStream(LOCAL_KEY_FILE_NAME)) {
                 if (fis.read(localCustomerMasterKey) != 96)
                     throw new Exception("Expected the customer master key file to be 96 bytes.");
             } catch (Exception e) {

@@ -16,12 +16,14 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.vault.DataKeyOptions;
+import com.mongodb.client.model.vault.RewrapManyDataKeyOptions;
 import com.mongodb.client.vault.ClientEncryption;
 import com.mongodb.client.vault.ClientEncryptions;
 import com.mongodb.tutorials.csfle.automatic.models.Patient;
 import com.mongodb.tutorials.csfle.automatic.models.PatientBilling;
 import com.mongodb.tutorials.csfle.automatic.models.PatientRecord;
 import com.mongodb.tutorials.csfle.util.EncryptionHelpers;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -38,7 +40,7 @@ import org.bson.codecs.pojo.PojoCodecProvider;
 
 @Slf4j
 public class ClientSideFieldLevelEncryptionAutomaticTutorial {
-    private static final String KMS_PROVIDER_NAME = "local";
+    private static final String LOCAL_KMS_PROVIDER = "local";
     private static final String ALGO_DETERMINISTIC = "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic";
     private static final String ALGO_RANDOMIZED = "AEAD_AES_256_CBC_HMAC_SHA_512-Random";
     private static final String KEY_VAULT_DATABASE_NAME = "encryption";
@@ -56,7 +58,7 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
         CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
 
         Map<String, Map<String, Object>> kmsProviderCredentials = EncryptionHelpers.getKmsProviderCredentials(
-            KMS_PROVIDER_NAME);
+            LOCAL_KMS_PROVIDER);
 
         ClientEncryptionSettings clientEncryptionSettings = ClientEncryptionSettings.builder()
             .keyVaultMongoClientSettings(MongoClientSettings.builder()
@@ -91,8 +93,9 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
             MongoCollection<Patient> collection = database.getCollection(ENCRYPTED_COLLECTION_NAME, Patient.class);
 
 //            deterministicVsRandomize(collection);
-            encryptDecrypt(collection);
+//            encryptDecrypt(collection);
 //            sortBySsn(collection);
+            rotateMasterKey(clientEncryption, collection);
         }
     }
 
@@ -170,12 +173,41 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
         log.info("* - Export and verify from MongoDB Compass instead.");
     }
 
+    private static void rotateMasterKey(ClientEncryption clientEncryption, MongoCollection<Patient> collection)
+        throws IOException {
+        log.info("***** Rotate Customer Master Key *****");
+
+        final String patientName = "Jon Doe";
+        final String ssn = "987-65-4320";
+        final String cardType = "Visa";
+        final String cardNumber = "4111111111111111";
+
+        log.info("* Insert 1 document with old master key.");
+        Patient patient = createDocument(patientName, ssn, cardType, cardNumber);
+        collection.insertOne(patient);
+        log.info("* Query the inserted document.");
+        Patient oldKeyResult = collection.find(eq("patientRecord.ssn", ssn)).first();
+        log.info("Old key result: {}", oldKeyResult);
+
+        // For "local" key provider, we can only do re-wrap data key with current master key.
+        // If attempt to set new master key by providing BsonDocument through RewrapManyDataKeyOptions.masterKey(),
+        // we will end up with error "Exception in encryption library: Unexpected field: '<some file name>'".
+        // The error is raised from inside MongoDB Automatic Encryption Shared Library.
+        // See source code at https://github.com/mongodb/libmongocrypt/blob/master/src/mongocrypt-kek.c
+        // line: 198 (or look for switch code MONGOCRYPT_KMS_PROVIDER_LOCAL)
+        clientEncryption.rewrapManyDataKey(new Document(), new RewrapManyDataKeyOptions().provider(LOCAL_KMS_PROVIDER));
+
+        log.info("* Query document after re-wrap data key.");
+        Patient newKeyResult = collection.find(eq("patientRecord.ssn", ssn)).first();
+        log.info("New key result: {}", newKeyResult);
+    }
+
     private static BsonBinary createKey(ClientEncryption clientEncryption, String keyAltName) {
         BsonDocument dataKeyDoc = clientEncryption.getKeyByAltName(keyAltName);
         if (dataKeyDoc != null) {
             return dataKeyDoc.getBinary("_id");
         }
-        return clientEncryption.createDataKey(KMS_PROVIDER_NAME, new DataKeyOptions().keyAltNames(List.of(keyAltName)));
+        return clientEncryption.createDataKey(LOCAL_KMS_PROVIDER, new DataKeyOptions().keyAltNames(List.of(keyAltName)));
     }
 
     private static Patient createDocument(String patientName, String ssn, String cardType, String cardNumber) {
