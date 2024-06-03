@@ -1,4 +1,4 @@
-package com.mongodb.tutorials.csfle.models;
+package com.mongodb.tutorials.csfle.automatic.models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

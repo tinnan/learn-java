@@ -1,4 +1,4 @@
-package com.mongodb.tutorials.csfle.models;
+package com.mongodb.tutorials.csfle.manual.models;
 
 import java.util.Base64;
 import lombok.Data;

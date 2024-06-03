@@ -136,21 +136,18 @@ public final class EncryptionHelpers {
 
     public static AutoEncryptionSettings getAutoEncryptionOptions(
         String keyVaultNamespace,
-        Map<String, Map<String, Object>> kmsProviderCredentials
+        Map<String, Map<String, Object>> kmsProviderCredentials,
+        Map<String, BsonDocument> jsonSchema
     ) {
-
-        // start-auto-encryption-options
         Map<String, Object> extraOptions = new HashMap<String, Object>();
         extraOptions.put("cryptSharedLibPath", getEnv("SHARED_LIB_PATH")); // Path to your Automatic Encryption Shared Library
 
-        AutoEncryptionSettings autoEncryptionSettings = AutoEncryptionSettings.builder()
+        return AutoEncryptionSettings.builder()
             .keyVaultNamespace(keyVaultNamespace)
             .kmsProviders(kmsProviderCredentials)
+            .schemaMap(jsonSchema)
             .extraOptions(extraOptions)
             .build();
-        // end-auto-encryption-options
-        return autoEncryptionSettings;
-
     }
 
     public static String getEnv(String name) {
