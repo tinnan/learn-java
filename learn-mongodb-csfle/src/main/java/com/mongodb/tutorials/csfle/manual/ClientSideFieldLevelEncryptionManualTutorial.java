@@ -1,4 +1,4 @@
-package com.mongodb.tutorials.csfle;
+package com.mongodb.tutorials.csfle.manual;
 
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
 import static com.mongodb.client.model.Filters.eq;
@@ -33,7 +33,7 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
 @Slf4j
-public class ClientSideFieldLevelEncryptionTutorial {
+public class ClientSideFieldLevelEncryptionManualTutorial {
     private static final String KMS_PROVIDER_NAME = "local";
     private static final String ALGO_DETERMINISTIC = "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic";
     private static final String ALGO_RANDOMIZED = "AEAD_AES_256_CBC_HMAC_SHA_512-Random";
