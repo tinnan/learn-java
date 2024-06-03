@@ -9,10 +9,12 @@ import org.bson.types.ObjectId;
 public class Patient {
     private ObjectId id;
     private String patientName;
+    private String dekAltName;
     private PatientRecord patientRecord;
 
-    public Patient(String name, PatientRecord patientRecord) {
+    public Patient(String name, String dekAltName, PatientRecord patientRecord) {
         this.patientName = name;
+        this.dekAltName = dekAltName;
         this.patientRecord = patientRecord;
     }
 }

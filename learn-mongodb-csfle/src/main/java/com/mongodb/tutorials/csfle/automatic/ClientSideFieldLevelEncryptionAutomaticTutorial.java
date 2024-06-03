@@ -46,6 +46,7 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
     private static final String KEY_VAULT_NAMESPACE = KEY_VAULT_DATABASE_NAME + "." + KEY_VAULT_COLLECTION_NAME;
     private static final String ENCRYPTED_DATABASE_NAME = "medicalRecords";
     private static final String ENCRYPTED_COLLECTION_NAME = "patients";
+    private static final String DATA_KEY_ALT_NAME = "data-key";
 
     public static void main(String[] args) throws Exception {
         String uri = EncryptionHelpers.getEnv("MONGODB_URI");
@@ -69,7 +70,7 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
         // !!! Everytime clientEncryption.createDataKey is called,
         // a new record of data encryption key is created in "encryption.__keyVault".
         // !!! If master key is lost we won't be able to decrypt the data.
-        BsonBinary dataKey = createKey(clientEncryption, "data-key");
+        BsonBinary dataKey = createKey(clientEncryption, DATA_KEY_ALT_NAME);
 
         // Create encrypted schema setting.
         Map<String, BsonDocument> encryptionSchema = createJsonSchema(dataKey);
@@ -179,7 +180,7 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
 
     private static Patient createDocument(String patientName, String ssn, String cardType, String cardNumber) {
 
-        return new Patient(patientName, new PatientRecord(ssn, new PatientBilling(cardType, cardNumber)));
+        return new Patient(patientName, DATA_KEY_ALT_NAME, new PatientRecord(ssn, new PatientBilling(cardType, cardNumber)));
     }
 
     private static Map<String, BsonDocument> createJsonSchema(BsonBinary dataKey) {
@@ -204,6 +205,9 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
                         .append("billing", new Document()
                             .append("encrypt", new Document()
                                 .append("bsonType", "object")
+                                // The keyId is JSON pointer referencing to field "dekAltName" in Patient object.
+                                // The value of field "dekAltName" is DEK alt name stored inside key vault.
+                                .append("keyId", "/dekAltName")
                                 .append("algorithm", ALGO_RANDOMIZED))))));
         Map<String, BsonDocument> schemaMap = new HashMap<>();
         schemaMap.put("medicalRecords.patients", BsonDocument.parse(jsonSchema.toJson()));
