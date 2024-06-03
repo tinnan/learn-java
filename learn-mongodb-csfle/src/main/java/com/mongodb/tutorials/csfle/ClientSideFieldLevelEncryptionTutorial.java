@@ -71,7 +71,8 @@ public class ClientSideFieldLevelEncryptionTutorial {
             // !!! If master key is lost we won't be able to decrypt the data.
             BsonBinary ssnDataKey = createKey(clientEncryption, ssnKeyName);
             BsonBinary billingDataKey = createKey(clientEncryption, billingKeyName);
-
+            // The example use 2 data encryption key to encrypt each field.
+            // Actually, you can choose to use same data encryption key to encrypt every field.
             MongoDatabase database = client.getDatabase(encryptedDatabaseName);
             MongoCollection<Document> collection = database.getCollection(encryptedCollectionName);
 
@@ -154,7 +155,6 @@ public class ClientSideFieldLevelEncryptionTutorial {
         // Insert same data for 2 records.
         // - patientRecord.ssn field should store same binary result.
         // - patientRecord.billing field should store different binary result.
-        // Try export data from Mongo compass and compare base64 string.
 
         final String patientName = "Jon Doe";
         final String ssn = "987-65-4320";
@@ -169,6 +169,16 @@ public class ClientSideFieldLevelEncryptionTutorial {
         Document document2 = createDocument(clientEncryption, ssnDataKey, billingDataKey, patientName, ssn, cardType,
             cardNumber);
         insert(collection, document2);
+
+        try (MongoCursor<Document> sorted = collection.find().iterator()) {
+            while (sorted.hasNext()) {
+                Document doc = sorted.next();
+                Document patientRecord = doc.get("patientRecord", Document.class);
+                Binary ssnField = patientRecord.get("ssn", Binary.class);
+                BsonValue decrypted = clientEncryption.decrypt(new BsonBinary(ssnField.getType(), ssnField.getData()));
+                log.info("Sorted Decrypted: {}", decrypted);
+            }
+        }
     }
 
     private static Document createDocument(ClientEncryption clientEncryption, BsonBinary ssnDataKey, BsonBinary billingDataKey,
