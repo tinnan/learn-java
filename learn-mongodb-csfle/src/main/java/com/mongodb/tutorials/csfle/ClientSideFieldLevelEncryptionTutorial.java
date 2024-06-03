@@ -163,7 +163,7 @@ public class ClientSideFieldLevelEncryptionTutorial {
             cardNumber);
         insert(collection, document1);
 
-        // Insert 2 we should
+        // Insert 2
         Document document2 = createDocument(clientEncryption, ssnDataKey, billingDataKey, patientName, ssn, cardType,
             cardNumber);
         insert(collection, document2);
