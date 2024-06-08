@@ -1,6 +1,6 @@
 package com.example.demo
 
-import com.example.demo.domain.ActivityLogQueryParam
+import com.example.demo.domain.activitylog.ActivityLogQueryParam
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 

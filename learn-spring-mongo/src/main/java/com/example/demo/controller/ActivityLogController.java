@@ -1,14 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.clients.ActivityLogSvcClient;
-import com.example.demo.domain.ActivityLog;
-import com.example.demo.domain.ActivityLogForAggregate;
-import com.example.demo.domain.ActivityLogQueryParam;
-import com.example.demo.domain.ActivityLogQueryParam.PaginationAndSort;
-import com.example.demo.domain.ActivityLogResponse;
-import com.example.demo.domain.ActivityLogView;
-import com.example.demo.domain.ActivityLogWithPageResponse;
-import com.example.demo.domain.ActivityLogWithPageResponse.PageInfo;
+import com.example.demo.domain.activitylog.ActivityLog;
+import com.example.demo.domain.activitylog.ActivityLogForAggregate;
+import com.example.demo.domain.activitylog.ActivityLogQueryParam;
+import com.example.demo.domain.activitylog.ActivityLogQueryParam.PaginationAndSort;
+import com.example.demo.domain.activitylog.ActivityLogResponse;
+import com.example.demo.domain.activitylog.ActivityLogView;
+import com.example.demo.domain.activitylog.ActivityLogWithPageResponse;
+import com.example.demo.domain.activitylog.ActivityLogWithPageResponse.PageInfo;
 import com.example.demo.service.ActivityLogAggregationService;
 import com.example.demo.service.ActivityLogPaginationService;
 import com.example.demo.service.ActivityLogService;

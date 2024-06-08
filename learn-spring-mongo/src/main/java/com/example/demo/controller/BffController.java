@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.clients.ActivityLogSvcClient;
-import com.example.demo.domain.ActivityLogResponse;
+import com.example.demo.domain.activitylog.ActivityLogResponse;
 import com.example.demo.service.ActivityLogService;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;

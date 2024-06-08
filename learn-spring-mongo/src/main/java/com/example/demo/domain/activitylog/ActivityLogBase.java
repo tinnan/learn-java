@@ -1,4 +1,4 @@
-package com.example.demo.domain;
+package com.example.demo.domain.activitylog;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;

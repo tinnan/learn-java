@@ -1,4 +1,4 @@
-package com.example.demo.domain;
+package com.example.demo.domain.activitylog;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

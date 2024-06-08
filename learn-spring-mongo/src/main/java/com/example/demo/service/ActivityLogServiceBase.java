@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.ActivityLogQueryParam;
-import com.example.demo.domain.ActivityLogQueryParam.PaginationAndSort;
+import com.example.demo.domain.activitylog.ActivityLogQueryParam;
+import com.example.demo.domain.activitylog.ActivityLogQueryParam.PaginationAndSort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

@@ -1,8 +1,8 @@
 package com.example.demo.clients;
 
-import com.example.demo.domain.ActivityLog;
-import com.example.demo.domain.ActivityLogResponse;
-import com.example.demo.domain.ActivityLogWithPageResponse;
+import com.example.demo.domain.activitylog.ActivityLog;
+import com.example.demo.domain.activitylog.ActivityLogResponse;
+import com.example.demo.domain.activitylog.ActivityLogWithPageResponse;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.io.IOException;

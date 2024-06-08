@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.domain.ActivityLog;
+import com.example.demo.domain.activitylog.ActivityLog;
 import java.math.BigInteger;
 import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;

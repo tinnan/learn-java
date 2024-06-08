@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.ActivityLog;
-import com.example.demo.domain.ActivityLogQueryParam;
+import com.example.demo.domain.activitylog.ActivityLog;
+import com.example.demo.domain.activitylog.ActivityLogQueryParam;
 import com.example.demo.domain.csv.ReportHeaderMappingStrategy;
 import com.example.demo.repository.ActivityLogRepository;
 import com.opencsv.bean.StatefulBeanToCsv;

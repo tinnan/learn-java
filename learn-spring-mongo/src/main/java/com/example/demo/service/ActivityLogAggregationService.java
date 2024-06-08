@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.ActivityLogForAggregate;
-import com.example.demo.domain.ActivityLogQueryParam;
-import com.example.demo.domain.ActivityLogQueryParam.PaginationAndSort;
+import com.example.demo.domain.activitylog.ActivityLogForAggregate;
+import com.example.demo.domain.activitylog.ActivityLogQueryParam;
+import com.example.demo.domain.activitylog.ActivityLogQueryParam.PaginationAndSort;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

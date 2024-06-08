@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.ActivityLogQueryParam;
-import com.example.demo.domain.ActivityLogView;
+import com.example.demo.domain.activitylog.ActivityLogQueryParam;
+import com.example.demo.domain.activitylog.ActivityLogView;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

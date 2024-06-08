@@ -1,4 +1,4 @@
-package com.example.demo.domain;
+package com.example.demo.domain.activitylog;
 
 import java.time.Instant;
 import java.util.List;

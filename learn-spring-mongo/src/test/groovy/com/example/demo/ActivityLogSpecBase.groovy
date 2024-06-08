@@ -1,7 +1,7 @@
 package com.example.demo
 
-import com.example.demo.domain.ActivityLog
-import com.example.demo.domain.ActivityLogBase
+import com.example.demo.domain.activitylog.ActivityLog
+import com.example.demo.domain.activitylog.ActivityLogBase
 import com.example.demo.repository.ActivityLogRepository
 import com.example.demo.service.ActivityLogService
 import groovy.util.logging.Slf4j

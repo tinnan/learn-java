@@ -1,15 +1,16 @@
-package com.example.demo.domain;
+package com.example.demo.domain.activitylog;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document("activity_log_view")
 @Getter
 @Setter
-public class ActivityLogView extends ActivityLogBase {
+public class ActivityLogForAggregate extends ActivityLog {
 
     @Field(name = "user_activity")
     private String userActivity;
+
+    @Field(name = "row_num")
+    private Long rowNum;
 }
