@@ -1,5 +1,5 @@
 services:
-  mongo1:
+  mongo:
     image: mongo:7.0
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
     ports:
@@ -18,10 +18,4 @@ services:
       start_interval: 1s
       retries: 30
     volumes:
-      - "mongo1_data:/data/db"
-      - "mongo1_config:/data/configdb"
       - "./src/test/resources/data/:/data/init/"
-
-volumes:
-  mongo1_data:
-  mongo1_config:
