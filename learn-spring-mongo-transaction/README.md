@@ -1,23 +1,14 @@
-# Learn Spring + Mongo DB
+# Learn Spring + Mongo DB Transaction
 
-## Generate Querydsl Q class
+## Requirement
+1. MongoDB Version 4.0+ (Community, Enterprise, Atlas)
+2. Transaction only works in cluster mode. (Not supported in standalone mode)
 
-Run `./gradlew build`
-
-## MongoDB indices and execution plan
-
-Index creation example command.
-
-```javascript
-db.activity_log.createIndex({tx_datetime: 1});
-db.activity_log.createIndex({tx_datetime: 1, branch_code: 1});
+## Configuration
+Configure transaction manager. See example in
+```
+com.example.demo.config.MongoConfig
 ```
 
-Query execution plan explain command example.
-
-```javascript
-db.activity_log.find({ $and: [ { $and: [{ "tx_datetime": { $gte: ISODate("2024-04-30T00:00:00") } }, { "tx_datetime": { $lte: ISODate("2024-05-05T10:11:47") } }] }, { "branch_code": "00145" } ] }).explain();
-db.activity_log.find({ $and: [ { $and: [{ "tx_datetime": { $gte: ISODate("2024-04-30T00:00:00") } }, { "tx_datetime": { $lte: ISODate("2024-05-05T10:11:47") } }] }, { "staff_id": "52143" } ] }).explain()
-db.activity_log.find({ "branch_code": "00145" }).explain();
-db.activity_log.find({ "staff_id": "52134" }).explain();
-```
+## Implementation
+Use `org.springframework.transaction.annotation.Transactional` annotation to mark your transaction method.
