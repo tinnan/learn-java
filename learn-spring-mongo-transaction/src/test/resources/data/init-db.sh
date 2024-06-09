@@ -9,8 +9,4 @@ db.createUser({
     { role: 'readWrite', db: 'admin_panel' }
   ]
 });
-
-use admin_panel;
-db.createCollection('activity_log');
-db.createCollection('activity_message');
 EOF
