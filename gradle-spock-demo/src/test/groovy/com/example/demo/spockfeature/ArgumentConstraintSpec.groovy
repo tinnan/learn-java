@@ -1,6 +1,7 @@
 package com.example.demo.spockfeature
 
-
+import com.example.demo.spockfeature.model.ObjectClass
+import com.example.demo.spockfeature.model.TestClass
 import spock.lang.Specification
 
 class ArgumentConstraintSpec extends Specification {
@@ -61,41 +62,5 @@ class ArgumentConstraintSpec extends Specification {
                 name == "John"
             }
         })
-    }
-}
-
-class TestClass {
-    void doSomething(int val, String name) {
-        // Do something.
-    }
-
-    void doOtherThing(ObjectClass o) {
-        // Do something.
-    }
-}
-
-class ObjectClass {
-    private int val
-    private String name
-
-    String getName() {
-        return name
-    }
-
-    void setName(String name) {
-        this.name = name
-    }
-
-    int getVal() {
-        return val
-    }
-
-    void setVal(int val) {
-        this.val = val
-    }
-
-    ObjectClass(int val, String name) {
-        this.val = val
-        this.name = name
     }
 }
