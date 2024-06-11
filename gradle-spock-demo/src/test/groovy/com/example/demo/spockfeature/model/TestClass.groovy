@@ -8,4 +8,8 @@ class TestClass {
     void doOtherThing(ObjectClass o) {
         // Do something.
     }
+
+    ObjectClass createObject(String name, int val) {
+        return null
+    }
 }

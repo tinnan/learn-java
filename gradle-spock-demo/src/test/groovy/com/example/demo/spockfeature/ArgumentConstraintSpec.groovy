@@ -21,6 +21,12 @@ class ArgumentConstraintSpec extends Specification {
 
         then:
         1 * testClass.doSomething(10, _ as String)
+
+        when:
+        testClass.doSomething(10, "+")
+
+        then: "Any matching"
+        1 * testClass.doSomething(_, _)
     }
 
     def "Null match"() {
