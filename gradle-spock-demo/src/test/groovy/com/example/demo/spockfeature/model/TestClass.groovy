@@ -12,4 +12,8 @@ class TestClass {
     ObjectClass createObject(String name, int val) {
         return null
     }
+
+    int createNumber(String s) {
+        return 0
+    }
 }

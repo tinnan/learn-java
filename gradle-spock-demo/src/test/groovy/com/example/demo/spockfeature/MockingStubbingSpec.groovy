@@ -37,4 +37,25 @@ class MockingStubbingSpec extends Specification {
             name == "A"
         }
     }
+
+    def "Response chaining"() {
+        given:
+        testClass.createNumber(_) >>> [10, 20, 30] >> { throw new IllegalStateException() } >>> [40, 50] >> 60
+
+        expect:
+        testClass.createNumber("") == 10
+        testClass.createNumber("") == 20
+        testClass.createNumber("") == 30
+
+        when:
+        testClass.createNumber("")
+
+        then:
+        thrown(IllegalStateException)
+
+        expect:
+        testClass.createNumber("") == 40
+        testClass.createNumber("") == 50
+        testClass.createNumber("") == 60
+    }
 }
