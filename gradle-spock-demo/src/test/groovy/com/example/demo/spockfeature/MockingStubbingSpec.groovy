@@ -7,7 +7,7 @@ import spock.lang.Specification
 class MockingStubbingSpec extends Specification {
     def testClass = Mock(TestClass)
 
-    def "Normal stubbing"() {
+    def "Return fixed value"() {
         given:
         testClass.createObject(_ as String, _ as Integer) >> new ObjectClass(100, "John Doe")
 
@@ -21,10 +21,10 @@ class MockingStubbingSpec extends Specification {
         }
     }
 
-    def "Custom stubbing"() {
+    def "Compute return values"() {
         given:
-        testClass.createObject(_ as String, _ as Integer) >> { name, val ->
-            val > 50 ? new ObjectClass((Integer) val, "Z") : new ObjectClass((Integer) val, "A")
+        testClass.createObject(_ as String, _ as Integer) >> { String name, Integer val ->
+            val > 50 ? new ObjectClass(val, "Z") : new ObjectClass(val, "A")
         }
 
         expect:
@@ -40,7 +40,11 @@ class MockingStubbingSpec extends Specification {
 
     def "Response chaining"() {
         given:
-        testClass.createNumber(_) >>> [10, 20, 30] >> { throw new IllegalStateException() } >>> [40, 50] >> 60
+        testClass.createNumber(_) >>> [10, 20, 30]
+                >> { throw new IllegalStateException() }
+                >>> [40, 50]
+                >> 60
+                >> { String s -> s == "Y" ? 70 : -1 }
 
         expect:
         testClass.createNumber("") == 10
@@ -57,5 +61,6 @@ class MockingStubbingSpec extends Specification {
         testClass.createNumber("") == 40
         testClass.createNumber("") == 50
         testClass.createNumber("") == 60
+        testClass.createNumber("Y") == 70
     }
 }
