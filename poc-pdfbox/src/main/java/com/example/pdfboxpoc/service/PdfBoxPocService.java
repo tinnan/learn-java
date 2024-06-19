@@ -13,15 +13,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PdfBoxPocService {
-    private final PdfService pdfService;
+    private final PdfTemplateService pdfTemplateService;
 
-    public PdfBoxPocService(PdfService pdfService) {
-        this.pdfService = pdfService;
+    public PdfBoxPocService(PdfTemplateService pdfTemplateService) {
+        this.pdfTemplateService = pdfTemplateService;
     }
 
     public Resource loadPdf() throws IOException {
         try (
-            PDDocument template = pdfService.loadTemplate();
+            PDDocument template = pdfTemplateService.loadTemplate();
             PDDocument newDoc = new PDDocument();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
         ) {
@@ -34,7 +34,7 @@ public class PdfBoxPocService {
 
             PDPage page = newDoc.getPage(0);
             try (PDPageContentStream contentStream = new PDPageContentStream(newDoc, page, AppendMode.APPEND, false)) {
-                contentStream.setFont(pdfService.loadCordiaFont(newDoc), 10);
+                contentStream.setFont(pdfTemplateService.loadCordiaFont(newDoc), 10);
 
                 showTextAt(contentStream, "9912039124", 330, 640);
                 showTextAt(contentStream, "19", 230, 610);

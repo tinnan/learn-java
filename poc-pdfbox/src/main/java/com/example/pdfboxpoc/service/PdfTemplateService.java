@@ -10,7 +10,7 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PdfService {
+public class PdfTemplateService {
     public PDFont loadCordiaFont(PDDocument document) throws IOException {
         Path fontFilePath = Paths.get("src/main/resources/font/cordia.ttf");
         return PDType0Font.load(document, fontFilePath.toFile());
