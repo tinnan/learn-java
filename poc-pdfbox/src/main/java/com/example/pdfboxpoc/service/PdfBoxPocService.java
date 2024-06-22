@@ -2,15 +2,22 @@ package com.example.pdfboxpoc.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class PdfBoxPocService {
     private final PdfTemplateService pdfTemplateService;
@@ -34,31 +41,48 @@ public class PdfBoxPocService {
 
             PDPage page = newDoc.getPage(0);
             try (PDPageContentStream contentStream = new PDPageContentStream(newDoc, page, AppendMode.APPEND, false)) {
-                contentStream.setFont(pdfTemplateService.loadCordiaFont(newDoc), 10);
+                contentStream.setFont(pdfTemplateService.loadCordiaFont(newDoc), 14);
 
-                showTextAt(contentStream, "9912039124", 330, 640);
-                showTextAt(contentStream, "19", 230, 610);
-                showTextAt(contentStream, "มิถุนายน", 265, 610);
-                showTextAt(contentStream, "2567", 310, 610);
-
-                showTextAt(contentStream, "นาย ทดสอบ นามสกุล", 120, 590);
-                showTextAt(contentStream, "14", 295, 590);
-                showTextAt(contentStream, "เล้าหมู", 360, 590);
-
-                showTextAt(contentStream, "บำรุงสุข", 72, 577);
-                showTextAt(contentStream, "ดินแดง", 160, 577);
-                showTextAt(contentStream, "ดินเหลือง", 230, 577);
-                showTextAt(contentStream, "กทม", 295, 577);
+                Map<String, String> dataMap = getData();
+                for (PDAnnotation annotation : page.getAnnotations()) {
+                    if ("FreeText".equals(annotation.getSubtype())
+                        && dataMap.containsKey(annotation.getContents())) {
+                        // replace annotation with text.
+                        String data = dataMap.get(annotation.getContents());
+                        PDRectangle rectangle = annotation.getRectangle();
+                        showTextAt(contentStream, data, rectangle.getLowerLeftX(), rectangle.getLowerLeftY());
+                    }
+                }
             }
+            page.setAnnotations(Collections.emptyList()); // Delete all annotation.
 
             newDoc.save(outputStream);
             return new ByteArrayResource(outputStream.toByteArray());
         }
     }
 
+    public Map<String, String> getData() {
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("name", "นาย ทดสอบ นามสกุล");
+        dataMap.put("age", "25");
+        dataMap.put("address", "115");
+        dataMap.put("street", "บำรุงสุข");
+        dataMap.put("district", "ดินแดง");
+        dataMap.put("sub_district", "ดินเหลือง");
+        dataMap.put("province", "กรุงเทพ");
+        dataMap.put("zip_code", "10200");
+        dataMap.put("score1", "5");
+        dataMap.put("score2", "4");
+        dataMap.put("score3", "5");
+        dataMap.put("score4", "3");
+        dataMap.put("sign_name", "ทดสอบ นามสกุล");
+        return dataMap;
+    }
+
     public void showTextAt(PDPageContentStream contentStream, String text, float tx, float ty)
         throws IOException {
         contentStream.beginText();
+        contentStream.setTextRise(1);
         contentStream.newLineAtOffset(tx, ty);
         contentStream.showText(text);
         contentStream.endText();

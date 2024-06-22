@@ -17,6 +17,6 @@ public class PdfTemplateService {
     }
 
     public PDDocument loadTemplate() throws IOException {
-        return Loader.loadPDF(Paths.get("src/main/resources/template/AL_contract.pdf").toFile());
+        return Loader.loadPDF(Paths.get("src/main/resources/template/annotated_template.pdf").toFile());
     }
 }
