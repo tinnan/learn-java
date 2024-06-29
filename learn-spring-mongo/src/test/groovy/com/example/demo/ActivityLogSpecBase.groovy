@@ -33,6 +33,9 @@ import org.springframework.test.context.DynamicPropertySource
 import spock.lang.Shared
 import spock.lang.Specification
 
+import javax.net.ssl.*
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
@@ -163,10 +166,42 @@ abstract class ActivityLogSpecBase extends Specification {
                 log.info("Configure Mongo distribution download base URL to: {}", distBaseUrl)
                 builder.distributionBaseUrl(Start.to(DistributionBaseUrl)
                         .initializedWith(DistributionBaseUrl.of(distBaseUrl)))
-                // Disable SSL certificate validation.
-                SslUtils.setTrustAll()
+                // Disable SSL certificate validation when downloading MongoDB binaries from some private server.
+                setTrustAll()
             }
             this.mongod = builder.build().start(Version.Main.V7_0)
+        }
+
+        private static void setTrustAll() {
+            // Create a trust manager that does not validate certificate chains
+            TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        X509Certificate[] getAcceptedIssuers() {
+                            return null
+                        }
+
+                        void checkClientTrusted(X509Certificate[] certs, String authType) {
+                        }
+
+                        void checkServerTrusted(X509Certificate[] certs, String authType) {
+                        }
+                    }
+            }
+
+            // Install the all-trusting trust manager
+            SSLContext sc = SSLContext.getInstance("SSL")
+            sc.init(null, trustAllCerts, new SecureRandom())
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory())
+
+            // Create all-trusting host name verifier
+            HostnameVerifier allHostsValid = new HostnameVerifier() {
+                boolean verify(String hostname, SSLSession session) {
+                    return true
+                }
+            }
+
+            // Install the all-trusting host verifier
+            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid)
         }
 
         @PostConstruct
