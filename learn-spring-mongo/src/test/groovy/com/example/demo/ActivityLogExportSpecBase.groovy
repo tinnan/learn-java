@@ -31,7 +31,7 @@ abstract class ActivityLogExportSpecBase extends Specification {
     static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0")
             .withCopyFileToContainer(MountableFile.forClasspathResource("./data/init-activity-log.js"),
                     "/docker-entrypoint-initdb.d/init-activity-log.js")
-    // todo: why waoting strategy does not work?
+    // todo: why waiting strategy does not work?
 //            .waitingFor(Wait.forLogMessage(".*MongoDB init process complete.*", 1))
     @Autowired(required = false)
     @Shared
