@@ -31,10 +31,8 @@ public class User {
     @Email(message = "{validation.email.email}", groups = AllUser.class)
     private String email;
 
-    @Between.List({
-            @Between(min = 10, max = 99, message = "{validation.age.between}", groups = RegularUser.class),
-            @Between(min = 25, max = 50, message = "{validation.age.between.admin}", groups = AdminUser.class),
-    })
+    @Between(min = 10, max = 99, message = "{validation.age.between}", groups = RegularUser.class)
+    @Between(min = 25, max = 50, message = "{validation.age.between.admin}", groups = AdminUser.class)
     private Integer age;
 
     @AssertTrue(message = "{validation.agreement.assertTrue}", groups = AdminUser.class)
