@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "94608956-f8be-47ba-bd77-d0f761a19ea8",
+		"name": "Learn Mongo DB Transaction",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34461727"
+	},
+	"item": [
+		{
+			"name": "New activity message",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"txDatetime\": \"2024-05-01T09:00:00Z\",\n    \"staffId\": \"80000\",\n    \"branchCode\": \"020\",\n    \"channel\": \"Branch\",\n    \"rmidEc\": \"000000000010234\",\n    \"idType\": \"CID\",\n    \"idNo\": \"1000000000000\",\n    \"serviceType\": \"Create RM\",\n    \"activityType\": \"Collect KYC info\",\n    \"metaData\": \"Walk in\",\n    \"detail\": {\n        \"errorCode\": \"0000\",\n        \"errorMsg\": \"\",\n        \"errorFields\": []\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/activity/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"activity",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Process activity message",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"a0a16d2f-5e43-4004-ba0c-6d5d3588e800\",\n    \"fakeError\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/activity/message/process",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"activity",
+						"message",
+						"process"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all activity message",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/activity/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"activity",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all activity log",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/activity",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"activity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset data",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/activity/reset",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"activity",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -4,18 +4,21 @@ services:
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
     ports:
       - 27017:27017
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - mongonet
+  mongo-init:
+    image: mongo:7.0
+    depends_on:
+      - mongo
+    networks:
+      - mongonet
     environment:
       - MONGO_INITDB_USERNAME=app_user
       - MONGO_INITDB_PASSWORD=app_password
-    healthcheck:
-      #      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017',priority:1}]}) }" | mongosh --port 27017 --quiet
-      test: [ "CMD", "sh", "/data/init/init.sh" ]
-      interval: 5s
-      timeout: 30s
-      start_period: 0s
-      start_interval: 1s
-      retries: 30
     volumes:
-      - "./src/test/resources/data/:/data/init/"
+      - "./docker/mongo/:/data/init/"
+    entrypoint:
+      - "/data/init/init.sh"
+
+networks:
+  mongonet:
