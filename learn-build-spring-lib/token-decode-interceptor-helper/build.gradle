@@ -78,6 +78,14 @@ publishing {
     }
     repositories {
         maven {
+            /*
+            Replace url value with URL of target Maven repository
+            and add credentials for authentication
+            credentials {
+                username = "user"
+                password = "pwd"
+            }
+             */
             url = layout.buildDirectory.dir("publishing-repository")
         }
     }
