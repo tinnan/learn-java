@@ -194,7 +194,7 @@ public class ClientSideFieldLevelEncryptionAutomaticTutorial {
         // we will end up with error "Exception in encryption library: Unexpected field: '<some file name>'".
         // The error is raised from inside MongoDB Automatic Encryption Shared Library.
         // See source code at https://github.com/mongodb/libmongocrypt/blob/master/src/mongocrypt-kek.c
-        // line: 198 (or look for switch code MONGOCRYPT_KMS_PROVIDER_LOCAL)
+        // line: 198 (or look for switch case MONGOCRYPT_KMS_PROVIDER_LOCAL)
         clientEncryption.rewrapManyDataKey(new Document(), new RewrapManyDataKeyOptions().provider(LOCAL_KMS_PROVIDER));
 
         log.info("* Query document after re-wrap data key.");
