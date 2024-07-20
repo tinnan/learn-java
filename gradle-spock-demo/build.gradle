@@ -23,6 +23,7 @@ ext {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "com.azure.spring:spring-cloud-azure-dependencies:5.14.0"
 	}
 }
 
@@ -44,6 +45,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
+
+	// Azure storage blob
+	implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob'
+	implementation 'com.azure:azure-storage-blob-batch:12.18.0'
+	implementation 'com.azure:azure-identity'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.rest-assured:rest-assured'
