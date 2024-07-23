@@ -51,7 +51,7 @@ public class MultipartController {
             .body(map);
     }
 
-    @PostMapping("/file/upload")
+    @PostMapping(value = "/file/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MultipartFileUploadResponse> uploadFile(MultipartFileUploadRequest request) {
 
         log.info("Upload data: {}", request);
@@ -63,7 +63,7 @@ public class MultipartController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/file/upload/upstream")
+    @PostMapping(value = "/file/upload/upstream", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MultipartFileUploadResponse> uploadToUpstream(MultipartFileUploadRequest request)
         throws IOException {
 
