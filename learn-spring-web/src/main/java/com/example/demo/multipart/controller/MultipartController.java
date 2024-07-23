@@ -55,8 +55,29 @@ public class MultipartController {
     public ResponseEntity<MultipartFileUploadResponse> uploadFile(MultipartFileUploadRequest request) {
 
         log.info("Upload data: {}", request);
-        log.info("Multipart file name: {} ({})", request.getFile().getName(), request.getFile().getContentType());
-        return ResponseEntity.ok(MultipartFileUploadResponse.builder().uploadedFileName(request.getFile().getName())
-            .uploadedContentType(request.getFile().getContentType()).build());
+        log.info("Multipart file name: {} ({})", request.getFile().getOriginalFilename(),
+            request.getFile().getContentType());
+
+        MultipartFileUploadResponse response = multipartService.uploadFile(request);
+
+        return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/file/upload/upstream")
+    public ResponseEntity<MultipartFileUploadResponse> uploadToUpstream(MultipartFileUploadRequest request)
+        throws IOException {
+
+        log.info("(Upstream) Upload data: {}", request);
+        log.info("(Upstream) Multipart file name: {} ({})", request.getFile().getOriginalFilename(),
+            request.getFile().getContentType());
+
+        return ResponseEntity.ok(
+            MultipartFileUploadResponse.builder()
+                .uploadedFileName(request.getFile().getOriginalFilename())
+                .uploadedContentType(request.getFile().getContentType())
+                .uploadedFileContent(new String(request.getFile().getBytes()))
+                .build());
+    }
+
+
 }
