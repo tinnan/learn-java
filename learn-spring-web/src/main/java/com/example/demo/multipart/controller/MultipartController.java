@@ -52,8 +52,7 @@ public class MultipartController {
     }
 
     @PostMapping("/file/upload")
-    public ResponseEntity<MultipartFileUploadResponse> uploadFile(MultipartFileUploadRequest request)
-        throws IOException {
+    public ResponseEntity<MultipartFileUploadResponse> uploadFile(MultipartFileUploadRequest request) {
 
         log.info("Upload data: {}", request);
         log.info("Multipart file name: {} ({})", request.getFile().getName(), request.getFile().getContentType());
