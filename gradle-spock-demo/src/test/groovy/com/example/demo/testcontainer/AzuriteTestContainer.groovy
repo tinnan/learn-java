@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.util.TestSocketUtils
+import org.springframework.util.ResourceUtils
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.spock.Testcontainers
 import org.testcontainers.utility.MountableFile
@@ -35,16 +36,31 @@ class AzuriteTestContainer extends Specification {
     public static final String AZ_STORAGE_ACCOUNT = "devstoreaccount1"
     public static final String AZ_ACCOUNT_KEY = "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
 
-    /**
-     * Certificate and key file is to enable SSL.
+    /*
+        Certificate file, key file, keystore and truststore are for enabling SSL.
+        https://github.com/Azure/Azurite/blob/main/README.md#https-setup
      */
+    static {
+        log.info("Configure truststore/keystore")
+        String keystorePath = ResourceUtils
+                .getFile("classpath:docker/cert/keystore.jks").getPath()
+        log.info("Keystore path: {}", keystorePath)
+        String truststorePath = ResourceUtils
+                .getFile("classpath:docker/cert/truststore.jks").getPath()
+        log.info("Truststore path: {}", truststorePath)
+        System.setProperty("javax.net.ssl.keyStore", keystorePath)
+        System.setProperty("javax.net.ssl.keyStorePassword", "azurite@1234")
+        System.setProperty("javax.net.ssl.trustStore", truststorePath)
+        System.setProperty("javax.net.ssl.trustStorePassword", "azurite@1234")
+    }
+
     static GenericContainer azuriteContainer = new GenericContainer<>("mcr.microsoft.com/azure-storage/azurite")
-            .withCopyFileToContainer(MountableFile.forClasspathResource("/docker/cert/127.0.0.1.pem"),
-                    "/workspace/127.0.0.1.pem")
-            .withCopyFileToContainer(MountableFile.forClasspathResource("/docker/cert/127.0.0.1-key.pem"),
-                    "/workspace/127.0.0.1-key.pem")
+            .withCopyFileToContainer(MountableFile.forClasspathResource("/docker/cert/cert.pem"),
+                    "/workspace/cert.pem")
+            .withCopyFileToContainer(MountableFile.forClasspathResource("/docker/cert/key.pem"),
+                    "/workspace/key.pem")
             .withCommand("azurite", "--blobHost", "0.0.0.0", "--queueHost", "0.0.0.0", "--tableHost", "0.0.0.0",
-                    "--cert", "/workspace/127.0.0.1.pem", "--key", "/workspace/127.0.0.1-key.pem")
+                    "--cert", "/workspace/cert.pem", "--key", "/workspace/key.pem")
             .withExposedPorts(10000, 10001, 10002)
 
     @DynamicPropertySource
