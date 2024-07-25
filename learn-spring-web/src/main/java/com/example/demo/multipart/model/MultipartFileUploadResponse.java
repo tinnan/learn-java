@@ -9,5 +9,5 @@ public class MultipartFileUploadResponse {
 
     private String uploadedFileName;
     private String uploadedContentType;
-    private String uploadedFileContent;
+    private byte[] uploadedFileContent;
 }

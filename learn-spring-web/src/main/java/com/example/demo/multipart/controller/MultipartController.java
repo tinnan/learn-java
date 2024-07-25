@@ -75,7 +75,7 @@ public class MultipartController {
             MultipartFileUploadResponse.builder()
                 .uploadedFileName(request.getFile().getOriginalFilename())
                 .uploadedContentType(request.getFile().getContentType())
-                .uploadedFileContent(new String(request.getFile().getBytes()))
+                .uploadedFileContent(request.getFile().getBytes())
                 .build());
     }
 
