@@ -60,7 +60,8 @@ class AsyncApiCallSpecs extends Specification {
         response.status == HttpStatus.OK.value()
 
         and:
+        final overheadMs = 300
         // todo: is there a better way to measure elapsed time of the API call. (Use Spy?)
-        end - start < Math.max(customerServiceDelayMs, fraudServiceDelayMs) + 500
+        end - start < Math.max(customerServiceDelayMs, fraudServiceDelayMs) + overheadMs
     }
 }
