@@ -15,6 +15,7 @@ public class NestedExceptionHandlingController {
             NestedCauseHandlingTestException is handled by NestedExceptionHandler
             despite CommonException is being handled by GlobalExceptionHandler
             since NestedExceptionHandler is annotated with @Order(1).
+            Spring starts behavior of handling nested exception since version 5.3
          */
         throw new CommonException(new NestedCauseHandlingTestException());
     }
