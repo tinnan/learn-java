@@ -1,0 +1,59 @@
+plugins {
+	id 'java'
+	id 'groovy'
+	id 'org.springframework.boot' version '3.3.0'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+ext {
+    set('springCloudVersion', "2023.0.2")
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	runtimeOnly 'org.hsqldb:hsqldb'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.rest-assured:rest-assured'
+
+	// mandatory dependencies for using Spock
+	testImplementation platform('org.apache.groovy:groovy-bom:4.0.20')
+	testImplementation platform("org.spockframework:spock-bom:2.4-M4-groovy-4.0")
+	testImplementation 'org.apache.groovy:groovy'
+	testImplementation 'org.spockframework:spock-core'
+	// This one is for using Spock framework with Spring.
+	testImplementation 'org.spockframework:spock-spring'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
