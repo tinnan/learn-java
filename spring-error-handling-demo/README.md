@@ -2,7 +2,7 @@ Demo app for leaning Spring error handling (`@ExceptionHandler`, `@ControllerAdv
 Learning from [Understanding Spring’s @ControllerAdvice](https://medium.com/@jovannypcg/understanding-springs-controlleradvice-cd96a364033f) guide.
 
 ## API
-Use postman collection provided in this project.
+Use http://localhost:8080/swagger-ui/index.html
 1. Get user - valid user names: `john_d`, `jame_s`.
 2. Post \
    valid input:
@@ -36,4 +36,4 @@ Use postman collection provided in this project.
      "content": "This is an act of terrorism !"
    }
    ```
-   
+4. Nested exception test
