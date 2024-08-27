@@ -2,7 +2,7 @@
 ## Content tags
 1. `aop-demo` aop, aspect oriented programming 
 2. `data-jpa-demo` jpa, springdata
-3. `gradle-spock-demo` spock, testcontainer, mongodb, redis, postgresql, embeddedmongodb, embeddedredis, azurite, azureblob
+3. `gradle-spock-demo` spock, testcontainer, mongodb, redis, postgresql, embeddedmongodb, embeddedredis, azurite, azureblob, mapstruct
 4. `kafkademo` spring, messaging, kafka
 5. `learn-build-spring-lib` spring, library, publish, gradle
 6. `learn-mongodb-csfle` mongodb, csfle, clientside, fieldlevel, encryption
