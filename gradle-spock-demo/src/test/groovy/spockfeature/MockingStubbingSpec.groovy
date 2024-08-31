@@ -1,7 +1,7 @@
-package com.example.demo.spockfeature
+package spockfeature
 
-import com.example.demo.spockfeature.model.ObjectClass
-import com.example.demo.spockfeature.model.TestClass
+import spockfeature.model.ObjectClass
+import spockfeature.model.TestClass
 import spock.lang.Specification
 
 class MockingStubbingSpec extends Specification {

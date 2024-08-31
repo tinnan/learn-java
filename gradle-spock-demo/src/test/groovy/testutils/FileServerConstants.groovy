@@ -1,4 +1,4 @@
-package com.example.demo.utils
+package testutils
 
 final class FileServerConstants {
     private FileServerConstants() {}

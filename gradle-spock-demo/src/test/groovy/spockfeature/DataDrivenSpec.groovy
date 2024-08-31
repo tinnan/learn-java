@@ -1,4 +1,4 @@
-package com.example.demo.spockfeature
+package spockfeature
 
 import spock.lang.Specification
 

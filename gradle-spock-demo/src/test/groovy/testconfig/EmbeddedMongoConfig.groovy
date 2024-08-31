@@ -1,7 +1,7 @@
-package com.example.demo.embedded
+package testconfig
 
-import com.example.demo.utils.FileServerConstants
-import com.example.demo.utils.SslUtils
+import testutils.FileServerConstants
+import testutils.SslUtils
 import com.mongodb.BasicDBObject
 import com.mongodb.MongoCommandException
 import com.mongodb.client.MongoClient

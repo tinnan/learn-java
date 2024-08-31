@@ -1,7 +1,7 @@
-package com.example.demo.embedded
+package testconfig
 
-import com.example.demo.utils.FileServerConstants
-import com.example.demo.utils.SslUtils
+import testutils.FileServerConstants
+import testutils.SslUtils
 import groovy.util.logging.Slf4j
 import redis.embedded.RedisServer
 import redis.embedded.core.ExecutableProvider

@@ -1,4 +1,4 @@
-package com.example.demo.spockfeature.model
+package spockfeature.model
 
 class TestClass {
     void doSomething(int val, String name) {

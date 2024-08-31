@@ -1,10 +1,12 @@
-package com.example.demo.controller
+package integration.api
 
+import com.example.demo.DemoApplication
 import com.example.demo.clients.FraudClient
 import com.example.demo.clients.NotificationClient
 import com.example.demo.controller.advisor.ExceptionHandlers
 import com.example.demo.domain.CustomerRegisterResult
 import com.example.demo.domain.Notification
+import com.example.demo.model.FraudResponse
 import io.restassured.RestAssured
 import io.restassured.config.LogConfig
 import io.restassured.filter.log.LogDetail
@@ -22,8 +24,10 @@ import static groovy.json.JsonOutput.toJson
 import static io.restassured.http.ContentType.JSON
 import static org.springframework.test.util.TestSocketUtils.findAvailableTcpPort
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class CustomerControllerTest extends Specification {
+@SpringBootTest(
+        classes = DemoApplication,
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+class CustomerRegisterApiIT extends Specification {
     private static final String BASE_URI = "http://localhost"
     private static final int PORT = findAvailableTcpPort()
     private static final String ELIGIBLE_CUSTOMER_EMAIL = "john.d@gmail.com"
@@ -53,8 +57,8 @@ class CustomerControllerTest extends Specification {
 
     @SpringBean
     FraudClient fraudClient = Stub() {
-        isFraudster(ELIGIBLE_CUSTOMER_EMAIL) >> false
-        isFraudster(FRAUDSTER_CUSTOMER_EMAIL) >> true
+        isFraudster(ELIGIBLE_CUSTOMER_EMAIL) >> FraudResponse.builder().fraudster(false).build()
+        isFraudster(FRAUDSTER_CUSTOMER_EMAIL) >> FraudResponse.builder().fraudster(true).build()
     }
 
     @SpringBean

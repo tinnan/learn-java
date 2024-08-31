@@ -6,6 +6,7 @@ import com.example.demo.controller.exception.IneligibleCustomerException;
 import com.example.demo.domain.Customer;
 import com.example.demo.domain.CustomerRegisterResult;
 import com.example.demo.domain.Notification;
+import com.example.demo.model.FraudResponse;
 import com.example.demo.repo.CustomerRepository;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -24,8 +25,8 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     public CustomerRegisterResult register(Customer customer) throws IneligibleCustomerException {
-        boolean isFraudster = fraudClient.isFraudster(customer.getEmail());
-        if (isFraudster) {
+        FraudResponse fraudResponse = fraudClient.isFraudster(customer.getEmail());
+        if (fraudResponse.isFraudster()) {
             throw new IneligibleCustomerException(customer.getEmail());
         }
 

@@ -1,4 +1,4 @@
-package com.example.demo.utils
+package testutils
 
 import javax.net.ssl.*
 import java.security.SecureRandom

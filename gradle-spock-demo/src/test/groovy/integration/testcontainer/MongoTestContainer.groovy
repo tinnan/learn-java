@@ -1,5 +1,6 @@
-package com.example.demo.testcontainer
+package integration.testcontainer
 
+import com.example.demo.DemoApplication
 import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
 import groovy.util.logging.Slf4j
@@ -16,7 +17,9 @@ import org.testcontainers.utility.MountableFile
 import spock.lang.Specification
 
 @Testcontainers
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(
+        classes = [DemoApplication],
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
 class MongoTestContainer extends Specification {
     protected static final String BASE_URI = "http://localhost"

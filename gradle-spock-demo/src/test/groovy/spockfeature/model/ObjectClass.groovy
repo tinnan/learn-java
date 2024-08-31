@@ -1,4 +1,4 @@
-package com.example.demo.spockfeature.model
+package spockfeature.model
 
 class ObjectClass {
     private int val

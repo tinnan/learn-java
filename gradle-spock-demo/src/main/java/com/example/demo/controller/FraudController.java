@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.clients.FraudClient;
+import com.example.demo.model.FraudResponse;
 import com.example.demo.service.FraudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ public class FraudController implements FraudClient {
     private final FraudService fraudService;
 
     @Override
-    public boolean isFraudster(String customerEmail) {
-        return fraudService.isFraudster(customerEmail);
+    public FraudResponse isFraudster(String customerEmail) {
+        return FraudResponse.builder().fraudster(fraudService.isFraudster(customerEmail)).build();
     }
 }

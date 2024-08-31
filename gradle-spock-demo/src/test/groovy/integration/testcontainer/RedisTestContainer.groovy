@@ -1,6 +1,6 @@
-package com.example.demo.testcontainer
+package integration.testcontainer
 
-
+import com.example.demo.DemoApplication
 import groovy.util.logging.Slf4j
 import io.restassured.RestAssured
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +14,9 @@ import org.testcontainers.spock.Testcontainers
 import spock.lang.Specification
 
 @Testcontainers
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(
+        classes = [DemoApplication],
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Slf4j
 class RedisTestContainer extends Specification {
     protected static final String BASE_URI = "http://localhost"
