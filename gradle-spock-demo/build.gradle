@@ -47,6 +47,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
+	implementation 'com.jayway.jsonpath:json-path'
 
 	//mapstruct
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
@@ -65,6 +66,8 @@ dependencies {
 	testImplementation 'org.testcontainers:spock'
 	testImplementation 'org.testcontainers:mongodb'
 	testImplementation "org.testcontainers:postgresql"
+	testCompileOnly('org.projectlombok:lombok')
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	// Embedded
 	testImplementation 'com.github.codemonstur:embedded-redis:1.4.3'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.14.0'
