@@ -8,9 +8,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,4 +39,14 @@ public class User {
 
     @AssertTrue(message = "{validation.agreement.assertTrue}", groups = AdminUser.class)
     private boolean agreement;
+
+    @Valid
+    private List<Address> addressList;
+
+    @Data
+    public static class Address {
+
+        @NotBlank(groups = AllUser.class)
+        private String addressNo;
+    }
 }

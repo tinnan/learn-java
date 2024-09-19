@@ -98,6 +98,30 @@ class UserControllerTest {
         performRequest(acceptLang, jsonBody, requestType, responseStatus, responseType, responseJson);
     }
 
+    @Test
+    public void whenPostRequestToUserWithInvalidAddressData_thenReturnBadRequest_TH() throws Exception {
+        String acceptLang = "th-TH";
+        String jsonBody = """
+                {
+                    "name": "John Doe",
+                    "email": "john.d@gmail.com",
+                    "age": 25,
+                    "addressList": [
+                        {"addressNo": ""}
+                    ]
+                }
+                """;
+        MediaType requestType = MediaType.APPLICATION_JSON;
+        int responseStatus = 400;
+        MediaType responseType = MediaType.APPLICATION_JSON;
+        String responseJson = """
+                {
+                    "addressList[0].addressNo":"must not be blank"
+                }
+                """;
+        performRequest(acceptLang, jsonBody, requestType, responseStatus, responseType, responseJson);
+    }
+
     private void performRequest(String acceptLang, String jsonBody, MediaType requestType,
         int status, MediaType responseType, String responseJson)
         throws Exception {
