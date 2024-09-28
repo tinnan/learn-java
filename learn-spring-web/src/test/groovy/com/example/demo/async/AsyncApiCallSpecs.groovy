@@ -22,8 +22,7 @@ class AsyncApiCallSpecs extends Specification {
         registry.add("clients.fraud.url", () -> "http://localhost:${port}")
         registry.add("service.customer.response.delay-ms", () -> customerServiceDelayMs)
         registry.add("service.fraud.response.delay-ms", () -> fraudServiceDelayMs)
-        registry.add("logging.level.com.example.demo.async.clients", () -> "debug")
-        registry.add("spring.cloud.openfeign.client.config.default.loggerLevel", () -> "full")
+
         RestAssured.baseURI = "http://localhost"
         RestAssured.port = port
     }
