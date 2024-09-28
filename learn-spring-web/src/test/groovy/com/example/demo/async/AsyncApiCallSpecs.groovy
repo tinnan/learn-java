@@ -2,6 +2,7 @@ package com.example.demo.async
 
 
 import io.restassured.RestAssured
+import org.spockframework.spring.EnableSharedInjection
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -9,6 +10,7 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import spock.lang.Specification
 
+@EnableSharedInjection
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = AsyncDemoApplication)
 class AsyncApiCallSpecs extends Specification {
     static def port = 58080

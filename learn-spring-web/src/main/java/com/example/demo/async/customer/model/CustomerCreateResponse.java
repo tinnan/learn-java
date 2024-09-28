@@ -1,5 +1,15 @@
 package com.example.demo.async.customer.model;
 
-public record CustomerCreateResponse(Integer customerId) {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CustomerCreateResponse {
+
+    private Integer customerId;
 }
