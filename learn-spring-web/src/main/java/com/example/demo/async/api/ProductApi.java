@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface ProductApi {
 
-    @PostMapping("/api/v1/product/apply")
+    @PostMapping("/product/apply")
     void applyProduct(@RequestHeader HttpHeaders headers, @RequestBody ProductApplicationRequest request);
 }

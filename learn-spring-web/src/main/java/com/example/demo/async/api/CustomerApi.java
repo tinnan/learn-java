@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface CustomerApi {
 
-    @GetMapping("/api/v1/customer/{customerId}")
+    @GetMapping("/customer/{customerId}")
     CustomerInfoResponse getCustomerInfo(@RequestHeader HttpHeaders headers,
         @PathVariable("customerId") Integer customerId);
 }

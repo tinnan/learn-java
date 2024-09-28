@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface FraudApi {
 
-    @GetMapping("/api/v1/check-fraud")
+    @GetMapping("/check-fraud")
     FraudCheckResponse isFraudster(@RequestHeader HttpHeaders headers, @RequestParam("customerId") Integer customerId);
 }

@@ -1,6 +1,6 @@
 package com.example.demo.multipart.controller
 
-import com.example.demo.async.AsyncDemoApplication
+
 import com.example.demo.multipart.MultipartDemoApplication
 import com.example.demo.multipart.model.MultipartFileUploadResponse
 import io.restassured.RestAssured
@@ -35,7 +35,7 @@ class MultipartControllerSpecs extends Specification {
         verifyAll(response.body().as(MultipartFileUploadResponse)) {
             getUploadedFileName() == "hello_file"
             getUploadedContentType() == "text/plain"
-            getUploadedFileContent() == "Hello world"
+            new String(getUploadedFileContent()) == "Hello world"
         }
     }
 }
