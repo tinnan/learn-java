@@ -5,6 +5,7 @@ import com.example.demo.async.model.FraudCheckResponse;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,12 +15,12 @@ public class ProductService {
 
     private final OutboundAsyncWrapperService wrapperService;
 
-    public void apply(Integer customerId, String productId) {
+    public void apply(HttpHeaders headers, Integer customerId, String productId) {
 
         try {
             long startTs = System.currentTimeMillis();
-            CompletableFuture<CustomerInfoResponse> customerInfoFuture = wrapperService.getCustomerInfo(customerId);
-            CompletableFuture<FraudCheckResponse> fraudsterFuture = wrapperService.isFraudster(customerId);
+            CompletableFuture<CustomerInfoResponse> customerInfoFuture = wrapperService.getCustomerInfo(headers, customerId);
+            CompletableFuture<FraudCheckResponse> fraudsterFuture = wrapperService.isFraudster(headers, customerId);
             CompletableFuture.allOf(customerInfoFuture, fraudsterFuture).thenRun(() -> {
                 long elapsed = System.currentTimeMillis() - startTs;
                 log.info("Async API call elapsed: {} ms", elapsed);
