@@ -1,7 +1,8 @@
-package com.example.demo.async.product;
+package com.example.demo.async.product.controller;
 
 import com.example.demo.async.api.ProductApi;
-import com.example.demo.async.model.ProductApplicationRequest;
+import com.example.demo.async.product.model.ProductApplicationRequest;
+import com.example.demo.async.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

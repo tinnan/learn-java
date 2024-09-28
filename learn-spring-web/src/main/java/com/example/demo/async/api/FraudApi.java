@@ -1,9 +1,8 @@
 package com.example.demo.async.api;
 
-import com.example.demo.async.model.FraudCheckResponse;
+import com.example.demo.async.fraud.model.FraudCheckResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;

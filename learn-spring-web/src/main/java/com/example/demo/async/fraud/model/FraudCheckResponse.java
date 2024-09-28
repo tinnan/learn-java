@@ -1,4 +1,4 @@
-package com.example.demo.async.model;
+package com.example.demo.async.fraud.model;
 
 public record FraudCheckResponse(Boolean isFraudster) {
 

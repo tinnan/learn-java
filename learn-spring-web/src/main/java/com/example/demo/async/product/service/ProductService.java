@@ -1,10 +1,10 @@
-package com.example.demo.async.product;
+package com.example.demo.async.product.service;
 
 import com.example.demo.async.clients.CustomerCreateClient;
-import com.example.demo.async.model.CustomerCreateResponse;
-import com.example.demo.async.model.CustomerInfoResponse;
-import com.example.demo.async.model.FraudCheckResponse;
-import com.example.demo.async.service.OutboundAsyncWrapperService;
+import com.example.demo.async.customer.model.CustomerCreateResponse;
+import com.example.demo.async.customer.model.CustomerInfoResponse;
+import com.example.demo.async.fraud.model.FraudCheckResponse;
+import com.example.demo.async.asyncwrapper.OutboundAsyncWrapperService;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

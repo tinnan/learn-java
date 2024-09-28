@@ -1,4 +1,4 @@
-package com.example.demo.async.model;
+package com.example.demo.async.customer.model;
 
 public record CustomerCreateRequest(String customerEmail) {
 

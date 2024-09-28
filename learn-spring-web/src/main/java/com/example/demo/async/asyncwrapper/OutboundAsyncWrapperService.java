@@ -1,9 +1,9 @@
-package com.example.demo.async.service;
+package com.example.demo.async.asyncwrapper;
 
 import com.example.demo.async.clients.CustomerInfoClient;
 import com.example.demo.async.clients.FraudClient;
-import com.example.demo.async.model.CustomerInfoResponse;
-import com.example.demo.async.model.FraudCheckResponse;
+import com.example.demo.async.customer.model.CustomerInfoResponse;
+import com.example.demo.async.fraud.model.FraudCheckResponse;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

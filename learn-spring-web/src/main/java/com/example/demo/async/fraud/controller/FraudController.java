@@ -1,7 +1,7 @@
-package com.example.demo.async.fraud;
+package com.example.demo.async.fraud.controller;
 
 import com.example.demo.async.api.FraudApi;
-import com.example.demo.async.model.FraudCheckResponse;
+import com.example.demo.async.fraud.model.FraudCheckResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
