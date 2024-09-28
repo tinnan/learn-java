@@ -1,15 +1,15 @@
 package com.example.demo.async.customer;
 
-import com.example.demo.async.api.CustomerApi;
+import com.example.demo.async.api.CustomerInfoApi;
 import com.example.demo.async.model.CustomerInfoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Slf4j
-public class CustomerController implements CustomerApi {
+@RestController
+public class CustomerInfoController implements CustomerInfoApi {
 
     @Value("${service.customer.response.delay-ms}")
     private Integer delay;

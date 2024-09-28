@@ -1,6 +1,6 @@
-package com.example.demo.async.product;
+package com.example.demo.async.service;
 
-import com.example.demo.async.clients.CustomerClient;
+import com.example.demo.async.clients.CustomerInfoClient;
 import com.example.demo.async.clients.FraudClient;
 import com.example.demo.async.model.CustomerInfoResponse;
 import com.example.demo.async.model.FraudCheckResponse;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OutboundAsyncWrapperService {
 
-    private final CustomerClient customerClient;
+    private final CustomerInfoClient customerInfoClient;
     private final FraudClient fraudClient;
 
     @Async
     public CompletableFuture<CustomerInfoResponse> getCustomerInfo(HttpHeaders headers, Integer customerId) {
-        CustomerInfoResponse customerInfo = customerClient.getCustomerInfo(headers, customerId);
+        CustomerInfoResponse customerInfo = customerInfoClient.getCustomerInfo(headers, customerId);
         return CompletableFuture.completedFuture(customerInfo);
     }
 
