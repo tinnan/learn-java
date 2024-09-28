@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-@SpringBootApplication(scanBasePackages = "com.example.demo.async")
 @EnableAsync
 @EnableFeignClients(basePackages = {"com.example.demo.async.clients"})
+@SpringBootApplication(scanBasePackages = "com.example.demo.async")
 public class AsyncDemoApplication {
 
 	public static void main(String[] args) {
