@@ -8,7 +8,7 @@ plugins {
     // while keeping it for its dependency management features.
     id 'org.springframework.boot' version '3.2.5' apply false
     id 'io.spring.dependency-management' version '1.1.4'
-    // Plus in for publishing libraries.
+    // Plug in for publishing libraries.
     id 'java-library'
     id 'maven-publish'
 }
