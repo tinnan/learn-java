@@ -1,3 +1,13 @@
 rootProject.name = 'main-project'
-include ':lib-project'
-project(':lib-project').projectDir = file('../lib-project')
+includeProjectIfExist('lib-project')
+
+def includeProjectIfExist(String projectName) {
+    try {
+        def projectDir = file("../${projectName}")
+        include ":${projectName}"
+        project(":${projectName}").projectDir = projectDir
+    } catch (Exception e) {
+        println "Warning: The directory does not exist. Error: ${e.message}"
+        // todo: fallback
+    }
+}
