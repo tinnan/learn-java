@@ -39,6 +39,9 @@ try {
 } catch (Exception e) {
     println "Info: Dependency resolution failed for: ${e.message}"
     println "Falling back to resolution from repository"
+    dependencies {
+        implementation files('lib/lib-project-0.1.0.jar')
+    }
 }
 
 test {

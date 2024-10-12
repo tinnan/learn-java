@@ -8,6 +8,5 @@ def includeProjectIfExist(String projectName) {
         project(":${projectName}").projectDir = projectDir
     } catch (Exception e) {
         println "Warning: The directory does not exist. Error: ${e.message}"
-        // todo: fallback
     }
 }
