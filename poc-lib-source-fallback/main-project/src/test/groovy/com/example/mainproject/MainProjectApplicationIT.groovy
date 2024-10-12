@@ -26,6 +26,6 @@ class MainProjectApplicationIT extends Specification {
 
         then:
         response.statusCode() == 200
-        response.body().asString() == "Hello James, Moa"
+        response.body().asString() == "(LOCAL) Hello James, Moa"
     }
 }
