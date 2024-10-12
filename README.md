@@ -17,4 +17,4 @@
 15. `spring-error-handling-demo` springweb, controlleradvice, exceptionhandling
 16. `spring-validation-demo` springweb, validation, hibernate, customvalidator, annotation
 17. `web-socket-demo` websocket, springweb, stompjs
-18. `poc-lib-source-fallback` library, libimportfallback
+18. `poc-lib-source-fallback` library, libimportfallback, gradle
