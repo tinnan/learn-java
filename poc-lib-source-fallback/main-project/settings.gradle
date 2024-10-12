@@ -1,3 +1,3 @@
 rootProject.name = 'main-project'
-include ':main-project', ':lib-project'
+include ':lib-project'
 project(':lib-project').projectDir = file('../lib-project')
