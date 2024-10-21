@@ -1,6 +1,6 @@
 package com.example.demo.controllerparam.config;
 
-import com.example.demo.controllerparam.controller.DemoController.GetParams;
+import com.example.demo.controllerparam.model.GetParams;
 import feign.RequestTemplate;
 import feign.codec.EncodeException;
 import feign.codec.Encoder;
