@@ -1,5 +1,5 @@
 package com.example.demo.controllerparam.controller;
 
-public interface DemoApi extends DemoServiceApi, DemoClientApi {
+public interface DemoApi extends DemoServerApi, DemoClientApi {
 
 }

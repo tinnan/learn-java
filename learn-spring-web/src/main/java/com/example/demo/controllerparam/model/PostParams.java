@@ -9,9 +9,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-// ! For POJO for request params object, if there is no args constructor then there must be field setters.
-// ! Otherwise, Spring will not bind request params to the POJO.
-public class GetParams {
+public class PostParams {
 
     @NotBlank
     private String name;
