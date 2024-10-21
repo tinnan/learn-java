@@ -7,6 +7,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
+// ! For POJO for request params object, if there is no args constructor then there must be field setters.
+// ! Otherwise, Spring will not bind request params to the POJO.
 public class GetParams {
 
     @NotBlank
