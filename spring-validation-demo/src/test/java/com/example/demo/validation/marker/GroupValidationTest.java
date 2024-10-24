@@ -85,6 +85,16 @@ class GroupValidationTest {
         assertViolation(violations, "alias", "must not be blank");
     }
 
+    @Test
+    void givenDefaultGroup_whenValidate_shouldValidateFieldWithAnnotationWithoutAnyGroup() {
+        User user = new User();
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertEquals(1, violations.size());
+
+        assertViolation(violations, "alias", "must not be blank");
+    }
+
     private void assertViolation(Set<ConstraintViolation<User>> violations, String expectedField,
         String expectedMessage) {
         for (ConstraintViolation<User> action : violations) {
