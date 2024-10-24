@@ -8,6 +8,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.groups.Default;
 import java.util.Set;
 import lombok.Data;
 import org.junit.jupiter.api.BeforeAll;
@@ -73,6 +74,17 @@ class GroupValidationTest {
         assertViolation(violations, "username", "must not be blank");
     }
 
+    @Test
+    void givenDefaultAndAllUserGroup_whenValidate_shouldValidateFieldWithAnnotationWithGroupAllUserAndWithoutAnyGroup() {
+        User user = new User();
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user, Default.class, AllUser.class);
+        assertEquals(2, violations.size());
+
+        assertViolation(violations, "name", "must not be blank");
+        assertViolation(violations, "alias", "must not be blank");
+    }
+
     private void assertViolation(Set<ConstraintViolation<User>> violations, String expectedField,
         String expectedMessage) {
         for (ConstraintViolation<User> action : violations) {
@@ -95,5 +107,8 @@ class GroupValidationTest {
 
         @NotBlank(groups = {RegularUser.class, AdminUser.class})
         private String username;
+
+        @NotBlank
+        private String alias;
     }
 }
