@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AsyncController {
 
+    private final HttpHeaders httpHeaders;
     private final AsyncService asyncService;
 
     @PostMapping("/task/run/void")
     public void runTaskVoid() {
+        log.info("runTaskVoid - HttpHeaders bean: {}", httpHeaders);
         asyncService.runTaskVoid();
     }
 

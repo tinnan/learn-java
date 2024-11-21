@@ -1,6 +1,7 @@
 package com.example.demo.requestscope.service;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -17,18 +18,29 @@ public class AsyncService {
 
     @Async
     public void runTaskVoid() {
+        sleep();
         log.info("runTaskVoid - Request scope bean: {}", httpHeaders);
     }
 
     @Async
     public CompletableFuture<Void> runTaskCompletableFutureVoid() {
+        sleep();
         log.info("runTaskCompletableFutureVoid - Request scope bean: {}", httpHeaders);
         return CompletableFuture.completedFuture(null);
     }
 
     @Async
     public CompletableFuture<String> runTaskCompletableFutureString() {
+        sleep();
         log.info("runTaskCompletableFutureString - Request scope bean: {}", httpHeaders);
         return CompletableFuture.completedFuture(httpHeaders.toString());
+    }
+
+    private void sleep() {
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            log.info("Interrupted");
+        }
     }
 }
