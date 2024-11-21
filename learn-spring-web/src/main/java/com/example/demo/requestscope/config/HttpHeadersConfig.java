@@ -3,9 +3,6 @@ package com.example.demo.requestscope.config;
 import static com.example.demo.requestscope.config.context.ContextUtils.createHttpHeaders;
 
 import com.example.demo.requestscope.config.context.CustomRequestScopeAttr;
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Objects;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,11 +23,7 @@ public class HttpHeadersConfig {
     @Bean(HTTP_HEADERS_BEAN_NAME)
     @RequestScope
     public HttpHeaders getHttpHeaders() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes == null) {
-            return new HttpHeaders();
-        }
-
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         if (requestAttributes instanceof ServletRequestAttributes attributes) {
             return createHttpHeaders(attributes);
         } else if (requestAttributes instanceof CustomRequestScopeAttr attributes) {
