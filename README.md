@@ -11,7 +11,7 @@
 9. `learn-spring-batch` spring, batch
 10. `learn-spring-mongo` spring, data, mongodb, aggregation, pagination, embeddedmongodb, testcontainer
 11. `learn-spring-mongo-transaction` spring, data, mongodb, cluster, replicaset, docker, testcontainer, transaction
-12. `learn-spring-web` springweb, multipartresponse, async, requestinterceptor, feign, configuration, properties
+12. `learn-spring-web` springweb, multipartresponse, async, requestinterceptor, feign, configuration, properties, requestscope
 13. `poc-pdfbox` apache, pdfbox, pdf, pdfannotation
 14. `refresh-spring-boot` spring, tutorial, refresher
 15. `spring-error-handling-demo` springweb, controlleradvice, exceptionhandling
