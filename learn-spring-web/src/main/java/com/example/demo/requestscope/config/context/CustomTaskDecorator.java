@@ -15,7 +15,7 @@ public class CustomTaskDecorator implements TaskDecorator {
         return () -> {
             log.info("Execute decorator");
             try {
-                RequestContextHolder.setRequestAttributes(new CustomRequestScopeAttr());
+                RequestContextHolder.setRequestAttributes(new NoOpRequestAttributes());
                 HttpHeadersContextHolder.set(httpHeaders);
                 runnable.run();
             } finally {

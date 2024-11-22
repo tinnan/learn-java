@@ -2,32 +2,27 @@ package com.example.demo.requestscope.config.context;
 
 import static com.example.demo.requestscope.config.HttpHeadersConfig.HTTP_HEADERS_REQUEST_SCOPE_ATTR;
 
-import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+@Slf4j
 public class ContextUtils {
 
     public static final List<String> ALLOWED_HEADERS = List.of("x-location", "x-correlation-id");
 
-    public static CustomRequestScopeAttr cloneRequestAttributes(RequestAttributes requestAttributes) {
+    public static CustomRequestScopeAttr cloneRequestAttributes() {
         try {
+            HttpHeaders httpHeaders = getHttpHeaders();
             CustomRequestScopeAttr clonedRequestAttribute = new CustomRequestScopeAttr();
-            Object attribute = requestAttributes.getAttribute(HTTP_HEADERS_REQUEST_SCOPE_ATTR,
+            clonedRequestAttribute.setAttribute(HTTP_HEADERS_REQUEST_SCOPE_ATTR, httpHeaders,
                 RequestAttributes.SCOPE_REQUEST);
-            if (Objects.nonNull(attribute)) {
-                clonedRequestAttribute.setAttribute(HTTP_HEADERS_REQUEST_SCOPE_ATTR, attribute,
-                    RequestAttributes.SCOPE_REQUEST);
-            } else if (requestAttributes instanceof ServletRequestAttributes servletRequestAttributes) {
-                clonedRequestAttribute.setAttribute(HTTP_HEADERS_REQUEST_SCOPE_ATTR,
-                    createHttpHeaders(servletRequestAttributes), RequestAttributes.SCOPE_REQUEST);
-            }
             return clonedRequestAttribute;
         } catch (Exception e) {
             return new CustomRequestScopeAttr();
@@ -36,17 +31,35 @@ public class ContextUtils {
 
     public static HttpHeaders getHttpHeaders() throws IllegalStateException {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (Objects.nonNull(requestAttributes)) {
+            Object attribute = requestAttributes.getAttribute(HTTP_HEADERS_REQUEST_SCOPE_ATTR,
+                RequestAttributes.SCOPE_REQUEST);
+            if (Objects.nonNull(attribute)) {
+                log.info("Create HttpHeaders from existing HttpHeaders bean {}", attribute);
+                return cloneHttpHeaders((HttpHeaders) attribute);
+            }
+        }
         if (Objects.nonNull(requestAttributes) && requestAttributes instanceof ServletRequestAttributes attrs) {
+            log.info("Create HttpHeaders from ServletRequestAttributes");
             return createHttpHeaders(attrs);
+        }
+        if (Objects.nonNull(requestAttributes) && requestAttributes instanceof CustomRequestScopeAttr attrs) {
+            log.info("Create HttpHeaders from CustomRequestScopeAttr");
+            return (HttpHeaders) attrs.getAttribute(HTTP_HEADERS_REQUEST_SCOPE_ATTR, RequestAttributes.SCOPE_REQUEST);
         }
         HttpHeaders httpHeaders = HttpHeadersContextHolder.get();
         if (Objects.nonNull(httpHeaders)) {
-            HttpHeaders clonedHeaders = new HttpHeaders();
-            httpHeaders.forEach(clonedHeaders::addAll);
-            return clonedHeaders;
+            log.info("Create HttpHeaders from HttpHeadersContextHolder");
+            return cloneHttpHeaders(httpHeaders);
         }
         throw new IllegalStateException("No thread-bound HttpHeaders attribute found. "
             + "Current thread must be request-bound or must contain HttpHeaders attribute in HttpHeadersContextHolder");
+    }
+
+    public static HttpHeaders cloneHttpHeaders(HttpHeaders original) {
+        HttpHeaders clonedHeaders = new HttpHeaders();
+        original.forEach(clonedHeaders::addAll);
+        return clonedHeaders;
     }
 
     public static HttpHeaders createHttpHeaders(ServletRequestAttributes attributes) {

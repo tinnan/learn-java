@@ -15,6 +15,7 @@ public class AsyncService {
 
     // Request scope bean.
     private final HttpHeaders httpHeaders;
+    private final DeepAsyncService deepAsyncService;
 
     @Async
     public void runTaskVoid() {
@@ -34,6 +35,13 @@ public class AsyncService {
         sleep();
         log.info("runTaskCompletableFutureString - Request scope bean: {}", httpHeaders);
         return CompletableFuture.completedFuture(httpHeaders.toString());
+    }
+
+    @Async
+    public void runDeepTaskVoid() {
+        sleep();
+        log.info("runDeepTaskVoid - Request scope bean: {}", httpHeaders);
+        deepAsyncService.runDeepTaskVoid();
     }
 
     private void sleep() {

@@ -35,4 +35,10 @@ public class AsyncController {
         CompletableFuture.allOf(future);
         return future.get();
     }
+
+    @PostMapping("/task/run/deep/void")
+    public void runDeepTaskVoid() {
+        log.info("runDeepTaskVoid - HttpHeaders bean: {}", httpHeaders);
+        asyncService.runDeepTaskVoid();
+    }
 }
