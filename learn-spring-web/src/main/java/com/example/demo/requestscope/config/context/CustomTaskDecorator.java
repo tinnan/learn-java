@@ -15,6 +15,10 @@ public class CustomTaskDecorator implements TaskDecorator {
         return () -> {
             log.info("Execute decorator");
             try {
+                /*
+                Call setRequestAttributes to stop Spring from throwing
+                java.lang.IllegalStateException - No thread-bound request found.
+                 */
                 RequestContextHolder.setRequestAttributes(new NoOpRequestAttributes());
                 HttpHeadersContextHolder.set(httpHeaders);
                 runnable.run();
