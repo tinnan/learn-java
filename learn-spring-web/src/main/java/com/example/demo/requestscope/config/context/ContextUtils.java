@@ -56,12 +56,6 @@ public class ContextUtils {
             + "Current thread must be request-bound or must contain HttpHeaders attribute in HttpHeadersContextHolder");
     }
 
-    public static HttpHeaders cloneHttpHeaders(HttpHeaders original) {
-        HttpHeaders clonedHeaders = new HttpHeaders();
-        original.forEach(clonedHeaders::addAll);
-        return clonedHeaders;
-    }
-
     public static HttpHeaders createHttpHeaders(ServletRequestAttributes attributes) {
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpServletRequest request = attributes.getRequest();
@@ -76,6 +70,12 @@ public class ContextUtils {
             }
         }
         return httpHeaders;
+    }
+
+    private static HttpHeaders cloneHttpHeaders(HttpHeaders original) {
+        HttpHeaders clonedHeaders = new HttpHeaders();
+        original.forEach(clonedHeaders::addAll);
+        return clonedHeaders;
     }
 
     private ContextUtils() {
