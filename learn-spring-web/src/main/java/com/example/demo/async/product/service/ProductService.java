@@ -40,7 +40,7 @@ public class ProductService {
             });
             CustomerInfoResponse customerInfoResponse = customerInfoFuture.get();
             FraudCheckResponse fraudCheckResponse = fraudsterFuture.get();
-            if (!fraudCheckResponse.isFraudster()) {
+            if (!Boolean.TRUE.equals(fraudCheckResponse.isFraudster())) {
                 log.info("Product application successful for customer {} {}", customerInfoResponse.firstName(),
                     customerInfoResponse.lastName());
             } else {
