@@ -1,31 +1,15 @@
 package com.example.demo.async.asyncwrapper;
 
-import com.example.demo.async.clients.CustomerInfoClient;
-import com.example.demo.async.clients.FraudClient;
-import com.example.demo.async.customer.model.CustomerInfoResponse;
-import com.example.demo.async.fraud.model.FraudCheckResponse;
 import java.util.concurrent.CompletableFuture;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import java.util.function.Supplier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class OutboundAsyncWrapperService {
 
-    private final CustomerInfoClient customerInfoClient;
-    private final FraudClient fraudClient;
-
     @Async
-    public CompletableFuture<CustomerInfoResponse> getCustomerInfo(HttpHeaders headers, Integer customerId) {
-        CustomerInfoResponse customerInfo = customerInfoClient.getCustomerInfo(headers, customerId);
-        return CompletableFuture.completedFuture(customerInfo);
-    }
-
-    @Async
-    public CompletableFuture<FraudCheckResponse> isFraudster(HttpHeaders headers, Integer customerId) {
-        FraudCheckResponse fraudster = fraudClient.isFraudster(headers, customerId);
-        return CompletableFuture.completedFuture(fraudster);
+    public <R> CompletableFuture<R> wrap(Supplier<R> supplier) {
+        return CompletableFuture.completedFuture(supplier.get());
     }
 }

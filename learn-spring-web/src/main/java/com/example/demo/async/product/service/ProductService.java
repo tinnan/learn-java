@@ -2,6 +2,8 @@ package com.example.demo.async.product.service;
 
 import com.example.demo.async.asyncwrapper.OutboundAsyncWrapperService;
 import com.example.demo.async.clients.CustomerCreateClient;
+import com.example.demo.async.clients.CustomerInfoClient;
+import com.example.demo.async.clients.FraudClient;
 import com.example.demo.async.customer.model.CustomerCreateRequest;
 import com.example.demo.async.customer.model.CustomerCreateResponse;
 import com.example.demo.async.customer.model.CustomerInfoResponse;
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductService {
 
+    private final CustomerInfoClient customerInfoClient;
     private final CustomerCreateClient customerCreateClient;
+    private final FraudClient fraudClient;
     private final OutboundAsyncWrapperService wrapperService;
 
     public void apply(String customerEmail, String productId) {
@@ -26,9 +30,10 @@ public class ProductService {
             CustomerCreateResponse customer = customerCreateClient.createCustomer(null,
                 CustomerCreateRequest.builder().customerEmail(customerEmail).build());
             Integer customerId = customer.getCustomerId();
-            CompletableFuture<CustomerInfoResponse> customerInfoFuture = wrapperService.getCustomerInfo(null,
-                customerId);
-            CompletableFuture<FraudCheckResponse> fraudsterFuture = wrapperService.isFraudster(null, customerId);
+            CompletableFuture<CustomerInfoResponse> customerInfoFuture = wrapperService.wrap(
+                () -> customerInfoClient.getCustomerInfo(null, customerId));
+            CompletableFuture<FraudCheckResponse> fraudsterFuture = wrapperService.wrap(
+                () -> fraudClient.isFraudster(null, customerId));
             CompletableFuture.allOf(customerInfoFuture, fraudsterFuture).thenRun(() -> {
                 long elapsed = System.currentTimeMillis() - startTs;
                 log.info("Async API call elapsed: {} ms", elapsed);
