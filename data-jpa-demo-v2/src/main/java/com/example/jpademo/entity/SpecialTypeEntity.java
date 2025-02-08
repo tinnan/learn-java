@@ -1,10 +1,11 @@
 package com.example.jpademo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.Map;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +27,17 @@ public class SpecialTypeEntity {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "json_column")
-    private Map<String, Object> jsonColumn;
+    private JsonColumn jsonColumn;
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class JsonColumn {
+
+        private String header;
+
+        @JsonProperty("description_list")
+        private List<String> description;
+    }
 }

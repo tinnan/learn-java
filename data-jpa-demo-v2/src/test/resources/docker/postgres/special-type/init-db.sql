@@ -4,4 +4,4 @@ CREATE TABLE special_type (
 );
 
 INSERT INTO special_type (id, json_column) VALUES
-(1, '{"header": "Header title", "description": ["Description 1", "Description 2"]}');
+(1, '{"header": "Header title", "description_list": ["Description 1", "Description 2"]}');

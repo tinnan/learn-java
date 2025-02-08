@@ -49,10 +49,8 @@ class SpecialTypeRepositoryTest extends Specification {
         then:
         data.isPresent()
         verifyAll(data.get()) {
-            it.jsonColumn == [
-                    "header"     : "Header title",
-                    "description": ["Description 1", "Description 2"]
-            ]
+            it.jsonColumn.header == "Header title"
+            it.jsonColumn.description == ["Description 1", "Description 2"]
         }
     }
 }
