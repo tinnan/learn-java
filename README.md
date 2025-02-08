@@ -18,3 +18,4 @@
 16. `spring-validation-demo` springweb, validation, hibernate, customvalidator, annotation
 17. `web-socket-demo` websocket, springweb, stompjs
 18. `poc-lib-source-fallback` library, libimportfallback, gradle
+19. `data-jpa-demo-v2` jpa, springdata, hibernate, sqltype
