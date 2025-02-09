@@ -42,15 +42,24 @@ class SpecialTypeRepositoryTest extends Specification {
     @Autowired
     SpecialTypeRepository specialTypeRepository
 
-    def "Should be able to query data from table with special type column"() {
+    def "Should be able to query data from table with special type column and deserialize into target object"() {
         when:
-        def data = specialTypeRepository.findById(1)
+        def data1 = specialTypeRepository.findById(1)
 
         then:
-        data.isPresent()
-        verifyAll(data.get()) {
+        data1.isPresent()
+        verifyAll(data1.get()) {
             it.jsonColumn.header == "Header title"
             it.jsonColumn.description == ["Description 1", "Description 2"]
+        }
+
+        when:
+        def data2 = specialTypeRepository.findById(2)
+
+        then:
+        data2.isPresent()
+        verifyAll(data2.get()) {
+            it.jsonColumn == null
         }
     }
 }
