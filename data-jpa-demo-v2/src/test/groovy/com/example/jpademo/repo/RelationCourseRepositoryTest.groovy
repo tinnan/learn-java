@@ -1,7 +1,10 @@
 package com.example.jpademo.repo
 
 import com.example.jpademo.JpaDemoApplication
+import com.example.jpademo.entity.RelationCourseEntity
+import com.example.jpademo.entity.RelationTeacherEntity
 import groovy.util.logging.Slf4j
+import org.spockframework.spring.EnableSharedInjection
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
@@ -10,10 +13,12 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.MountableFile
+import spock.lang.Shared
 import spock.lang.Specification
 
 @Slf4j
 @DirtiesContext
+@EnableSharedInjection
 @ActiveProfiles("test")
 @SpringBootTest(classes = JpaDemoApplication, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class RelationCourseRepositoryTest extends Specification {
@@ -39,8 +44,29 @@ class RelationCourseRepositoryTest extends Specification {
         registry.add("spring.datasource.password", () -> PG_PASSWORD)
     }
 
+    @Shared
+    @Autowired
+    RelationTeacherRepository relationTeacherRepository
+    @Shared
     @Autowired
     RelationCourseRepository relationCourseRepository
+
+    def setupSpec() {
+        def relationTeacher = new RelationTeacherEntity(
+                id: 1,
+                name: "Teacher 1"
+        )
+        def relationCourse = new RelationCourseEntity(
+                id: 1,
+                code: "C0001",
+                name: "Course 1",
+                teacher: new RelationTeacherEntity(
+                        id: 1
+                )
+        )
+        relationTeacherRepository.save(relationTeacher)
+        relationCourseRepository.save(relationCourse)
+    }
 
     def "Should be able to query data from table with joined column"() {
         when:
