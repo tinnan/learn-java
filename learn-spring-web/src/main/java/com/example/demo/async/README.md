@@ -15,5 +15,6 @@
    ```shell
    artillery run ./src/main/resources/loadtest/async-loadtest-spec.yaml
    ```
+5. If there is too many timeout error in test result, try increase number of core pool size in `AsyncConfig`.
 
 Note: The underlying APIs response are intentionally delayed in a way that a request should be answered after 3 seconds.
