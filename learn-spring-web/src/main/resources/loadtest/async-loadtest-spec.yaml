@@ -1,0 +1,15 @@
+config:
+  target: 'http://localhost:8080'
+  phases:
+    - duration: 30
+      arrivalRate: 20
+      rampTo: 20
+      name: Default phase
+scenarios:
+  - flow:
+      - post:
+          url: '/api/v1/product/apply'
+          json:
+            customerEmail: 'test@test.com'
+            productId: '1'
+          count: 20
