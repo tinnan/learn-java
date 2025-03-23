@@ -1,6 +1,7 @@
 package com.example.demo.async.product.service;
 
 import com.example.demo.async.asyncwrapper.OutboundAsyncWrapperService;
+import com.example.demo.async.asyncwrapper.OutboundReactiveWrapperService;
 import com.example.demo.async.clients.CustomerCreateClient;
 import com.example.demo.async.clients.CustomerInfoClient;
 import com.example.demo.async.clients.FraudClient;
@@ -9,12 +10,12 @@ import com.example.demo.async.customer.model.CustomerCreateRequest;
 import com.example.demo.async.customer.model.CustomerCreateResponse;
 import com.example.demo.async.customer.model.CustomerInfoResponse;
 import com.example.demo.async.fraud.model.FraudCheckResponse;
-import com.example.demo.async.asyncwrapper.OutboundReactiveWrapperService;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import reactor.core.publisher.Mono;
@@ -27,6 +28,7 @@ public class ProductService {
 
     @Value("${com.example.demo.async.concurrency-mode}")
     private final ConcurrencyMode concurrencyMode;
+    private final HttpHeaders httpHeaders;
     private final CustomerInfoClient customerInfoClient;
     private final CustomerCreateClient customerCreateClient;
     private final FraudClient fraudClient;
@@ -62,13 +64,13 @@ public class ProductService {
     private FlowResult executeAsyncFlow(String customerEmail) throws ExecutionException, InterruptedException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        CustomerCreateResponse customer = customerCreateClient.createCustomer(null,
+        CustomerCreateResponse customer = customerCreateClient.createCustomer(httpHeaders,
             CustomerCreateRequest.builder().customerEmail(customerEmail).build());
         Integer customerId = customer.getCustomerId();
         CompletableFuture<CustomerInfoResponse> customerInfoFuture = outboundAsyncWrapperService.wrap(
-            () -> customerInfoClient.getCustomerInfo(null, customerId));
+            () -> customerInfoClient.getCustomerInfo(httpHeaders, customerId));
         CompletableFuture<FraudCheckResponse> fraudsterFuture = outboundAsyncWrapperService.wrap(
-            () -> fraudClient.isFraudster(null, customerId));
+            () -> fraudClient.isFraudster(httpHeaders, customerId));
         CompletableFuture.allOf(customerInfoFuture, fraudsterFuture).thenRun(() -> {
             stopWatch.stop();
             log.info("Async API call elapsed: {} ms", stopWatch.getTotalTimeMillis());
@@ -80,13 +82,13 @@ public class ProductService {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         try {
-            CustomerCreateResponse customer = customerCreateClient.createCustomer(null,
+            CustomerCreateResponse customer = customerCreateClient.createCustomer(httpHeaders,
                 CustomerCreateRequest.builder().customerEmail(customerEmail).build());
             Integer customerId = customer.getCustomerId();
             Mono<CustomerInfoResponse> customerInfoFuture = outboundReactiveWrapperService.wrap(
-                () -> customerInfoClient.getCustomerInfo(null, customerId));
+                () -> customerInfoClient.getCustomerInfo(httpHeaders, customerId));
             Mono<FraudCheckResponse> fraudsterFuture = outboundReactiveWrapperService.wrap(
-                () -> fraudClient.isFraudster(null, customerId));
+                () -> fraudClient.isFraudster(httpHeaders, customerId));
             Tuple2<CustomerInfoResponse, FraudCheckResponse> resolution = Mono.zip(customerInfoFuture, fraudsterFuture)
                 .block();
             if (resolution == null) {
