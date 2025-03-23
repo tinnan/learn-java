@@ -14,7 +14,7 @@ public class CustomerCreateController implements CustomerCreateApi {
     @Override
     public CustomerCreateResponse createCustomer(HttpHeaders headers, CustomerCreateRequest request) {
         int newCustomerId = 1;
-        log.info("Customer created for email {} - new ID {}", request.getCustomerEmail(), newCustomerId);
+        log.debug("Customer created for email {} - new ID {}", request.getCustomerEmail(), newCustomerId);
         return CustomerCreateResponse.builder().customerId(newCustomerId).build();
     }
 }

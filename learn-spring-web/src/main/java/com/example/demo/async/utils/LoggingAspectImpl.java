@@ -21,11 +21,11 @@ public class LoggingAspectImpl {
 
         try {
             watch.start();
-            log.info("Start execute method {}", methodName);
+            log.debug("Start execute method {}", methodName);
             return proceedingJoinPoint.proceed();
         } finally {
             watch.stop();
-            log.info("finished execute method {} in {} ms", methodName, watch.getTotalTimeMillis());
+            log.debug("finished execute method {} in {} ms", methodName, watch.getTotalTimeMillis());
         }
     }
 }

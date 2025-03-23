@@ -16,7 +16,7 @@ public class ProductController implements ProductApi {
     private final ProductService productService;
 
     public void applyProduct(HttpHeaders headers, ProductApplicationRequest request) {
-        log.info("Product {} apply request for customer email {}", request.productId(), request.customerEmail());
+        log.debug("Product {} apply request for customer email {}", request.productId(), request.customerEmail());
         productService.apply(request.customerEmail(), request.productId());
     }
 }
