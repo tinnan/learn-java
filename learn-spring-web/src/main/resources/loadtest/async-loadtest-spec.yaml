@@ -9,6 +9,8 @@ scenarios:
   - flow:
       - post:
           url: '/api/v1/product/apply'
+          headers:
+            x-correlation-id: '{{ $randomString() }}'
           json:
             customerEmail: 'test@test.com'
             productId: '1'
