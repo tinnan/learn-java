@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class HandleAsyncTestService {
 
-    public String succeed() throws InterruptedException {
+    public String succeed(String text) throws InterruptedException {
         log.info("succeed() - sleep");
         TimeUnit.SECONDS.sleep(1);
         log.info("succeed() - awake");
-        return "Result of succeed()";
+        return "Result of succeed(%s)".formatted(text);
     }
 
     public String failAfter1Second() throws InterruptedException {
