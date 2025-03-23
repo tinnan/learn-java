@@ -28,7 +28,8 @@ public class AsyncConfig {
     @Primary
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(50);
+        executor.setCorePoolSize(10);
+        executor.setQueueCapacity(0); // This will make executor always create new thread (no queue).
         executor.setTaskDecorator(new CustomThreadDecorator());
         executor.initialize();
         return executor;
