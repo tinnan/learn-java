@@ -1,17 +1,22 @@
 package com.example.demo.async
 
 import com.example.demo.async.asyncwrapper.OutboundAsyncWrapperService
+import com.example.demo.async.exception.AsyncException
+import com.example.demo.async.model.Tuple3
 import com.example.demo.async.service.HandleAsyncTestService
+import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
+import org.springframework.util.StopWatch
 import spock.lang.Specification
 
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionException
 import java.util.concurrent.ExecutionException
 
+@Slf4j
 @TestPropertySource(properties = [
         "com.example.demo.async.concurrency-mode=ASYNC"
 ])
@@ -23,6 +28,17 @@ class HandleAsyncSpecs extends Specification {
     OutboundAsyncWrapperService wrapperService
     @Autowired
     HandleAsyncTestService handleAsyncTestService
+    StopWatch stopWatch
+
+    def setup() {
+        stopWatch = new StopWatch()
+        stopWatch.start()
+    }
+
+    def cleanup() {
+        stopWatch.stop()
+        log.info("Test elapsed time: {} ms", stopWatch.getTotalTimeMillis())
+    }
 
     def "Test handling CompletableFuture objects"() {
         given:
@@ -73,29 +89,29 @@ class HandleAsyncSpecs extends Specification {
     def """Test handling CompletableFuture objects by custom allOf API - should throw CompletionException with cause
             from the first exceptionally completed future (ordered by input of the allOf method)"""() {
         when:
-        wrapperService.allOf(
-                () -> handleAsyncTestService.failAfter2Second(),
-                () -> handleAsyncTestService.succeed(null),
-                () -> handleAsyncTestService.failAfter1Second()
-        ).join()
+        OutboundAsyncWrapperService.allOf(
+                wrapperService.wrap(() -> handleAsyncTestService.failAfter2Second()),
+                wrapperService.wrap(() -> handleAsyncTestService.succeed(null)),
+                wrapperService.wrap(() -> handleAsyncTestService.failAfter1Second()),
+        )
 
         then:
-        def e = thrown(CompletionException)
+        def e = thrown(AsyncException)
         e.getCause() instanceof IllegalStateException
         e.getCause().getMessage() == "From failAfter2Second()"
     }
 
     def "Test handling CompletableFuture objects by custom allOf API"() {
         when:
-        def asyncResult = wrapperService.allOf(
-                () -> handleAsyncTestService.succeed("1"),
-                () -> handleAsyncTestService.succeed("2"),
-                () -> handleAsyncTestService.succeed("3")
-        ).join()
+        Tuple3<String, String, String> asyncResult = OutboundAsyncWrapperService.allOf(
+                wrapperService.wrap(() -> handleAsyncTestService.succeed("1")),
+                wrapperService.wrap(() -> handleAsyncTestService.succeed("2")),
+                wrapperService.wrap(() -> handleAsyncTestService.succeed("3")),
+        )
 
         then:
-        asyncResult.get(0) as String == "Result of succeed(1)"
-        asyncResult.get(1) as String == "Result of succeed(2)"
-        asyncResult.get(2) as String == "Result of succeed(3)"
+        asyncResult.getT1() == "Result of succeed(1)"
+        asyncResult.getT2() == "Result of succeed(2)"
+        asyncResult.getT3() == "Result of succeed(3)"
     }
 }
