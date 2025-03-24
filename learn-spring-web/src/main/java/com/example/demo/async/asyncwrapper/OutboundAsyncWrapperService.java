@@ -22,17 +22,17 @@ public class OutboundAsyncWrapperService {
     }
 
     public static <T1, T2> Tuple2<T1, T2> allOf(
-        CompletableFuture<? extends T1> future1,
-        CompletableFuture<? extends T2> future2
+        CompletableFuture<?> future1,
+        CompletableFuture<?> future2
     ) throws AsyncException {
         AllOfResult result = all(future1, future2);
         return new Tuple2<>(result.getData(0), result.getData(1));
     }
 
     public static <T1, T2, T3> Tuple3<T1, T2, T3> allOf(
-        CompletableFuture<? extends T1> completableFuture1,
-        CompletableFuture<? extends T2> completableFuture2,
-        CompletableFuture<? extends T3> completableFuture3
+        CompletableFuture<?> completableFuture1,
+        CompletableFuture<?> completableFuture2,
+        CompletableFuture<?> completableFuture3
     ) throws AsyncException {
         AllOfResult result = all(completableFuture1, completableFuture2, completableFuture3);
         return new Tuple3<>(result.getData(0), result.getData(1),

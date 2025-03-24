@@ -86,12 +86,12 @@ class HandleAsyncSpecs extends Specification {
         e2.getCause().getMessage() == "From failAfter1Second()"
     }
 
-    def """Test handling CompletableFuture objects by custom allOf API - should throw CompletionException with cause
+    def """Test handling CompletableFuture objects by custom allOf API - should throw AsyncException with cause
             from the first exceptionally completed future (ordered by input of the allOf method)"""() {
         when:
         OutboundAsyncWrapperService.allOf(
                 wrapperService.wrap(() -> handleAsyncTestService.failAfter2Second()),
-                wrapperService.wrap(() -> handleAsyncTestService.succeed(null)),
+                wrapperService.wrap(() -> handleAsyncTestService.succeed("1")),
                 wrapperService.wrap(() -> handleAsyncTestService.failAfter1Second()),
         )
 
@@ -99,19 +99,40 @@ class HandleAsyncSpecs extends Specification {
         def e = thrown(AsyncException)
         e.getCause() instanceof IllegalStateException
         e.getCause().getMessage() == "From failAfter2Second()"
+
+        def results = e.getResults()
+        verifyAll(results[0]) {
+            it.isError()
+            it.getData() == null
+            it.getError() instanceof IllegalStateException
+            it.getError().getMessage() == "From failAfter2Second()"
+        }
+        verifyAll(results[1]) {
+            !it.isError()
+            it.getData() == "Result of succeed(1)"
+        }
+        verifyAll(results[2]) {
+            it.isError()
+            it.getData() == null
+            it.getError() instanceof IllegalArgumentException
+            it.getError().getMessage() == "From failAfter1Second()"
+        }
     }
 
     def "Test handling CompletableFuture objects by custom allOf API"() {
         when:
-        Tuple3<String, String, String> asyncResult = OutboundAsyncWrapperService.allOf(
+        Tuple3<String, Void, HandleAsyncTestService.SuccessResponse> asyncResult = OutboundAsyncWrapperService.allOf(
                 wrapperService.wrap(() -> handleAsyncTestService.succeed("1")),
-                wrapperService.wrap(() -> handleAsyncTestService.succeed("2")),
-                wrapperService.wrap(() -> handleAsyncTestService.succeed("3")),
+                wrapperService.wrap(() -> handleAsyncTestService.succeedVoid()),
+                wrapperService.wrap(() -> handleAsyncTestService.succeed()),
         )
+        String r1 = asyncResult.getT1()
+        Void r2 = asyncResult.getT2()
+        HandleAsyncTestService.SuccessResponse r3 = asyncResult.getT3()
 
         then:
-        asyncResult.getT1() == "Result of succeed(1)"
-        asyncResult.getT2() == "Result of succeed(2)"
-        asyncResult.getT3() == "Result of succeed(3)"
+        r1 == "Result of succeed(1)"
+        r2 == null
+        r3.name == "John"
     }
 }
