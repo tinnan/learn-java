@@ -1,7 +1,7 @@
 package com.example.demo.async
 
 import com.example.demo.async.asyncwrapper.OutboundAsyncWrapperService
-import com.example.demo.async.exception.AsyncException
+import com.example.demo.async.exception.AsyncAllOfException
 import com.example.demo.async.model.Tuple3
 import com.example.demo.async.service.HandleAsyncTestService
 import groovy.util.logging.Slf4j
@@ -86,7 +86,7 @@ class HandleAsyncSpecs extends Specification {
         e2.getCause().getMessage() == "From failAfter1Second()"
     }
 
-    def """Test handling CompletableFuture objects by custom allOf API - should throw AsyncException with cause
+    def """Test handling CompletableFuture objects by custom allOf API - should throw AsyncAllOfException with cause
             from the first exceptionally completed future (ordered by input of the allOf method)"""() {
         when:
         OutboundAsyncWrapperService.allOf(
@@ -96,7 +96,7 @@ class HandleAsyncSpecs extends Specification {
         )
 
         then:
-        def e = thrown(AsyncException)
+        def e = thrown(AsyncAllOfException)
         e.getCause() instanceof IllegalStateException
         e.getCause().getMessage() == "From failAfter2Second()"
 

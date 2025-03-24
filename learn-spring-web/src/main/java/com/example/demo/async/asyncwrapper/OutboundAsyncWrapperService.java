@@ -1,6 +1,6 @@
 package com.example.demo.async.asyncwrapper;
 
-import com.example.demo.async.exception.AsyncException;
+import com.example.demo.async.exception.AsyncAllOfException;
 import com.example.demo.async.model.AsyncResult;
 import com.example.demo.async.model.Tuple2;
 import com.example.demo.async.model.Tuple3;
@@ -24,7 +24,7 @@ public class OutboundAsyncWrapperService {
     public static <T1, T2> Tuple2<T1, T2> allOf(
         CompletableFuture<?> future1,
         CompletableFuture<?> future2
-    ) throws AsyncException {
+    ) throws AsyncAllOfException {
         AllOfResult result = all(future1, future2);
         return new Tuple2<>(result.getData(0), result.getData(1));
     }
@@ -33,13 +33,13 @@ public class OutboundAsyncWrapperService {
         CompletableFuture<?> completableFuture1,
         CompletableFuture<?> completableFuture2,
         CompletableFuture<?> completableFuture3
-    ) throws AsyncException {
+    ) throws AsyncAllOfException {
         AllOfResult result = all(completableFuture1, completableFuture2, completableFuture3);
         return new Tuple3<>(result.getData(0), result.getData(1),
             result.getData(2));
     }
 
-    private static AllOfResult all(CompletableFuture<?>... completableFutures) throws AsyncException {
+    private static AllOfResult all(CompletableFuture<?>... completableFutures) throws AsyncAllOfException {
         CompletableFuture.allOf(completableFutures);
         List<AsyncResult> resultList = new ArrayList<>();
         for (CompletableFuture<?> completableFuture : completableFutures) {
@@ -53,13 +53,13 @@ public class OutboundAsyncWrapperService {
         }
         AllOfResult result = new AllOfResult(resultList);
         if (result.isExceptionallyCompleted()) {
-            throw new AsyncException(result.getResultList(), result.getFirstError());
+            throw new AsyncAllOfException(result.getResultList(), result.getFirstError());
         }
         return result;
     }
 
     @Getter
-    static class AllOfResult {
+    private static class AllOfResult {
 
         private final List<AsyncResult> resultList;
         private Exception firstError = null;
