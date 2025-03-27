@@ -89,7 +89,7 @@ class HandleAsyncSpecs extends Specification {
     def """Test handling CompletableFuture objects by custom allOf API - should throw AsyncAllOfException with cause
             from the first exceptionally completed future (ordered by input of the allOf method)"""() {
         when:
-        OutboundAsyncWrapperService.allOf(
+        OutboundAsyncWrapperService.all(
                 wrapperService.wrap(() -> handleAsyncTestService.failAfter2Second()),
                 wrapperService.wrap(() -> handleAsyncTestService.succeed("1")),
                 wrapperService.wrap(() -> handleAsyncTestService.failAfter1Second()),
@@ -121,7 +121,7 @@ class HandleAsyncSpecs extends Specification {
 
     def "Test handling CompletableFuture objects by custom allOf API"() {
         when:
-        Tuple3<String, Void, HandleAsyncTestService.SuccessResponse> asyncResult = OutboundAsyncWrapperService.allOf(
+        Tuple3<String, Void, HandleAsyncTestService.SuccessResponse> asyncResult = OutboundAsyncWrapperService.all(
                 wrapperService.wrap(() -> handleAsyncTestService.succeed("1")),
                 wrapperService.wrap(() -> handleAsyncTestService.succeedVoid()),
                 wrapperService.wrap(() -> handleAsyncTestService.succeed()),
