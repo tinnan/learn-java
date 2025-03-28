@@ -60,11 +60,13 @@ class RequestScopeBeanInAsyncSpecs extends Specification {
                 .header(Constants.HEADER_X_CORRELATION_ID, "x-cor-no-wait")
                 .post("/api/v1/async/request-scope-bean/no-wait")
 
+        then:
+        response.statusCode() == 200
+
         and:
         RequestScopeBeanInAsyncTestService.waitForSetStorageValue(2000)
 
         then:
-        response.statusCode() == 200
         RequestScopeBeanInAsyncTestService.getStorageValue() == "x-cor-no-wait"
     }
 }

@@ -24,6 +24,7 @@ public class RequestScopeBeanInAsyncTestController {
 
     @PostMapping("/no-wait")
     public void asyncNoWait() {
+        log.info("Executing /async/request-scope-bean/no-wait");
         service.execute();
     }
 }
