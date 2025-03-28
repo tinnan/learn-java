@@ -64,13 +64,14 @@ public class ProductService {
     private FlowResult executeAsyncFlow(String customerEmail) throws ExecutionException, InterruptedException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        CustomerCreateResponse customer = customerCreateClient.createCustomer(httpHeaders,
+        HttpHeaders clonedHeaders = cloneHeaders();
+        CustomerCreateResponse customer = customerCreateClient.createCustomer(clonedHeaders,
             CustomerCreateRequest.builder().customerEmail(customerEmail).build());
         Integer customerId = customer.getCustomerId();
         CompletableFuture<CustomerInfoResponse> customerInfoFuture = outboundAsyncWrapperService.wrap(
-            () -> customerInfoClient.getCustomerInfo(httpHeaders, customerId));
+            () -> customerInfoClient.getCustomerInfo(clonedHeaders, customerId));
         CompletableFuture<FraudCheckResponse> fraudsterFuture = outboundAsyncWrapperService.wrap(
-            () -> fraudClient.isFraudster(httpHeaders, customerId));
+            () -> fraudClient.isFraudster(clonedHeaders, customerId));
         CompletableFuture.allOf(customerInfoFuture, fraudsterFuture).thenRun(() -> {
             stopWatch.stop();
             log.info("Async API call elapsed: {} ms", stopWatch.getTotalTimeMillis());
@@ -82,13 +83,14 @@ public class ProductService {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         try {
-            CustomerCreateResponse customer = customerCreateClient.createCustomer(httpHeaders,
+            HttpHeaders clonedHeaders = cloneHeaders();
+            CustomerCreateResponse customer = customerCreateClient.createCustomer(clonedHeaders,
                 CustomerCreateRequest.builder().customerEmail(customerEmail).build());
             Integer customerId = customer.getCustomerId();
             Mono<CustomerInfoResponse> customerInfoFuture = outboundReactiveWrapperService.wrap(
-                () -> customerInfoClient.getCustomerInfo(httpHeaders, customerId));
+                () -> customerInfoClient.getCustomerInfo(clonedHeaders, customerId));
             Mono<FraudCheckResponse> fraudsterFuture = outboundReactiveWrapperService.wrap(
-                () -> fraudClient.isFraudster(httpHeaders, customerId));
+                () -> fraudClient.isFraudster(clonedHeaders, customerId));
             Tuple2<CustomerInfoResponse, FraudCheckResponse> resolution = Mono.zip(customerInfoFuture, fraudsterFuture)
                 .block();
             if (resolution == null) {
@@ -99,6 +101,12 @@ public class ProductService {
             stopWatch.stop();
             log.info("Reactive API call elapsed: {} ms", stopWatch.getTotalTimeMillis());
         }
+    }
+
+    private HttpHeaders cloneHeaders() {
+        HttpHeaders clonedHeaders = new HttpHeaders();
+        clonedHeaders.putAll(this.httpHeaders);
+        return clonedHeaders;
     }
 
     record FlowResult(
