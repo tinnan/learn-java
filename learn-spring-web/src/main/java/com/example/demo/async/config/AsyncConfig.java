@@ -61,9 +61,14 @@ public class AsyncConfig {
                 try {
                     MDC.setContextMap(contextMap);
                     /*
-                    Call setRequestAttributes to stop Spring from throwing
+                    NOTE 1: Call setRequestAttributes to stop Spring from throwing
                     "java.lang.IllegalStateException - No thread-bound request found" when trying to access
-                    request scoped bean in non request-bound thread.
+                    request scoped bean in child thread.
+                    NOTE 2: Not propagating request attributes of current thread
+                    (RequestContextHolder.getRequestAttributes()) to child treads because I have tried and in some case
+                    it results in error "Cannot ask for request attribute - request is not active anymore!" and trying
+                    to implement a custom RequestAttributes seems to require too much work. So I will stick to
+                    relying on ThreadLocal for parsing required data to child threads.
                      */
                     RequestContextHolder.setRequestAttributes(new NoOpRequestAttributes());
                     runnable.run();
