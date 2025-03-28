@@ -7,7 +7,7 @@ import lombok.Getter;
 public class AllOfResult {
 
     private final List<AsyncResult> resultList;
-    private Exception firstError = null;
+    private Throwable firstError = null;
 
     public AllOfResult(List<AsyncResult> resultList) {
         if (resultList == null || resultList.isEmpty()) {

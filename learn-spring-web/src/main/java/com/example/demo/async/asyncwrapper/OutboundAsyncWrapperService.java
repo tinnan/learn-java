@@ -63,7 +63,7 @@ public class OutboundAsyncWrapperService {
             try {
                 resultList.add(new AsyncResult(completableFuture.get(), null));
             } catch (ExecutionException e) {
-                resultList.add(new AsyncResult(null, (Exception) e.getCause()));
+                resultList.add(new AsyncResult(null, e.getCause()));
             } catch (Exception e) {
                 resultList.add(new AsyncResult(null, e));
             }

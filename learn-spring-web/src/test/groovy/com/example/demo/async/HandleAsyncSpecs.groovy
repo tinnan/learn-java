@@ -15,6 +15,7 @@ import spock.lang.Specification
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionException
 import java.util.concurrent.ExecutionException
+import java.util.function.Supplier
 
 @Slf4j
 @TestPropertySource(properties = [
@@ -47,9 +48,12 @@ class HandleAsyncSpecs extends Specification {
         Spring bean inheritance from parent thread? Because it does not use Spring task executor bean to
         execute async method.
          */
-        def failAfter2SecondFuture = wrapperService.wrap(() -> handleAsyncTestService.failAfter2Second())
-        def succeedFuture = wrapperService.wrap(() -> handleAsyncTestService.succeed(null))
-        def failAfter1SecondFuture = wrapperService.wrap(() -> handleAsyncTestService.failAfter1Second())
+        Supplier<String> failAfter2Second = () -> handleAsyncTestService.failAfter2Second()
+        Supplier<String> succeed = () -> handleAsyncTestService.succeed(null)
+        Supplier<String> failAfter1Second = () -> handleAsyncTestService.failAfter1Second()
+        def failAfter2SecondFuture = wrapperService.wrap(failAfter2Second)
+        def succeedFuture = wrapperService.wrap(succeed)
+        def failAfter1SecondFuture = wrapperService.wrap(failAfter1Second)
 
         when:
         CompletableFuture.allOf(failAfter2SecondFuture, succeedFuture, failAfter1SecondFuture).join()
@@ -88,11 +92,16 @@ class HandleAsyncSpecs extends Specification {
 
     def """Test handling CompletableFuture objects by custom allOf API - should throw AsyncAllOfException with cause
             from the first exceptionally completed future (ordered by input of the allOf method)"""() {
+        given:
+        Supplier<String> failAfter2Second = () -> handleAsyncTestService.failAfter2Second()
+        Supplier<String> succeed = () -> handleAsyncTestService.succeed("1")
+        Supplier<String> failAfter1Second = () -> handleAsyncTestService.failAfter1Second()
+
         when:
         OutboundAsyncWrapperService.all(
-                wrapperService.wrap(() -> handleAsyncTestService.failAfter2Second()),
-                wrapperService.wrap(() -> handleAsyncTestService.succeed("1")),
-                wrapperService.wrap(() -> handleAsyncTestService.failAfter1Second()),
+                wrapperService.wrap(failAfter2Second),
+                wrapperService.wrap(succeed),
+                wrapperService.wrap(failAfter1Second),
         )
 
         then:
@@ -120,11 +129,16 @@ class HandleAsyncSpecs extends Specification {
     }
 
     def "Test handling CompletableFuture objects by custom allOf API"() {
+        given:
+        Supplier<String> succeed = () -> handleAsyncTestService.succeed("1")
+        Runnable succeedVoid = () -> handleAsyncTestService.succeedVoid()
+        Supplier<HandleAsyncTestService.SuccessResponse> successResponse = () -> handleAsyncTestService.succeed()
+
         when:
         Tuple3<String, Void, HandleAsyncTestService.SuccessResponse> asyncResult = OutboundAsyncWrapperService.all(
-                wrapperService.wrap(() -> handleAsyncTestService.succeed("1")),
-                wrapperService.wrap(() -> handleAsyncTestService.succeedVoid()),
-                wrapperService.wrap(() -> handleAsyncTestService.succeed()),
+                wrapperService.wrap(succeed),
+                wrapperService.wrap(succeedVoid),
+                wrapperService.wrap(successResponse),
         )
         String r1 = asyncResult.getT1()
         Void r2 = asyncResult.getT2()

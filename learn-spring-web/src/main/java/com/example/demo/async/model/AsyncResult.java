@@ -9,7 +9,7 @@ import lombok.Getter;
 public class AsyncResult {
 
     private Object data;
-    private Exception error;
+    private Throwable error;
 
     public boolean isError() {
         return this.error != null;
