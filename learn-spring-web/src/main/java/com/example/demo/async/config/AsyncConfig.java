@@ -68,7 +68,7 @@ public class AsyncConfig {
                     (RequestContextHolder.getRequestAttributes()) to child treads because I have tried and in some case
                     it results in error "Cannot ask for request attribute - request is not active anymore!" and trying
                     to implement a custom RequestAttributes seems to require too much work. So I will stick to
-                    relying on ThreadLocal for parsing required data to child threads.
+                    ThreadLocal for parsing required data to child threads.
                      */
                     RequestContextHolder.setRequestAttributes(new NoOpRequestAttributes());
                     runnable.run();
