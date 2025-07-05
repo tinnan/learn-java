@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: "sa"
+      POSTGRES_PASSWORD: "password"
+    volumes:
+      - "./db/init-postgres.sql:/docker-entrypoint-initdb.d/*.sql:ro"
+    ports:
+      - "5432:5432"
