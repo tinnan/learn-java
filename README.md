@@ -19,3 +19,4 @@
 17. `web-socket-demo` websocket, springweb, stompjs
 18. `poc-lib-source-fallback` library, libimportfallback, gradle
 19. `data-jpa-demo-v2` jpa, springdata, hibernate, sqltype
+20. `jobrunner` spring, batch, postgresql
