@@ -58,7 +58,10 @@ public class JobBuilderServiceImpl implements JobBuilderService {
     }
 
     private Step createStep(String taskName, long stepNumber) {
-        String stepName = UUID.randomUUID().toString();
+        // !Do not use random value for stepName unless you want to rerun every step when retry a job.
+        // !Make stepName unique in scope of same job instance ID (and other customized criteria) to unsure
+        // !completed steps are skipped when retried.
+        String stepName = taskName + "-step-" + stepNumber;
         return new StepBuilder(stepName, jobRepository)
             .tasklet((contribution, chunkContext) -> {
                 BatchStepExecutionAdditionalData additionalData = BatchStepExecutionAdditionalData.builder()
