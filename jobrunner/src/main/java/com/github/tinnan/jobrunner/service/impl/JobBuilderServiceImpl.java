@@ -1,11 +1,13 @@
 package com.github.tinnan.jobrunner.service.impl;
 
 import com.github.tinnan.jobrunner.entity.BatchStepExecutionAdditionalData;
+import com.github.tinnan.jobrunner.entity.JobParam;
 import com.github.tinnan.jobrunner.model.event.BatchStepExecutionAdditionalDataEvent;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
+import com.github.tinnan.jobrunner.service.TaskletFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -15,7 +17,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -30,20 +32,23 @@ public class JobBuilderServiceImpl implements JobBuilderService {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final TaskletFactory taskletFactory;
 
     @Override
-    public Job build(String jobName) {
+    public Job build(String jobName, JobParam jobParam) {
         List<Flow> flows = new ArrayList<>();
-        IntStream.range(1, 4).forEach(taskNumber -> {
 
-            String taskName = "task-" + taskNumber;
+        List<String> tasks = jobParam.getServices();
+        List<Tasklet> stepTaskletList = jobParam.getSteps().stream()
+            .map(taskletFactory::createTasklet)
+            .toList();
+        AtomicInteger taskNumberCounter = new AtomicInteger();
+        tasks.forEach((taskName) -> {
+            int taskNumber = taskNumberCounter.getAndIncrement();
             FlowBuilder<Flow> flowBuilder = new FlowBuilder<>(taskName);
-            flowBuilder.start(createStep(taskNumber, taskName, 1));
-
-            for (int i = 2; i < 4; i++) {
-                flowBuilder.next(createStep(taskNumber, taskName, i));
-            }
-
+            AtomicInteger stepNumberCounter = new AtomicInteger(1);
+            stepTaskletList.forEach((stepTasklet) -> flowBuilder.next(
+                createStep(taskNumber, taskName, stepNumberCounter.getAndIncrement(), stepTasklet)));
             flows.add(flowBuilder.build());
         });
 
@@ -56,11 +61,11 @@ public class JobBuilderServiceImpl implements JobBuilderService {
             .build();
     }
 
-    private Step createStep(int taskNumber, String taskName, int stepNumber) {
+    private Step createStep(int taskNumber, String taskName, int stepNumber, Tasklet tasklet) {
         // !Do not use random value for stepName unless you want to rerun every step when retry a job.
         // !Make stepName unique in scope of same job instance ID (and other customized criteria) to unsure
         // !completed steps are skipped when retried.
-        String stepName = taskName + "-step-" + stepNumber;
+        String stepName = "task_" + taskNumber + "_step_" + stepNumber;
         return new StepBuilder(stepName, jobRepository)
             .tasklet((contribution, chunkContext) -> {
                 BatchStepExecutionAdditionalData additionalData = BatchStepExecutionAdditionalData.builder()
@@ -70,13 +75,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
                     .taskName(taskName)
                     .build();
                 applicationEventPublisher.publishEvent(new BatchStepExecutionAdditionalDataEvent(this, additionalData));
-                // Simulate failure for retry
-                int rand = (int) (Math.random() * 100);
-                if (rand % 2 == 0) {
-                    throw new RuntimeException("Step " + stepName + " failed");
-                }
-                log.info("Executing {} - finished", stepName);
-                return RepeatStatus.FINISHED;
+                return tasklet.execute(contribution, chunkContext);
             }, transactionManager)
             .build();
     }

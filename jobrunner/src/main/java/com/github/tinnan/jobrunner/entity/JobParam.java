@@ -1,9 +1,13 @@
 package com.github.tinnan.jobrunner.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.tinnan.jobrunner.constants.JobStepAction;
+import com.github.tinnan.jobrunner.constants.ParameterName;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +35,16 @@ public class JobParam implements Serializable {
         private JobStepAction action;
         private List<StepParam> params;
 
+        @JsonIgnore
+        public String getParameterValue(ParameterName parameterName) {
+            return Optional.ofNullable(this.params).orElse(Collections.emptyList())
+                .stream()
+                .filter(p -> parameterName == p.getParameterName())
+                .findFirst()
+                .map(StepParam::getParameterValue)
+                .orElse(null);
+        }
+
         @Getter
         @Builder
         @NoArgsConstructor
@@ -39,7 +53,7 @@ public class JobParam implements Serializable {
 
             @Serial
             private static final long serialVersionUID = -7886373771601148091L;
-            private String parameterName;
+            private ParameterName parameterName;
             private String parameterValue;
         }
     }
