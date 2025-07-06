@@ -1,8 +1,6 @@
 package com.github.tinnan.jobrunner.entity;
 
-import com.github.tinnan.jobrunner.entity.converter.JsonToJobParamConverter;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -10,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Builder
@@ -28,7 +28,7 @@ public class BatchJobInstanceParam {
     @Column(name = COLUMN_JOB_INSTANCE_ID)
     private Long jobInstanceId;
 
-    @Convert(converter = JsonToJobParamConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = COLUMN_SERIALIZED_PARAM)
     private JobParam serializedParam;
 }
