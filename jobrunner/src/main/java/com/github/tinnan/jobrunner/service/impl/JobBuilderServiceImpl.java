@@ -5,7 +5,6 @@ import com.github.tinnan.jobrunner.model.event.BatchStepExecutionAdditionalDataE
 import com.github.tinnan.jobrunner.service.JobBuilderService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,14 +34,14 @@ public class JobBuilderServiceImpl implements JobBuilderService {
     @Override
     public Job build(String jobName) {
         List<Flow> flows = new ArrayList<>();
-        IntStream.range(0, 3).forEach(taskId -> {
+        IntStream.range(1, 4).forEach(taskNumber -> {
 
-            String taskName = "task-" + taskId;
+            String taskName = "task-" + taskNumber;
             FlowBuilder<Flow> flowBuilder = new FlowBuilder<>(taskName);
-            flowBuilder.start(createStep(taskName, 1));
+            flowBuilder.start(createStep(taskNumber, taskName, 1));
 
             for (int i = 2; i < 4; i++) {
-                flowBuilder.next(createStep(taskName, i));
+                flowBuilder.next(createStep(taskNumber, taskName, i));
             }
 
             flows.add(flowBuilder.build());
@@ -57,7 +56,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
             .build();
     }
 
-    private Step createStep(String taskName, long stepNumber) {
+    private Step createStep(int taskNumber, String taskName, int stepNumber) {
         // !Do not use random value for stepName unless you want to rerun every step when retry a job.
         // !Make stepName unique in scope of same job instance ID (and other customized criteria) to unsure
         // !completed steps are skipped when retried.
@@ -67,7 +66,8 @@ public class JobBuilderServiceImpl implements JobBuilderService {
                 BatchStepExecutionAdditionalData additionalData = BatchStepExecutionAdditionalData.builder()
                     .stepExecutionId(contribution.getStepExecution().getId())
                     .stepNumber(stepNumber)
-                    .altTaskName(taskName)
+                    .taskNumber(taskNumber)
+                    .taskName(taskName)
                     .build();
                 applicationEventPublisher.publishEvent(new BatchStepExecutionAdditionalDataEvent(this, additionalData));
                 // Simulate failure for retry
