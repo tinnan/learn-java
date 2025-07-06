@@ -21,6 +21,10 @@ public abstract class AbstractTasklet implements Tasklet {
 
     protected abstract JobStepAction associatedWithAction();
 
+    public List<String> produceContextParams() {
+        return Collections.emptyList();
+    }
+
     protected void validate(JobParam.Step jobParamStep) {
         JobStepAction associatedWithAction = associatedWithAction();
         if (jobParamStep.getAction() != associatedWithAction) {

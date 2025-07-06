@@ -5,6 +5,8 @@ import com.github.tinnan.jobrunner.entity.JobParam;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
 import com.github.tinnan.jobrunner.service.JobManagementService;
 import com.github.tinnan.jobrunner.service.TaskletFactory;
+import com.github.tinnan.jobrunner.task.AbstractTasklet;
+import com.github.tinnan.jobrunner.task.listener.StepExecutionPromotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,7 +19,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.core.step.builder.TaskletStepBuilder;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -38,16 +40,14 @@ public class JobBuilderServiceImpl implements JobBuilderService {
         List<Flow> flows = new ArrayList<>();
 
         List<String> tasks = jobParam.getServices();
-        List<Tasklet> stepTaskletList = jobParam.getSteps().stream()
-            .map(taskletFactory::createTasklet)
-            .toList();
+        List<JobParam.Step> jobParamSteps = jobParam.getSteps();
         AtomicInteger taskNumberCounter = new AtomicInteger(1);
         tasks.forEach((taskName) -> {
             int taskNumber = taskNumberCounter.getAndIncrement();
             FlowBuilder<Flow> flowBuilder = new FlowBuilder<>(taskName);
             AtomicInteger stepNumberCounter = new AtomicInteger(1);
-            stepTaskletList.forEach((stepTasklet) -> flowBuilder.next(
-                createStep(taskNumber, taskName, stepNumberCounter.getAndIncrement(), stepTasklet)));
+            jobParamSteps.forEach((jobParamStep) -> flowBuilder.next(
+                createStep(taskNumber, taskName, stepNumberCounter.getAndIncrement(), jobParamStep)));
             flows.add(flowBuilder.build());
         });
 
@@ -60,12 +60,13 @@ public class JobBuilderServiceImpl implements JobBuilderService {
             .build();
     }
 
-    private Step createStep(int taskNumber, String taskName, int stepNumber, Tasklet tasklet) {
+    private Step createStep(int taskNumber, String taskName, int stepNumber, JobParam.Step jobStepParam) {
         // !Do not use random value for stepName unless you want to rerun every step when retry a job.
         // !Make stepName unique in scope of same job instance ID (and other customized criteria) to unsure
         // !completed steps are skipped when retried.
         String stepName = "task_" + taskNumber + "_step_" + stepNumber;
-        return new StepBuilder(stepName, jobRepository)
+        AbstractTasklet tasklet = taskletFactory.createTasklet(jobStepParam);
+        TaskletStepBuilder stepBuilder = new StepBuilder(stepName, jobRepository)
             .tasklet((contribution, chunkContext) -> {
                 BatchStepExecutionAdditionalData additionalData = BatchStepExecutionAdditionalData.builder()
                     .stepExecutionId(contribution.getStepExecution().getId())
@@ -75,8 +76,11 @@ public class JobBuilderServiceImpl implements JobBuilderService {
                     .build();
                 jobManagementService.save(additionalData);
                 return tasklet.execute(contribution, chunkContext);
-            }, transactionManager)
-            .build();
+            }, transactionManager);
+        if (!tasklet.produceContextParams().isEmpty()) {
+            stepBuilder.listener(new StepExecutionPromotionListener(tasklet.produceContextParams()));
+        }
+        return stepBuilder.build();
     }
 
     private TaskExecutor createTaskExecutor(int maxConcurrent) {
