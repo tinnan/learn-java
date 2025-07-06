@@ -1,5 +1,6 @@
 package com.github.tinnan.jobrunner.controller;
 
+import com.github.tinnan.jobrunner.entity.JobParam;
 import com.github.tinnan.jobrunner.model.BatchJob;
 import com.github.tinnan.jobrunner.model.BatchJobDetail;
 import com.github.tinnan.jobrunner.model.JobStartResult;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface JobController {
 
     @PostMapping("/start")
-    JobStartResult startJob();
+    JobStartResult startJob(@RequestBody JobParam jobParam);
 
     @PostMapping("/{jobInstanceId}/retry")
     JobStartResult retryJob(@PathVariable Long jobInstanceId);

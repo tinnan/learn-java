@@ -2,6 +2,8 @@ package com.github.tinnan.jobrunner.service.impl;
 
 import com.github.tinnan.jobrunner.entity.BatchJobInstance;
 import com.github.tinnan.jobrunner.entity.BatchStepExecution;
+import com.github.tinnan.jobrunner.entity.JobParam;
+import com.github.tinnan.jobrunner.exception.JobParameterNotFoundException;
 import com.github.tinnan.jobrunner.mapper.BatchJobMapper;
 import com.github.tinnan.jobrunner.model.BatchJob;
 import com.github.tinnan.jobrunner.model.BatchJobDetail;
@@ -37,11 +39,14 @@ public class JobServiceImpl implements JobService {
     private final BatchStepExecutionRepository batchStepExecutionRepository;
 
     @Override
-    public JobStartResult start(@Nullable Long jobInstanceId) throws Exception {
-        String runId = getRunId(jobInstanceId);
-        JobParameters params = new JobParametersBuilder()
-            .addString(JOB_PARAM_RUN_ID, runId)
-            .toJobParameters();
+    public JobStartResult start(JobParam jobParam) {
+        JobParameters params = getJobParameters();
+        return null;
+    }
+
+    @Override
+    public JobStartResult retry(long jobInstanceId) throws Exception {
+        JobParameters params = getJobParameters(jobInstanceId);
         Job job = jobBuilderService.build(JOB_NAME);
         JobExecution jobExecution = jobLauncher.run(job, params);
         return JobStartResult.builder()
@@ -64,19 +69,24 @@ public class JobServiceImpl implements JobService {
         return BatchJobMapper.INSTANCE.mapToBatchJobDetail(batchStepExecutions);
     }
 
-    private String getRunId(@Nullable Long jobInstanceId) {
-        if (jobInstanceId == null) {
-            return UUID.randomUUID().toString();
-        }
+    private JobParameters getJobParameters() {
+        return new JobParametersBuilder()
+            .addString(JOB_PARAM_RUN_ID, UUID.randomUUID().toString())
+            .toJobParameters();
+    }
+
+    private JobParameters getJobParameters(long jobInstanceId) {
         Optional<BatchJobInstance> batchJobInstance = batchJobInstanceRepository.findById(jobInstanceId);
         if (batchJobInstance.isEmpty()) {
-            return UUID.randomUUID().toString();
+            throw new JobParameterNotFoundException(JOB_PARAM_RUN_ID);
         }
 
         String jobParamRunId = BatchJobMapper.INSTANCE.getJobParamRunId(batchJobInstance.get());
         if (StringUtils.isBlank(jobParamRunId)) {
-            return UUID.randomUUID().toString();
+            throw new JobParameterNotFoundException(JOB_PARAM_RUN_ID);
         }
-        return jobParamRunId;
+        return new JobParametersBuilder()
+            .addString(JOB_PARAM_RUN_ID, jobParamRunId)
+            .toJobParameters();
     }
 }
