@@ -41,7 +41,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
         List<Tasklet> stepTaskletList = jobParam.getSteps().stream()
             .map(taskletFactory::createTasklet)
             .toList();
-        AtomicInteger taskNumberCounter = new AtomicInteger();
+        AtomicInteger taskNumberCounter = new AtomicInteger(1);
         tasks.forEach((taskName) -> {
             int taskNumber = taskNumberCounter.getAndIncrement();
             FlowBuilder<Flow> flowBuilder = new FlowBuilder<>(taskName);
