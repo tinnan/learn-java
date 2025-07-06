@@ -23,7 +23,7 @@ public class BatchStepExecutionAdditionalData implements Serializable {
 
     public static final String COLUMN_STEP_EXECUTION_ID = "STEP_EXECUTION_ID";
     public static final String COLUMN_STEP_NUMBER = "STEP_NUMBER";
-    public static final String COLUMN_ALT_TASK_NAME = "ALT_TASK_NAME";
+    public static final String COLUMN_TASK_NAME = "TASK_NAME";
     @Serial
     private static final long serialVersionUID = -5071377997797079239L;
 
@@ -34,6 +34,6 @@ public class BatchStepExecutionAdditionalData implements Serializable {
     @Column(name = COLUMN_STEP_NUMBER)
     private Long stepNumber;
 
-    @Column(name = COLUMN_ALT_TASK_NAME)
+    @Column(name = COLUMN_TASK_NAME)
     private String altTaskName;
 }
