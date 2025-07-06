@@ -45,6 +45,9 @@ public class MergeTasklet extends AbstractTasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        Long id = contribution.getStepExecution().getId();
+        String stepName = contribution.getStepExecution().getStepName();
+        log.info("{} - Step execution ID {}, Step name {}", associatedWithAction(), id, stepName);
         return RepeatStatus.FINISHED;
     }
 }
