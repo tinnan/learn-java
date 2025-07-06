@@ -1,7 +1,7 @@
 package com.github.tinnan.jobrunner.service.impl;
 
 import com.github.tinnan.jobrunner.entity.BatchStepExecutionAdditionalData;
-import com.github.tinnan.jobrunner.repository.BatchStepExecutionAdditionalDataRepository;
+import com.github.tinnan.jobrunner.model.event.BatchStepExecutionAdditionalDataEvent;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final BatchStepExecutionAdditionalDataRepository stepAdditionalDataRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Job build(String jobName) {
@@ -65,9 +66,9 @@ public class JobBuilderServiceImpl implements JobBuilderService {
                     .stepNumber(stepNumber)
                     .altTaskName(taskName)
                     .build();
-                stepAdditionalDataRepository.save(additionalData);
+                applicationEventPublisher.publishEvent(new BatchStepExecutionAdditionalDataEvent(this, additionalData));
                 // Simulate failure for retry
-                int rand = (int)(Math.random() * 100);
+                int rand = (int) (Math.random() * 100);
                 if (rand % 2 == 0) {
                     throw new RuntimeException("Step " + stepName + " failed");
                 }
