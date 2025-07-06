@@ -1,9 +1,11 @@
 package com.github.tinnan.jobrunner.advice;
 
+import com.github.tinnan.jobrunner.exception.JobParameterNotFoundException;
 import com.github.tinnan.jobrunner.model.ErrorResponse;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +25,12 @@ public class GlobalExceptionHandler {
             ErrorResponse errorResponse = ErrorResponse.builder().message(e.getMessage()).build();
             return ResponseEntity.internalServerError().body(errorResponse);
         }
+    }
+
+    @ExceptionHandler(JobParameterNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handle(JobParameterNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(ErrorResponse.builder().message(e.getMessage()).build());
     }
 
     @ExceptionHandler(Exception.class)
