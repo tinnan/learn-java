@@ -12,9 +12,9 @@ public interface BatchStepExecutionRepository extends JpaRepository<BatchStepExe
     @Query("""
         SELECT bse
         FROM BatchStepExecution bse
-        WHERE bse.batchJobExecution.jobInstanceId = :JobInstanceId
+        WHERE bse.batchJobExecution.batchJobInstance.jobInstanceId = :JobInstanceId
         ORDER BY
-            bse.batchJobExecution.jobInstanceId ASC,
+            bse.batchJobExecution.batchJobInstance.jobInstanceId ASC,
             bse.batchJobExecution.jobExecutionId ASC,
             bse.stepExecutionId ASC
         """)

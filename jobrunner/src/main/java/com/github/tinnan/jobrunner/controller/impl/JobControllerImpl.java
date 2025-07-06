@@ -2,7 +2,7 @@ package com.github.tinnan.jobrunner.controller.impl;
 
 import com.github.tinnan.jobrunner.controller.JobController;
 import com.github.tinnan.jobrunner.model.BatchJob;
-import com.github.tinnan.jobrunner.model.BatchTask;
+import com.github.tinnan.jobrunner.model.BatchJobDetail;
 import com.github.tinnan.jobrunner.model.JobStartResult;
 import com.github.tinnan.jobrunner.service.JobService;
 import jakarta.annotation.Nullable;
@@ -35,7 +35,7 @@ public class JobControllerImpl implements JobController {
     }
 
     @Override
-    public List<BatchTask> fetchJob(Long jobInstanceId) {
-        return jobService.fetchJobTasks(jobInstanceId);
+    public BatchJobDetail fetchJob(Long jobInstanceId) {
+        return jobService.fetchJobDetail(jobInstanceId);
     }
 }

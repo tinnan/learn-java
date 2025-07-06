@@ -8,6 +8,6 @@ import lombok.Getter;
 @Builder
 public class BatchTask {
 
-    private String taskName;
+    private Integer taskNumber;
     private List<BatchStep> steps;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -41,9 +42,6 @@ public class BatchJobExecution {
     @Column(name = COLUMN_VERSION)
     private Long version;
 
-    @Column(name = COLUMN_JOB_INSTANCE_ID)
-    private Long jobInstanceId;
-
     @Column(name = COLUMN_CREATE_TIME)
     private LocalDateTime createTime;
 
@@ -69,4 +67,9 @@ public class BatchJobExecution {
     @JoinColumn(name = COLUMN_JOB_EXECUTION_ID,
         referencedColumnName = BatchJobExecutionParams.COLUMN_JOB_EXECUTION_ID)
     private List<BatchJobExecutionParams> batchJobExecutionParams;
+
+    @ManyToOne
+    @JoinColumn(name = COLUMN_JOB_INSTANCE_ID,
+        referencedColumnName = BatchJobInstance.COLUMN_JOB_INSTANCE_ID)
+    private BatchJobInstance batchJobInstance;
 }

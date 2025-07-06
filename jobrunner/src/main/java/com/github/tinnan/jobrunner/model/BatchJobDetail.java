@@ -1,5 +1,6 @@
 package com.github.tinnan.jobrunner.model;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -7,5 +8,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class BatchJobDetail extends BatchJob {
 
-
+    List<BatchTask> tasks;
 }

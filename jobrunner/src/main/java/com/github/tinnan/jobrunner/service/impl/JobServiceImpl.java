@@ -4,14 +4,13 @@ import com.github.tinnan.jobrunner.entity.BatchJobInstance;
 import com.github.tinnan.jobrunner.entity.BatchStepExecution;
 import com.github.tinnan.jobrunner.mapper.BatchJobMapper;
 import com.github.tinnan.jobrunner.model.BatchJob;
-import com.github.tinnan.jobrunner.model.BatchTask;
+import com.github.tinnan.jobrunner.model.BatchJobDetail;
 import com.github.tinnan.jobrunner.model.JobStartResult;
 import com.github.tinnan.jobrunner.repository.BatchJobInstanceRepository;
 import com.github.tinnan.jobrunner.repository.BatchStepExecutionRepository;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
 import com.github.tinnan.jobrunner.service.JobService;
 import jakarta.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,7 +20,6 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.stereotype.Service;
 
@@ -56,14 +54,14 @@ public class JobServiceImpl implements JobService {
     public List<BatchJob> fetchJobs(@Nullable Long jobInstanceIdOffset, @Nullable Long count) {
         List<BatchJobInstance> batchJobInstances = batchJobInstanceRepository
             .findJobs(JOB_NAME, jobInstanceIdOffset, Optional.ofNullable(count).orElse(JOB_PAGE_SIZE));
-        return BatchJobMapper.INSTANCE.mapToBatchJobs(batchJobInstances);
+        return BatchJobMapper.INSTANCE.mapToBatchJob(batchJobInstances);
     }
 
     @Override
-    public List<BatchTask> fetchJobTasks(Long jobInstanceId) {
+    public BatchJobDetail fetchJobDetail(Long jobInstanceId) {
         List<BatchStepExecution> batchStepExecutions = batchStepExecutionRepository.findStepsByJobInstanceId(
             jobInstanceId);
-        return Collections.emptyList();
+        return BatchJobMapper.INSTANCE.mapToBatchJobDetail(batchStepExecutions);
     }
 
     private String getRunId(@Nullable Long jobInstanceId) {

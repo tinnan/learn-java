@@ -11,6 +11,7 @@ import org.springframework.batch.core.BatchStatus;
 @Builder
 public class BatchStep {
 
+    private Integer stepNumber;
     private String stepName;
     private BatchStatus status;
     @JsonFormat(shape = Shape.STRING)
