@@ -39,4 +39,9 @@ public class BatchJobInstance {
     @JoinColumn(name = COLUMN_JOB_INSTANCE_ID,
         referencedColumnName = BatchJobExecution.COLUMN_JOB_INSTANCE_ID)
     private List<BatchJobExecution> batchJobExecution;
+
+    @OneToOne
+    @JoinColumn(name = COLUMN_JOB_INSTANCE_ID,
+        referencedColumnName = BatchJobInstanceParam.COLUMN_JOB_INSTANCE_ID)
+    private BatchJobInstanceParam batchJobInstanceParam;
 }

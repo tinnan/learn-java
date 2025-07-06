@@ -1,6 +1,7 @@
 package com.github.tinnan.jobrunner.service.impl;
 
 import com.github.tinnan.jobrunner.entity.BatchJobInstance;
+import com.github.tinnan.jobrunner.entity.BatchJobInstanceParam;
 import com.github.tinnan.jobrunner.entity.BatchStepExecution;
 import com.github.tinnan.jobrunner.entity.JobParam;
 import com.github.tinnan.jobrunner.exception.JobParameterNotFoundException;
@@ -8,6 +9,7 @@ import com.github.tinnan.jobrunner.mapper.BatchJobMapper;
 import com.github.tinnan.jobrunner.model.BatchJob;
 import com.github.tinnan.jobrunner.model.BatchJobDetail;
 import com.github.tinnan.jobrunner.model.JobStartResult;
+import com.github.tinnan.jobrunner.repository.BatchJobInstanceParamRepository;
 import com.github.tinnan.jobrunner.repository.BatchJobInstanceRepository;
 import com.github.tinnan.jobrunner.repository.BatchStepExecutionRepository;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
@@ -37,17 +39,42 @@ public class JobServiceImpl implements JobService {
     private final JobBuilderService jobBuilderService;
     private final BatchJobInstanceRepository batchJobInstanceRepository;
     private final BatchStepExecutionRepository batchStepExecutionRepository;
+    private final BatchJobInstanceParamRepository batchJobInstanceParamRepository;
 
     @Override
-    public JobStartResult start(JobParam jobParam) {
+    public JobStartResult start(JobParam jobParam) throws Exception {
         JobParameters params = getJobParameters();
-        return null;
+        JobStartResult result = start(jobParam, params);
+        BatchJobInstanceParam batchJobInstanceParam = BatchJobInstanceParam.builder()
+            .jobInstanceId(result.getJobInstanceId())
+            .serializedParam(jobParam)
+            .build();
+        batchJobInstanceParamRepository.save(batchJobInstanceParam);
+        return result;
     }
 
     @Override
     public JobStartResult retry(long jobInstanceId) throws Exception {
-        JobParameters params = getJobParameters(jobInstanceId);
-        Job job = jobBuilderService.build(JOB_NAME);
+        Optional<BatchJobInstance> batchJobInstanceOpt = batchJobInstanceRepository.findById(jobInstanceId);
+        if (batchJobInstanceOpt.isEmpty()) {
+            throw new JobParameterNotFoundException(JOB_PARAM_RUN_ID);
+        }
+
+        BatchJobInstance batchJobInstance = batchJobInstanceOpt.get();
+        String jobParamRunId = BatchJobMapper.INSTANCE.getJobParamRunId(batchJobInstance);
+        if (StringUtils.isBlank(jobParamRunId)) {
+            throw new JobParameterNotFoundException(JOB_PARAM_RUN_ID);
+        }
+
+        JobParam jobParam = batchJobInstance.getBatchJobInstanceParam().getSerializedParam();
+        JobParameters params = new JobParametersBuilder()
+            .addString(JOB_PARAM_RUN_ID, jobParamRunId)
+            .toJobParameters();
+        return start(jobParam, params);
+    }
+
+    private JobStartResult start(JobParam jobParam, JobParameters params) throws Exception {
+        Job job = jobBuilderService.build(JOB_NAME, jobParam);
         JobExecution jobExecution = jobLauncher.run(job, params);
         return JobStartResult.builder()
             .jobInstanceId(jobExecution.getJobId())
@@ -72,21 +99,6 @@ public class JobServiceImpl implements JobService {
     private JobParameters getJobParameters() {
         return new JobParametersBuilder()
             .addString(JOB_PARAM_RUN_ID, UUID.randomUUID().toString())
-            .toJobParameters();
-    }
-
-    private JobParameters getJobParameters(long jobInstanceId) {
-        Optional<BatchJobInstance> batchJobInstance = batchJobInstanceRepository.findById(jobInstanceId);
-        if (batchJobInstance.isEmpty()) {
-            throw new JobParameterNotFoundException(JOB_PARAM_RUN_ID);
-        }
-
-        String jobParamRunId = BatchJobMapper.INSTANCE.getJobParamRunId(batchJobInstance.get());
-        if (StringUtils.isBlank(jobParamRunId)) {
-            throw new JobParameterNotFoundException(JOB_PARAM_RUN_ID);
-        }
-        return new JobParametersBuilder()
-            .addString(JOB_PARAM_RUN_ID, jobParamRunId)
             .toJobParameters();
     }
 }

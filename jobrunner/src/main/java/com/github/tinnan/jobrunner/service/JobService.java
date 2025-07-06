@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface JobService {
 
-    JobStartResult start(JobParam jobParam);
+    JobStartResult start(JobParam jobParam) throws Exception;
 
     JobStartResult retry(long jobInstanceId) throws Exception;
 
