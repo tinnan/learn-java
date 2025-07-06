@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = BatchJobExecution.TABLE_NAME)
-@Entity(name = BatchJobExecution.TABLE_NAME)
+@Entity
 public class BatchJobExecution {
 
     public static final String TABLE_NAME = "BATCH_JOB_EXECUTION";

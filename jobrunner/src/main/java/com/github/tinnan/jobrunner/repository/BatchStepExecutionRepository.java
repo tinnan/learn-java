@@ -1,0 +1,22 @@
+package com.github.tinnan.jobrunner.repository;
+
+import com.github.tinnan.jobrunner.entity.BatchStepExecution;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface BatchStepExecutionRepository extends JpaRepository<BatchStepExecution, Long> {
+
+    @Query("""
+        SELECT bse
+        FROM BatchStepExecution bse
+        WHERE bse.batchJobExecution.jobInstanceId = :JobInstanceId
+        ORDER BY
+            bse.batchJobExecution.jobInstanceId ASC,
+            bse.batchJobExecution.jobExecutionId ASC,
+            bse.stepExecutionId ASC
+        """)
+    List<BatchStepExecution> findStepsByJobInstanceId(Long JobInstanceId);
+}

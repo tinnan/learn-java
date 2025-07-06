@@ -2,13 +2,13 @@ package com.github.tinnan.jobrunner.controller.impl;
 
 import com.github.tinnan.jobrunner.controller.JobController;
 import com.github.tinnan.jobrunner.model.BatchJob;
+import com.github.tinnan.jobrunner.model.BatchTask;
 import com.github.tinnan.jobrunner.model.JobStartResult;
 import com.github.tinnan.jobrunner.service.JobService;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -35,7 +35,7 @@ public class JobControllerImpl implements JobController {
     }
 
     @Override
-    public List<JobExecution> fetchJob(Long jobInstanceId) {
-        return jobService.fetchJobStatus(jobInstanceId);
+    public List<BatchTask> fetchJob(Long jobInstanceId) {
+        return jobService.fetchJobTasks(jobInstanceId);
     }
 }

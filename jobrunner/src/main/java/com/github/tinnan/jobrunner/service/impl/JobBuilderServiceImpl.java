@@ -1,8 +1,11 @@
 package com.github.tinnan.jobrunner.service.impl;
 
+import com.github.tinnan.jobrunner.entity.BatchStepExecutionAdditionalData;
+import com.github.tinnan.jobrunner.repository.BatchStepExecutionAdditionalDataRepository;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
+    private final BatchStepExecutionAdditionalDataRepository stepAdditionalDataRepository;
 
     @Override
     public Job build(String jobName) {
@@ -52,15 +56,20 @@ public class JobBuilderServiceImpl implements JobBuilderService {
             .build();
     }
 
-    private Step createStep(String taskName, int stepId) {
-        String stepName = taskName + "-step-" + stepId;
+    private Step createStep(String taskName, long stepNumber) {
+        String stepName = UUID.randomUUID().toString();
         return new StepBuilder(stepName, jobRepository)
             .tasklet((contribution, chunkContext) -> {
+                BatchStepExecutionAdditionalData additionalData = BatchStepExecutionAdditionalData.builder()
+                    .stepExecutionId(contribution.getStepExecution().getId())
+                    .stepNumber(stepNumber)
+                    .altTaskName(taskName)
+                    .build();
+                stepAdditionalDataRepository.save(additionalData);
                 // Simulate failure for retry
                 int rand = (int)(Math.random() * 100);
                 if (rand % 2 == 0) {
-                    log.info("Executing {} - failed", stepName);
-                    throw new RuntimeException(stepName + " failed");
+                    throw new RuntimeException("Step " + stepName + " failed");
                 }
                 log.info("Executing {} - finished", stepName);
                 return RepeatStatus.FINISHED;

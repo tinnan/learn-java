@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = BatchJobInstance.TABLE_NAME)
-@Entity(name = BatchJobInstance.TABLE_NAME)
+@Entity
 public class BatchJobInstance {
 
     public static final String TABLE_NAME = "BATCH_JOB_INSTANCE";

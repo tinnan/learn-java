@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface BatchJobInstanceRepository extends JpaRepository<BatchJobInstance, Long> {
 
     @Query("""
-        SELECT bji FROM BATCH_JOB_INSTANCE bji
+        SELECT bji FROM BatchJobInstance bji
         WHERE bji.jobName = :jobName
             AND (:jobInstanceIdOffset IS NULL OR bji.jobInstanceId < :jobInstanceIdOffset)
         ORDER BY bji.jobInstanceId DESC

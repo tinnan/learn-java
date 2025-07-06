@@ -1,13 +1,17 @@
 package com.github.tinnan.jobrunner.service.impl;
 
 import com.github.tinnan.jobrunner.entity.BatchJobInstance;
+import com.github.tinnan.jobrunner.entity.BatchStepExecution;
 import com.github.tinnan.jobrunner.mapper.BatchJobMapper;
 import com.github.tinnan.jobrunner.model.BatchJob;
+import com.github.tinnan.jobrunner.model.BatchTask;
 import com.github.tinnan.jobrunner.model.JobStartResult;
 import com.github.tinnan.jobrunner.repository.BatchJobInstanceRepository;
+import com.github.tinnan.jobrunner.repository.BatchStepExecutionRepository;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
 import com.github.tinnan.jobrunner.service.JobService;
 import jakarta.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,9 +34,9 @@ public class JobServiceImpl implements JobService {
     private static final long JOB_PAGE_SIZE = 30;
 
     private final JobLauncher jobLauncher;
-    private final JobExplorer jobExplorer;
     private final JobBuilderService jobBuilderService;
     private final BatchJobInstanceRepository batchJobInstanceRepository;
+    private final BatchStepExecutionRepository batchStepExecutionRepository;
 
     @Override
     public JobStartResult start(@Nullable Long jobInstanceId) throws Exception {
@@ -56,8 +60,10 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<JobExecution> fetchJobStatus(Long jobId) {
-        return jobExplorer.getJobExecutions(jobExplorer.getJobInstance(jobId));
+    public List<BatchTask> fetchJobTasks(Long jobInstanceId) {
+        List<BatchStepExecution> batchStepExecutions = batchStepExecutionRepository.findStepsByJobInstanceId(
+            jobInstanceId);
+        return Collections.emptyList();
     }
 
     private String getRunId(@Nullable Long jobInstanceId) {

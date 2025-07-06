@@ -1,10 +1,10 @@
 package com.github.tinnan.jobrunner.controller;
 
 import com.github.tinnan.jobrunner.model.BatchJob;
+import com.github.tinnan.jobrunner.model.BatchTask;
 import com.github.tinnan.jobrunner.model.JobStartResult;
 import jakarta.annotation.Nullable;
 import java.util.List;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,5 +26,5 @@ public interface JobController {
         @RequestParam(required = false) @Nullable Long count);
 
     @GetMapping("/{jobInstanceId}")
-    List<JobExecution> fetchJob(@PathVariable Long jobInstanceId);
+    List<BatchTask> fetchJob(@PathVariable Long jobInstanceId);
 }
