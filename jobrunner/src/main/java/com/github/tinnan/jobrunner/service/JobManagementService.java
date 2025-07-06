@@ -1,8 +1,8 @@
 package com.github.tinnan.jobrunner.service;
 
-import com.github.tinnan.jobrunner.model.event.BatchStepExecutionAdditionalDataEvent;
+import com.github.tinnan.jobrunner.entity.BatchStepExecutionAdditionalData;
 
 public interface JobManagementService {
 
-    void listen(BatchStepExecutionAdditionalDataEvent event);
+    void save(BatchStepExecutionAdditionalData event);
 }

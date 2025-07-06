@@ -2,8 +2,8 @@ package com.github.tinnan.jobrunner.service.impl;
 
 import com.github.tinnan.jobrunner.entity.BatchStepExecutionAdditionalData;
 import com.github.tinnan.jobrunner.entity.JobParam;
-import com.github.tinnan.jobrunner.model.event.BatchStepExecutionAdditionalDataEvent;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
+import com.github.tinnan.jobrunner.service.JobManagementService;
 import com.github.tinnan.jobrunner.service.TaskletFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,6 @@ import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,8 @@ public class JobBuilderServiceImpl implements JobBuilderService {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final ApplicationEventPublisher applicationEventPublisher;
     private final TaskletFactory taskletFactory;
+    private final JobManagementService jobManagementService;
 
     @Override
     public Job build(String jobName, JobParam jobParam) {
@@ -74,7 +73,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
                     .taskNumber(taskNumber)
                     .taskName(taskName)
                     .build();
-                applicationEventPublisher.publishEvent(new BatchStepExecutionAdditionalDataEvent(this, additionalData));
+                jobManagementService.save(additionalData);
                 return tasklet.execute(contribution, chunkContext);
             }, transactionManager)
             .build();
