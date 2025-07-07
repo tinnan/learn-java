@@ -9,20 +9,20 @@ import lombok.Getter;
 public enum JobStepAction {
 
     MERGE("Merge", List.of(
-        new ParamSpec(ParameterName.FROM_BRANCH, true, null),
-        new ParamSpec(ParameterName.TO_BRANCH, true, null)
+        new ParamSpec(JobParameterName.FROM_BRANCH, true, null),
+        new ParamSpec(JobParameterName.TO_BRANCH, true, null)
     )),
     DEV_BUILD_DEPLOY("DEV build-deploy", List.of(
-        new ParamSpec(ParameterName.ENV, true, Env.names())
+        new ParamSpec(JobParameterName.ENV, true, Env.names())
     )),
     SIT_BUILD("SIT build", List.of(
-        new ParamSpec(ParameterName.RELEASE, true, null)
+        new ParamSpec(JobParameterName.RELEASE, true, null)
     )),
     SIT_DEPLOY_DEV("SIT deploy with dev tag", List.of(
-        new ParamSpec(ParameterName.ENV, true, Env.names())
+        new ParamSpec(JobParameterName.ENV, true, Env.names())
     )),
     DEPLOY_RELEASE("Deploy release", List.of(
-        new ParamSpec(ParameterName.ENV, true, Env.names())
+        new ParamSpec(JobParameterName.ENV, true, Env.names())
     ));
 
     private final String desc;
@@ -32,7 +32,7 @@ public enum JobStepAction {
     @AllArgsConstructor
     public static class ParamSpec {
 
-        private ParameterName parameterName;
+        private JobParameterName parameterName;
         private boolean required;
         private String[] availableValues;
     }

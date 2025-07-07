@@ -2,7 +2,7 @@ package com.github.tinnan.jobrunner.task;
 
 import com.github.tinnan.jobrunner.constants.JobStepAction;
 import com.github.tinnan.jobrunner.constants.JobStepAction.ParamSpec;
-import com.github.tinnan.jobrunner.constants.ParameterName;
+import com.github.tinnan.jobrunner.constants.JobParameterName;
 import com.github.tinnan.jobrunner.entity.JobParam;
 import com.github.tinnan.jobrunner.exception.JobParameterViolationException;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public abstract class AbstractTasklet implements Tasklet {
 
         List<String> violations = new ArrayList<>();
         paramSpecs.forEach(paramSpec -> {
-            ParameterName parameterName = paramSpec.getParameterName();
+            JobParameterName parameterName = paramSpec.getParameterName();
             String parameterValue = jobParamStep.getParameterValue(parameterName);
             if (paramSpec.isRequired() && StringUtils.isBlank(parameterValue)) {
                 violations.add("Parameter " + parameterName + " is required");

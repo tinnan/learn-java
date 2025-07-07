@@ -2,7 +2,7 @@ package com.github.tinnan.jobrunner.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.tinnan.jobrunner.constants.JobStepAction;
-import com.github.tinnan.jobrunner.constants.ParameterName;
+import com.github.tinnan.jobrunner.constants.JobParameterName;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
@@ -36,7 +36,7 @@ public class JobParam implements Serializable {
         private List<StepParam> params;
 
         @JsonIgnore
-        public String getParameterValue(ParameterName parameterName) {
+        public String getParameterValue(JobParameterName parameterName) {
             return Optional.ofNullable(this.params).orElse(Collections.emptyList())
                 .stream()
                 .filter(p -> parameterName == p.getParameterName())
@@ -53,7 +53,7 @@ public class JobParam implements Serializable {
 
             @Serial
             private static final long serialVersionUID = -7886373771601148091L;
-            private ParameterName parameterName;
+            private JobParameterName parameterName;
             private String parameterValue;
         }
     }

@@ -1,7 +1,7 @@
 package com.github.tinnan.jobrunner.task;
 
 import com.github.tinnan.jobrunner.constants.JobStepAction;
-import com.github.tinnan.jobrunner.constants.ParameterName;
+import com.github.tinnan.jobrunner.constants.JobParameterName;
 import com.github.tinnan.jobrunner.entity.JobParam.Step;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
@@ -15,7 +15,7 @@ public class SitDeployDevTasklet extends AbstractTasklet {
 
     public SitDeployDevTasklet(Step jobParamStep) {
         super(jobParamStep);
-        this.env = jobParamStep.getParameterValue(ParameterName.ENV);
+        this.env = jobParamStep.getParameterValue(JobParameterName.ENV);
     }
 
     @Override

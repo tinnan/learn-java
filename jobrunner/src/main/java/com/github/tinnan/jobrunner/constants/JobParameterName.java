@@ -1,6 +1,6 @@
 package com.github.tinnan.jobrunner.constants;
 
-public enum ParameterName {
+public enum JobParameterName {
 
     FROM_BRANCH,
     TO_BRANCH,

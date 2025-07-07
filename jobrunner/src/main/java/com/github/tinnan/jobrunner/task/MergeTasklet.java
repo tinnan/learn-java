@@ -1,7 +1,7 @@
 package com.github.tinnan.jobrunner.task;
 
 import com.github.tinnan.jobrunner.constants.JobStepAction;
-import com.github.tinnan.jobrunner.constants.ParameterName;
+import com.github.tinnan.jobrunner.constants.JobParameterName;
 import com.github.tinnan.jobrunner.entity.JobParam.Step;
 import com.github.tinnan.jobrunner.exception.JobParameterViolationException;
 import java.util.regex.Matcher;
@@ -21,8 +21,8 @@ public class MergeTasklet extends AbstractTasklet {
 
     public MergeTasklet(Step jobParamStep) {
         super(jobParamStep);
-        this.fromBranch = jobParamStep.getParameterValue(ParameterName.FROM_BRANCH);
-        this.toBranch = jobParamStep.getParameterValue(ParameterName.TO_BRANCH);
+        this.fromBranch = jobParamStep.getParameterValue(JobParameterName.FROM_BRANCH);
+        this.toBranch = jobParamStep.getParameterValue(JobParameterName.TO_BRANCH);
         validateMergeTarget();
     }
 
