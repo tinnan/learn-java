@@ -30,5 +30,5 @@ public class BatchJobInstanceParam {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = COLUMN_SERIALIZED_PARAM)
-    private JobParam serializedParam;
+    private StartJobParam serializedParam;
 }

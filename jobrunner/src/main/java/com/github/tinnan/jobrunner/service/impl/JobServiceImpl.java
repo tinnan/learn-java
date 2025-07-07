@@ -3,7 +3,7 @@ package com.github.tinnan.jobrunner.service.impl;
 import com.github.tinnan.jobrunner.entity.BatchJobInstance;
 import com.github.tinnan.jobrunner.entity.BatchJobInstanceParam;
 import com.github.tinnan.jobrunner.entity.BatchStepExecution;
-import com.github.tinnan.jobrunner.entity.JobParam;
+import com.github.tinnan.jobrunner.entity.StartJobParam;
 import com.github.tinnan.jobrunner.exception.JobParameterNotFoundException;
 import com.github.tinnan.jobrunner.mapper.BatchJobMapper;
 import com.github.tinnan.jobrunner.model.BatchJob;
@@ -42,7 +42,7 @@ public class JobServiceImpl implements JobService {
     private final BatchJobInstanceParamRepository batchJobInstanceParamRepository;
 
     @Override
-    public JobStartResult start(JobParam jobParam) throws Exception {
+    public JobStartResult start(StartJobParam jobParam) throws Exception {
         JobParameters params = getJobParameters();
         JobStartResult result = start(jobParam, params);
         BatchJobInstanceParam batchJobInstanceParam = BatchJobInstanceParam.builder()
@@ -66,14 +66,14 @@ public class JobServiceImpl implements JobService {
             throw new JobParameterNotFoundException(JOB_PARAM_RUN_ID);
         }
 
-        JobParam jobParam = batchJobInstance.getBatchJobInstanceParam().getSerializedParam();
+        StartJobParam jobParam = batchJobInstance.getBatchJobInstanceParam().getSerializedParam();
         JobParameters params = new JobParametersBuilder()
             .addString(JOB_PARAM_RUN_ID, jobParamRunId)
             .toJobParameters();
         return start(jobParam, params);
     }
 
-    private JobStartResult start(JobParam jobParam, JobParameters params) throws Exception {
+    private JobStartResult start(StartJobParam jobParam, JobParameters params) throws Exception {
         Job job = jobBuilderService.build(JOB_NAME, jobParam);
         JobExecution jobExecution = jobLauncher.run(job, params);
         return JobStartResult.builder()

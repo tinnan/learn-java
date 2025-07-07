@@ -3,7 +3,7 @@ package com.github.tinnan.jobrunner.task;
 import com.github.tinnan.jobrunner.constants.JobStepAction;
 import com.github.tinnan.jobrunner.constants.JobStepAction.ParamSpec;
 import com.github.tinnan.jobrunner.constants.JobParameterName;
-import com.github.tinnan.jobrunner.entity.JobParam;
+import com.github.tinnan.jobrunner.entity.StartJobParam;
 import com.github.tinnan.jobrunner.exception.JobParameterViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 
 public abstract class AbstractTasklet implements Tasklet {
 
-    public AbstractTasklet(JobParam.Step jobParamStep) {
+    public AbstractTasklet(StartJobParam.Step jobParamStep) {
         validate(jobParamStep);
     }
 
@@ -25,7 +25,7 @@ public abstract class AbstractTasklet implements Tasklet {
         return Collections.emptyList();
     }
 
-    protected void validate(JobParam.Step jobParamStep) {
+    protected void validate(StartJobParam.Step jobParamStep) {
         JobStepAction associatedWithAction = associatedWithAction();
         if (jobParamStep.getAction() != associatedWithAction) {
             throw new IllegalArgumentException(

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobParam implements Serializable {
+public class StartJobParam implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -180321234960237537L;

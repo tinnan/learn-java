@@ -1,6 +1,6 @@
 package com.github.tinnan.jobrunner.service;
 
-import com.github.tinnan.jobrunner.entity.JobParam;
+import com.github.tinnan.jobrunner.entity.StartJobParam;
 import com.github.tinnan.jobrunner.model.BatchJob;
 import com.github.tinnan.jobrunner.model.BatchJobDetail;
 import com.github.tinnan.jobrunner.model.JobStartResult;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface JobService {
 
-    JobStartResult start(JobParam jobParam) throws Exception;
+    JobStartResult start(StartJobParam jobParam) throws Exception;
 
     JobStartResult retry(long jobInstanceId) throws Exception;
 

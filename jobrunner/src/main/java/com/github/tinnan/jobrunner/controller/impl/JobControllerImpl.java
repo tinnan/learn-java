@@ -1,7 +1,7 @@
 package com.github.tinnan.jobrunner.controller.impl;
 
 import com.github.tinnan.jobrunner.controller.JobController;
-import com.github.tinnan.jobrunner.entity.JobParam;
+import com.github.tinnan.jobrunner.entity.StartJobParam;
 import com.github.tinnan.jobrunner.model.BatchJob;
 import com.github.tinnan.jobrunner.model.BatchJobDetail;
 import com.github.tinnan.jobrunner.model.JobStartResult;
@@ -20,7 +20,7 @@ public class JobControllerImpl implements JobController {
 
     @SneakyThrows
     @Override
-    public JobStartResult startJob(JobParam jobParam) {
+    public JobStartResult startJob(StartJobParam jobParam) {
         return jobService.start(jobParam);
     }
 

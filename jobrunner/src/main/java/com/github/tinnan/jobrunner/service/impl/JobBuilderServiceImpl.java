@@ -1,7 +1,7 @@
 package com.github.tinnan.jobrunner.service.impl;
 
 import com.github.tinnan.jobrunner.entity.BatchStepExecutionAdditionalData;
-import com.github.tinnan.jobrunner.entity.JobParam;
+import com.github.tinnan.jobrunner.entity.StartJobParam;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
 import com.github.tinnan.jobrunner.service.JobManagementService;
 import com.github.tinnan.jobrunner.service.TaskletFactory;
@@ -36,11 +36,11 @@ public class JobBuilderServiceImpl implements JobBuilderService {
     private final JobManagementService jobManagementService;
 
     @Override
-    public Job build(String jobName, JobParam jobParam) {
+    public Job build(String jobName, StartJobParam jobParam) {
         List<Flow> flows = new ArrayList<>();
 
         List<String> tasks = jobParam.getServices();
-        List<JobParam.Step> jobParamSteps = jobParam.getSteps();
+        List<StartJobParam.Step> jobParamSteps = jobParam.getSteps();
         AtomicInteger taskNumberCounter = new AtomicInteger(1);
         tasks.forEach((taskName) -> {
             int taskNumber = taskNumberCounter.getAndIncrement();
@@ -60,7 +60,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
             .build();
     }
 
-    private Step createStep(int taskNumber, String taskName, int stepNumber, JobParam.Step jobStepParam) {
+    private Step createStep(int taskNumber, String taskName, int stepNumber, StartJobParam.Step jobStepParam) {
         // !Do not use random value for stepName unless you want to rerun every step when retry a job.
         // !Make stepName unique in scope of same job instance ID (and other customized criteria) to unsure
         // !completed steps are skipped when retried.

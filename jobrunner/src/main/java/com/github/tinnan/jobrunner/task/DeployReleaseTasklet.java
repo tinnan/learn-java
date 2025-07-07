@@ -1,7 +1,7 @@
 package com.github.tinnan.jobrunner.task;
 
 import com.github.tinnan.jobrunner.constants.JobStepAction;
-import com.github.tinnan.jobrunner.entity.JobParam.Step;
+import com.github.tinnan.jobrunner.entity.StartJobParam.Step;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
