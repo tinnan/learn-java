@@ -45,10 +45,12 @@ public class MergeTasklet extends AbstractTasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        String taskName = contribution.getStepExecution().getJobExecution().getExecutionContext()
+            .get("taskName", String.class);
         Long id = contribution.getStepExecution().getId();
         String stepName = contribution.getStepExecution().getStepName();
-        log.info("{} - Step execution ID {}, Step name {} - From {} to {}", associatedWithAction(), id, stepName,
-            fromBranch, toBranch);
+        log.info("{} - Task {} Step execution ID {}, Step name {} - From {} to {}", associatedWithAction(), taskName,
+            id, stepName, fromBranch, toBranch);
         return RepeatStatus.FINISHED;
     }
 }

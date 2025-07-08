@@ -6,9 +6,11 @@ import com.github.tinnan.jobrunner.service.JobBuilderService;
 import com.github.tinnan.jobrunner.service.JobManagementService;
 import com.github.tinnan.jobrunner.service.TaskletFactory;
 import com.github.tinnan.jobrunner.task.AbstractTasklet;
+import com.github.tinnan.jobrunner.task.TaskParamSetupTasklet;
 import com.github.tinnan.jobrunner.task.listener.StepExecutionPromotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +47,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
         tasks.forEach((taskName) -> {
             int taskNumber = taskNumberCounter.getAndIncrement();
             FlowBuilder<Flow> flowBuilder = new FlowBuilder<>(taskName);
+            flowBuilder.start(createTaskParamSetupStep(taskNumber, taskName));
             AtomicInteger stepNumberCounter = new AtomicInteger(1);
             jobParamSteps.forEach((jobParamStep) -> flowBuilder.next(
                 createStep(taskNumber, taskName, stepNumberCounter.getAndIncrement(), jobParamStep)));
@@ -60,27 +63,48 @@ public class JobBuilderServiceImpl implements JobBuilderService {
             .build();
     }
 
+    private Step createTaskParamSetupStep(int taskNumber, String taskName) {
+        int stepNumber = -1;
+        String stepName = createStepName(taskNumber, stepNumber);
+        TaskParamSetupTasklet tasklet = new TaskParamSetupTasklet(Map.of("taskName", taskName));
+        return new StepBuilder(stepName, jobRepository)
+            .tasklet((contribution, chunkContext) -> {
+                saveStepAdditionalData(contribution.getStepExecution().getId(), stepNumber, taskNumber, taskName);
+                return tasklet.execute(contribution, chunkContext);
+            }, transactionManager)
+            .listener(new StepExecutionPromotionListener(tasklet.produceContextParams()))
+            .build();
+    }
+
     private Step createStep(int taskNumber, String taskName, int stepNumber, StartJobParam.Step jobStepParam) {
         // !Do not use random value for stepName unless you want to rerun every step when retry a job.
         // !Make stepName unique in scope of same job instance ID (and other customized criteria) to unsure
         // !completed steps are skipped when retried.
-        String stepName = "task_" + taskNumber + "_step_" + stepNumber;
+        String stepName = createStepName(taskNumber, stepNumber);
         AbstractTasklet tasklet = taskletFactory.createTasklet(jobStepParam);
         TaskletStepBuilder stepBuilder = new StepBuilder(stepName, jobRepository)
             .tasklet((contribution, chunkContext) -> {
-                BatchStepExecutionAdditionalData additionalData = BatchStepExecutionAdditionalData.builder()
-                    .stepExecutionId(contribution.getStepExecution().getId())
-                    .stepNumber(stepNumber)
-                    .taskNumber(taskNumber)
-                    .taskName(taskName)
-                    .build();
-                jobManagementService.save(additionalData);
+                saveStepAdditionalData(contribution.getStepExecution().getId(), stepNumber, taskNumber, taskName);
                 return tasklet.execute(contribution, chunkContext);
             }, transactionManager);
         if (!tasklet.produceContextParams().isEmpty()) {
             stepBuilder.listener(new StepExecutionPromotionListener(tasklet.produceContextParams()));
         }
         return stepBuilder.build();
+    }
+
+    private String createStepName(int taskNumber, int stepNumber) {
+        return "task_" + taskNumber + "_step_" + stepNumber;
+    }
+
+    private void saveStepAdditionalData(long stepExecutionId, int stepNumber, int taskNumber, String taskName) {
+        BatchStepExecutionAdditionalData additionalData = BatchStepExecutionAdditionalData.builder()
+            .stepExecutionId(stepExecutionId)
+            .stepNumber(stepNumber)
+            .taskNumber(taskNumber)
+            .taskName(taskName)
+            .build();
+        jobManagementService.save(additionalData);
     }
 
     private TaskExecutor createTaskExecutor(int maxConcurrent) {

@@ -7,4 +7,4 @@ services:
     volumes:
       - "./db/init-postgres.sql:/docker-entrypoint-initdb.d/*.sql:ro"
     ports:
-      - "5432:5432"
+      - "35432:5432"

@@ -13,6 +13,7 @@ public interface BatchStepExecutionRepository extends JpaRepository<BatchStepExe
         SELECT bse
         FROM BatchStepExecution bse
         WHERE bse.batchJobExecution.batchJobInstance.jobInstanceId = :JobInstanceId
+            AND bse.batchStepExecutionAdditionalData.stepNumber > 0
         ORDER BY
             bse.batchJobExecution.batchJobInstance.jobInstanceId ASC,
             bse.batchJobExecution.jobExecutionId ASC,
