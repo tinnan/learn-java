@@ -3,6 +3,7 @@ package com.github.tinnan.jobrunner.task;
 import com.github.tinnan.jobrunner.constants.JobStepAction;
 import com.github.tinnan.jobrunner.constants.JobParameterName;
 import com.github.tinnan.jobrunner.entity.StartJobParam.Step;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -25,6 +26,7 @@ public class SitDeployDevTasklet extends AbstractTasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        validateRequiredContextParams(contribution, List.of("tag"));
         String tag = contribution.getStepExecution().getJobExecution().getExecutionContext().get("tag", String.class);
         Long id = contribution.getStepExecution().getId();
         String stepName = contribution.getStepExecution().getStepName();

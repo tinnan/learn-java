@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 
 public abstract class AbstractTasklet implements Tasklet {
@@ -52,6 +53,16 @@ public abstract class AbstractTasklet implements Tasklet {
             String msg = "Step " + jobParamStep.getAction() + " parameters violations: " + violations;
             throw new JobParameterViolationException(msg);
         }
+    }
+
+    protected void validateRequiredContextParams(StepContribution contribution, List<String> requiredParams) {
+        List<String> violations = new ArrayList<>();
+        for (String requiredParam : requiredParams) {
+            if (!contribution.getStepExecution().getJobExecution().getExecutionContext().containsKey(requiredParam)) {
+                violations.add(requiredParam);
+            }
+        }
+        throw new JobParameterViolationException("Missing required context params from previous steps: " + violations);
     }
 
     private boolean isValidAgainstAvailableValues(String valueToCheck, String[] availableValues) {
