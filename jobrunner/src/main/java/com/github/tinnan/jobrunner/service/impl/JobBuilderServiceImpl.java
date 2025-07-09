@@ -1,5 +1,6 @@
 package com.github.tinnan.jobrunner.service.impl;
 
+import com.github.tinnan.jobrunner.constants.ExitStatus;
 import com.github.tinnan.jobrunner.entity.BatchStepExecutionAdditionalData;
 import com.github.tinnan.jobrunner.entity.StartJobParam;
 import com.github.tinnan.jobrunner.service.JobBuilderService;
@@ -9,6 +10,7 @@ import com.github.tinnan.jobrunner.task.AbstractTasklet;
 import com.github.tinnan.jobrunner.task.TaskParamSetupTasklet;
 import com.github.tinnan.jobrunner.task.listener.StepExecutionPromotionListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,15 +44,33 @@ public class JobBuilderServiceImpl implements JobBuilderService {
         List<Flow> flows = new ArrayList<>();
 
         List<String> tasks = jobParam.getServices();
-        List<StartJobParam.Step> jobParamSteps = jobParam.getSteps();
         AtomicInteger taskNumberCounter = new AtomicInteger(1);
         tasks.forEach((taskName) -> {
+            Iterator<StartJobParam.Step> jobParamSteps = jobParam.getSteps().iterator();
             int taskNumber = taskNumberCounter.getAndIncrement();
+
             FlowBuilder<Flow> flowBuilder = new FlowBuilder<>(taskName);
             flowBuilder.start(createTaskParamSetupStep(taskNumber, taskName));
             AtomicInteger stepNumberCounter = new AtomicInteger(1);
-            jobParamSteps.forEach((jobParamStep) -> flowBuilder.next(
-                createStep(taskNumber, taskName, stepNumberCounter.getAndIncrement(), jobParamStep)));
+            Step currentStep = createStep(taskNumber, taskName, stepNumberCounter.getAndIncrement(),
+                jobParamSteps.next());
+            flowBuilder.next(currentStep);
+            while (true) {
+                if (jobParamSteps.hasNext()) {
+                    Step nextStep = createStep(taskNumber, taskName, stepNumberCounter.getAndIncrement(),
+                        jobParamSteps.next());
+                    flowBuilder
+                        .on(ExitStatus.PAUSED).stopAndRestart(nextStep)
+                        .from(currentStep).on(org.springframework.batch.core.ExitStatus.FAILED.getExitCode()).fail()
+                        .from(currentStep).on(ExitStatus.ANY).to(nextStep);
+                    currentStep = nextStep;
+                } else {
+                    flowBuilder
+                        .from(currentStep).on(org.springframework.batch.core.ExitStatus.FAILED.getExitCode()).fail()
+                        .from(currentStep).on(ExitStatus.ANY).end();
+                    break;
+                }
+            }
             flows.add(flowBuilder.build());
         });
 

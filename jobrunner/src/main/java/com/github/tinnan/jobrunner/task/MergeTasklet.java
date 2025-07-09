@@ -7,6 +7,7 @@ import com.github.tinnan.jobrunner.exception.JobParameterViolationException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
@@ -45,10 +46,17 @@ public class MergeTasklet extends AbstractTasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        String stepName = contribution.getStepExecution().getStepName();
+//        if ("task_1_step_1".equals(stepName)) {
+//            contribution.setExitStatus(new ExitStatus(com.github.tinnan.jobrunner.constants.ExitStatus.PAUSED));
+//            return RepeatStatus.FINISHED;
+//        }
+//        if ("task_1_step_1".equals(stepName)) {
+//            throw new Exception("Fake error");
+//        }
         String taskName = contribution.getStepExecution().getJobExecution().getExecutionContext()
             .get("taskName", String.class);
         Long id = contribution.getStepExecution().getId();
-        String stepName = contribution.getStepExecution().getStepName();
         log.info("{} - Task {} Step execution ID {}, Step name {} - From {} to {}", associatedWithAction(), taskName,
             id, stepName, fromBranch, toBranch);
         return RepeatStatus.FINISHED;
