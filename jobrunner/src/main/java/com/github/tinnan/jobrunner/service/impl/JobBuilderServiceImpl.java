@@ -1,5 +1,6 @@
 package com.github.tinnan.jobrunner.service.impl;
 
+import com.github.tinnan.jobrunner.config.JobTaskDecorator;
 import com.github.tinnan.jobrunner.constants.ExitStatus;
 import com.github.tinnan.jobrunner.entity.BatchStepExecutionAdditionalData;
 import com.github.tinnan.jobrunner.entity.StartJobParam;
@@ -110,6 +111,9 @@ public class JobBuilderServiceImpl implements JobBuilderService {
         if (!tasklet.produceContextParams().isEmpty()) {
             stepBuilder.listener(new StepExecutionPromotionListener(tasklet.produceContextParams()));
         }
+        if (tasklet.isThrottled()) {
+            stepBuilder.taskExecutor(createTaskExecutor(1));
+        }
         return stepBuilder.build();
     }
 
@@ -129,6 +133,7 @@ public class JobBuilderServiceImpl implements JobBuilderService {
 
     private TaskExecutor createTaskExecutor(int maxConcurrent) {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setTaskDecorator(new JobTaskDecorator());
         taskExecutor.setCorePoolSize(maxConcurrent);
         taskExecutor.setMaxPoolSize(maxConcurrent);
         taskExecutor.initialize();

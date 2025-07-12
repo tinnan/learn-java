@@ -1,13 +1,14 @@
 package com.github.tinnan.jobrunner.task;
 
+import com.github.tinnan.jobrunner.config.JobConfigHolder;
 import com.github.tinnan.jobrunner.constants.JobParameterName;
 import com.github.tinnan.jobrunner.constants.JobStepAction;
+import com.github.tinnan.jobrunner.constants.TaskletThrottleGroup;
 import com.github.tinnan.jobrunner.entity.StartJobParam.Step;
 import com.github.tinnan.jobrunner.exception.JobParameterViolationException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
@@ -32,6 +33,11 @@ public class MergeTasklet extends AbstractTasklet {
         return JobStepAction.MERGE;
     }
 
+    @Override
+    public TaskletThrottleGroup getThrottleLimit() {
+        return TaskletThrottleGroup.JENKINS;
+    }
+
     private void validateMergeTarget() {
         Matcher fromBranchMatcher = DEV_RELEASE_BRANCH_PATTERN.matcher(this.fromBranch);
         Matcher toBranchMatcher = DEV_RELEASE_BRANCH_PATTERN.matcher(this.toBranch);
@@ -52,8 +58,10 @@ public class MergeTasklet extends AbstractTasklet {
 //            return RepeatStatus.FINISHED;
 //        }
 //        if ("task_1_step_1".equals(stepName)) {
-//            throw new Exception("Fake error");
+//            contribution.setExitStatus(new ExitStatus(ExitStatus.FAILED.getExitCode(), "Fake error"));
+//            return RepeatStatus.FINISHED;
 //        }
+        log.info("{} - Job config value: {}", associatedWithAction(), JobConfigHolder.get());
         String taskName = contribution.getStepExecution().getJobExecution().getExecutionContext()
             .get("taskName", String.class);
         Long id = contribution.getStepExecution().getId();

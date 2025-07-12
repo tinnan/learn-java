@@ -1,5 +1,6 @@
 package com.github.tinnan.jobrunner.service.impl;
 
+import com.github.tinnan.jobrunner.config.JobConfigHolder;
 import com.github.tinnan.jobrunner.entity.BatchJobInstance;
 import com.github.tinnan.jobrunner.entity.BatchJobInstanceParam;
 import com.github.tinnan.jobrunner.entity.BatchStepExecution;
@@ -74,6 +75,7 @@ public class JobServiceImpl implements JobService {
     }
 
     private JobStartResult start(StartJobParam jobParam, JobParameters params) throws Exception {
+        JobConfigHolder.set("Test-Config");
         Job job = jobBuilderService.build(JOB_NAME, jobParam);
         JobExecution jobExecution = jobLauncher.run(job, params);
         return JobStartResult.builder()

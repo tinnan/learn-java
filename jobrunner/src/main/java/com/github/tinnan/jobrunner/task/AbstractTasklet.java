@@ -3,6 +3,7 @@ package com.github.tinnan.jobrunner.task;
 import com.github.tinnan.jobrunner.constants.JobStepAction;
 import com.github.tinnan.jobrunner.constants.JobStepAction.ParamSpec;
 import com.github.tinnan.jobrunner.constants.JobParameterName;
+import com.github.tinnan.jobrunner.constants.TaskletThrottleGroup;
 import com.github.tinnan.jobrunner.entity.StartJobParam;
 import com.github.tinnan.jobrunner.exception.JobParameterViolationException;
 import java.util.ArrayList;
@@ -25,6 +26,14 @@ public abstract class AbstractTasklet implements Tasklet {
 
     public List<String> produceContextParams() {
         return Collections.emptyList();
+    }
+
+    public TaskletThrottleGroup getThrottleLimit() {
+        return null;
+    }
+
+    public boolean isThrottled() {
+        return getThrottleLimit() != null;
     }
 
     protected void validate(StartJobParam.Step jobParamStep) {
