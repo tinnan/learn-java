@@ -26,7 +26,7 @@ public class SitBuildTasklet extends AbstractTasklet {
     }
 
     @Override
-    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+    public RepeatStatus internalExecute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         String tag = String.valueOf((int) (Math.random() * 1000000));
         contribution.getStepExecution().getExecutionContext().put("tag", tag);
         Long id = contribution.getStepExecution().getId();

@@ -12,9 +12,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.MDC;
 import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.repeat.RepeatStatus;
 
 public abstract class AbstractTasklet implements Tasklet {
 
@@ -84,5 +87,29 @@ public abstract class AbstractTasklet implements Tasklet {
             return true;
         }
         return Arrays.stream(availableValues).toList().contains(valueToCheck);
+    }
+
+    @Override
+    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        String mdcStepName = buildMdcStepName(contribution);
+        MDC.put("stepName", mdcStepName);
+        try {
+            return internalExecute(contribution, chunkContext);
+        } finally {
+            MDC.remove("stepName");
+        }
+    }
+
+    protected abstract RepeatStatus internalExecute(StepContribution contribution, ChunkContext chunkContext)
+        throws Exception;
+
+    private String buildMdcStepName(StepContribution contribution) {
+        Long jobExeId = contribution.getStepExecution().getJobExecution().getId();
+        String stepName = contribution.getStepExecution().getStepName();
+        JobStepAction jobStepAction = associatedWithAction();
+        return String.join("_",
+            jobExeId.toString(),
+            stepName,
+            jobStepAction != null ? jobStepAction.toString() : this.getClass().getSimpleName());
     }
 }

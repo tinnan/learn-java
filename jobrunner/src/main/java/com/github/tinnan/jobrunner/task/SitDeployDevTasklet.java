@@ -25,7 +25,7 @@ public class SitDeployDevTasklet extends AbstractTasklet {
     }
 
     @Override
-    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+    public RepeatStatus internalExecute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         String tag = validateRequiredAndGetContextParam(contribution, "tag", String.class);
         Long id = contribution.getStepExecution().getId();
         String stepName = contribution.getStepExecution().getStepName();

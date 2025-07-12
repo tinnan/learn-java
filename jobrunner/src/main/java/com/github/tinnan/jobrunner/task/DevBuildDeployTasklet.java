@@ -31,7 +31,7 @@ public class DevBuildDeployTasklet extends AbstractTasklet {
     }
 
     @Override
-    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+    public RepeatStatus internalExecute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         String stepName = contribution.getStepExecution().getStepName();
 //        if ("task_1_step_2".equals(stepName)) {
 //            contribution.setExitStatus(new ExitStatus(com.github.tinnan.jobrunner.constants.ExitStatus.PAUSED));

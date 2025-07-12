@@ -35,7 +35,7 @@ public class TaskParamSetupTasklet extends AbstractTasklet {
     }
 
     @Override
-    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+    public RepeatStatus internalExecute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         params.forEach((key, value) -> {
             log.debug("Setup param {}: {}", key, value);
             contribution.getStepExecution().getExecutionContext().put(key, value);
